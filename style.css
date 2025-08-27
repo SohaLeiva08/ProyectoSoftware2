@@ -1,0 +1,182 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+    .avatar {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .selected-member {
+      border: 2px solid #3b82f6;
+    }
+    .team-member:hover {
+      background-color: #f3f4f6;
+    }
+    .tab-button {
+      transition: all 0.2s ease;
+    }
+    .tab-button.active {
+      border-bottom: 2px solid #3b82f6;
+      color: #3b82f6;
+    }
+    .kanban-column {
+      min-height: 500px;
+      background-color: #f9fafb;
+    }
+    .task-card {
+      transition: all 0.2s ease;
+      cursor: grab;
+    }
+    .task-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    .task-card:active {
+      cursor: grabbing;
+    }
+    .status-todo {
+      border-left: 4px solid #9ca3af;
+    }
+    .status-doing {
+      border-left: 4px solid #3b82f6;
+    }
+    .status-review {
+      border-left: 4px solid #f59e0b;
+    }
+    .status-done {
+      border-left: 4px solid #10b981;
+    }
+    .status-cancelled {
+      border-left: 4px solid #ef4444;
+    }
+    .drag-over {
+      background-color: #e5e7eb;
+      border: 2px dashed #3b82f6;
+    }
+    .dragging {
+      opacity: 0.5;
+      transform: rotate(5deg);
+    }
+    .notification-badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background-color: #ef4444;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .notification-item {
+      border-left: 3px solid transparent;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .notification-item.unread {
+      border-left-color: #3b82f6;
+      background-color: #f0f9ff;
+    }
+    .notification-item:hover {
+      background-color: #e6f3ff;
+    }
+    .notification-panel {
+      transition: all 0.3s ease;
+      transform: translateX(100%);
+    }
+    .notification-panel.open {
+      transform: translateX(0);
+    }
+    .highlight-element {
+      animation: highlight 2s ease;
+      border: 2px solid #3b82f6 !important;
+    }
+    @keyframes highlight {
+      0% { background-color: rgba(59, 130, 246, 0.3); }
+      100% { background-color: transparent; }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .pulse {
+      animation: pulse 0.5s ease-in-out;
+    }
+    
+    /* Estilos responsive */
+    .sidebar {
+      transition: transform 0.3s ease;
+      z-index: 40;
+    }
+    .sidebar-mobile-hidden {
+      transform: translateX(-100%);
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 30;
+    }
+    .overlay.active {
+      display: block;
+    }
+    
+    /* Media queries para responsive */
+    @media (max-width: 1024px) {
+      .kanban-column {
+        min-height: 400px;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .kanban-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .header-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      .header-actions > div {
+        width: 100%;
+      }
+      .search-input {
+        width: 100% !important;
+      }
+      .project-title {
+        font-size: 1.25rem !important;
+      }
+      .view-toggle {
+        width: 100%;
+        justify-content: center;
+      }
+      .task-card {
+        margin-bottom: 1rem;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .avatar {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+      .team-selector {
+        padding: 0.5rem !important;
+      }
+      .modal-container {
+        width: 95% !important;
+        padding: 1rem !important;
+      }
+      .notification-panel {
+        width: 100% !important;
+      }
+    }
