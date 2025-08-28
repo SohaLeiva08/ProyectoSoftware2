@@ -1,149 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Management App</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SCRUMLY</title>
+
+  <link rel="stylesheet" href="app.css">
   <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
-    /* Estilos adicionales para mejorar la UI */
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 40;
-      display: none;
+    /* ——— Estilos ——— */
+    .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,.5); z-index: 40; display:none; }
+    .overlay.active { display:block; }
+    .sidebar { transition: transform .3s ease-in-out; z-index:45; height:100vh; }
+    .sidebar-mobile-hidden { transform: translateX(-100%); }
+    @media (min-width:768px){ .sidebar-mobile-hidden{ transform:translateX(0);} .overlay{display:none!important;} }
+    .avatar{ width:2rem; height:2rem; border-radius:9999px; object-fit:cover; }
+    .selected-member{ border:2px solid #3b82f6; }
+    .notification-badge{ position:absolute; top:-5px; right:-5px; background-color:#ef4444; color:#fff; border-radius:9999px; width:18px; height:18px; display:flex; align-items:center; justify-content:center; font-size:.75rem; font-weight:600; }
+    .task-card{ cursor:grab; transition:all .2s ease; }
+    .task-card:hover{ transform: translateY(-2px); box-shadow:0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -1px rgba(0,0,0,.06); }
+    .task-card.dragging{ opacity:.5; cursor:grabbing; }
+    .kanban-column{ background-color:#f9fafb; min-height:500px; }
+    .highlight-element{ animation: highlight 2s ease; }
+    @keyframes highlight{ 0%{ background-color:rgba(255,255,0,.5);} 100%{ background-color:transparent;} }
+    .notification-item{ cursor:pointer; transition: background-color .2s; }
+    .notification-item:hover{ background-color:#f3f4f6; }
+    .notification-item.unread{ background-color:#eff6ff; }
+    .notification-panel{ transform: translateX(100%); transition: transform .3s ease-in-out; }
+    .notification-panel.open{ transform: translateX(0); }
+    .tab-button{ border-bottom:2px solid transparent; }
+    .tab-button.active{ border-bottom-color:#3b82f6; color:#3b82f6; }
+    .team-member{ transition: background-color .2s; }
+    .team-member:hover{ background-color:#f3f4f6; }
+
+    /* ——— NUEVO: estilos UI de tarjetas ——— */
+    .task-card-ui{
+      position: relative;
+      background: #fff;
+      border-radius: .75rem;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 1px 2px rgba(0,0,0,.04);
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
     }
-    
-    .overlay.active {
-      display: block;
-    }
-    
-    .sidebar {
-      transition: transform 0.3s ease-in-out;
-      z-index: 45;
-      height: 100vh;
-    }
-    
-    .sidebar-mobile-hidden {
-      transform: translateX(-100%);
-    }
-    
-    @media (min-width: 768px) {
-      .sidebar-mobile-hidden {
-        transform: translateX(0);
-      }
-      
-      .overlay {
-        display: none !important;
-      }
-    }
-    
-    .avatar {
-      width: 2rem;
-      height: 2rem;
-      border-radius: 9999px;
-      object-fit: cover;
-    }
-    
-    .selected-member {
-      border: 2px solid #3b82f6;
-    }
-    
-    .notification-badge {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background-color: #ef4444;
-      color: white;
-      border-radius: 9999px;
-      width: 18px;
-      height: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-    
-    .task-card {
-      cursor: grab;
-      transition: all 0.2s ease;
-    }
-    
-    .task-card:hover {
+    .task-card-ui:hover{
       transform: translateY(-2px);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 8px 16px rgba(0,0,0,.06);
+      border-color:#d1d5db;
     }
-    
-    .task-card.dragging {
-      opacity: 0.5;
-      cursor: grabbing;
+    .task-accent{
+      position:absolute; left:0; top:0; bottom:0; width:4px; border-top-left-radius:.75rem; border-bottom-left-radius:.75rem;
     }
-    
-    .kanban-column {
-      background-color: #f9fafb;
-      min-height: 500px;
+    .accent-critical{ background:#ef4444; }
+    .accent-high{ background:#f59e0b; }
+    .accent-medium{ background:#3b82f6; }
+    .accent-low{ background:#6b7280; }
+
+    .task-title{
+      font-size:.95rem;
+      line-height:1.25rem;
+      font-weight:600;
+      color:#111827;
+      margin-right:.5rem;
     }
-    
-    .highlight-element {
-      animation: highlight 2s ease;
+    .task-desc{
+      font-size:.8rem;
+      color:#6b7280;
     }
-    
-    @keyframes highlight {
-      0% { background-color: rgba(255, 255, 0, 0.5); }
-      100% { background-color: transparent; }
+    .tag-pill{
+      display:inline-flex; align-items:center; gap:.25rem;
+      background:#d1fae5; color:#065f46;
+      font-size:.7rem; font-weight:600;
+      padding:.2rem .5rem; border-radius:999px;
     }
-    
-    .notification-item {
-      cursor: pointer;
-      transition: background-color 0.2s;
+    .chip{
+      display:inline-flex; align-items:center; gap:.35rem;
+      font-size:.7rem; font-weight:700;
+      padding:.2rem .5rem; border-radius:999px; border:1px solid transparent;
+      background:#f9fafb; color:#374151;
     }
-    
-    .notification-item:hover {
-      background-color: #f3f4f6;
+    .chip::before{
+      content:""; width:.4rem; height:.4rem; border-radius:999px; display:inline-block;
+      background: currentColor; opacity:.9;
     }
-    
-    .notification-item.unread {
-      background-color: #eff6ff;
+    .chip-priority-critical{ color:#b91c1c; border-color:#fecaca; background:#fff1f2; }
+    .chip-priority-high{ color:#b45309; border-color:#fde68a; background:#fffbeb; }
+    .chip-priority-medium{ color:#1d4ed8; border-color:#bfdbfe; background:#eff6ff; }
+    .chip-priority-low{ color:#4b5563; border-color:#e5e7eb; background:#f9fafb; }
+
+    .badge{
+      display:inline-flex; align-items:center; gap:.35rem;
+      font-size:.68rem; font-weight:600; padding:.15rem .45rem; border-radius:.5rem;
     }
-    
-    .notification-panel {
-      transform: translateX(100%);
-      transition: transform 0.3s ease-in-out;
+    .badge-due{ background:#eef2ff; color:#3730a3; }
+    .badge-overdue{ background:#fee2e2; color:#991b1b; }
+
+    .task-footer{
+      display:flex; align-items:center; justify-content:space-between; margin-top:.25rem;
+      padding-top:.35rem; border-top:1px dashed #e5e7eb;
     }
-    
-    .notification-panel.open {
-      transform: translateX(0);
-    }
-    
-    .tab-button {
-      border-bottom: 2px solid transparent;
-    }
-    
-    .tab-button.active {
-      border-bottom-color: #3b82f6;
-      color: #3b82f6;
-    }
-    
-    .team-member {
-      transition: background-color 0.2s;
-    }
-    
-    .team-member:hover {
-      background-color: #f3f4f6;
-    }
+    .task-actions{ display:flex; align-items:center; gap:.5rem; }
+    .task-action-btn{ font-size:.75rem; font-weight:600; padding:.25rem .5rem; border-radius:.375rem; background:#eef2ff; color:#1d4ed8; }
+    .task-action-btn:hover{ background:#e0e7ff; }
+
+    .avatar-sm{ width:1.5rem; height:1.5rem; border-radius:999px; object-fit:cover; }
   </style>
 </head>
 <body>
   <div id="root"></div>
-  
+
   <!-- Modal de Bienvenida -->
   <div id="welcome-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -167,22 +135,15 @@
     document.addEventListener('DOMContentLoaded', function() {
       const showWelcome = localStorage.getItem('showWelcome');
       const userName = localStorage.getItem('userName');
-      
       if (showWelcome === 'true' && userName) {
         const welcomeModal = document.getElementById('welcome-modal');
         const welcomeMessage = document.getElementById('welcome-message');
-        
         welcomeMessage.textContent = `¡Bienvenido ${userName}! Estamos encantados de tenerte aquí.`;
         welcomeModal.classList.remove('hidden');
-        
-        // Eliminar la flag para que no se muestre nuevamente
         localStorage.removeItem('showWelcome');
-        
-        // Configurar event listeners para cerrar el modal
         document.getElementById('close-welcome').addEventListener('click', function() {
           welcomeModal.classList.add('hidden');
         });
-        
         document.getElementById('accept-welcome').addEventListener('click', function() {
           welcomeModal.classList.add('hidden');
         });
@@ -192,8 +153,8 @@
 
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
-    
-    // Datos iniciales
+
+    /* ========== Datos iniciales ========== */
     const initialTeamMembers = [
       { id: 'user-1', name: 'Alex Johnson', avatar: 'https://i.pravatar.cc/100?img=1', role: 'Frontend Developer', email: 'alex@company.com' },
       { id: 'user-2', name: 'Maria Garcia', avatar: 'https://i.pravatar.cc/100?img=2', role: 'UI/UX Designer', email: 'maria@company.com' },
@@ -210,22 +171,22 @@
         tags: ['Design', 'Development', 'Marketing'],
         assignees: ['user-2', 'user-1'],
         issues: [
-          { 
-            id: 'issue-1', 
-            title: 'Add discount code to checkout page', 
-            date: 'Sep 14', 
-            tag: 'Feature Request', 
+          {
+            id: 'issue-1',
+            title: 'Add discount code to checkout page',
+            date: 'Sep 14',
+            tag: 'Feature Request',
             assignee: 'https://i.pravatar.cc/100?img=1',
             status: 'doing',
             priority: 'high',
             createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-            updatedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+            updatedAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
           },
-          { 
-            id: 'issue-2', 
-            title: 'Fix broken image on product page', 
-            date: 'Sep 15', 
-            tag: 'Bug', 
+          {
+            id: 'issue-2',
+            title: 'Fix broken image on product page',
+            date: 'Sep 15',
+            tag: 'Bug',
             assignee: 'https://i.pravatar.cc/100?img=2',
             status: 'todo',
             priority: 'medium',
@@ -235,28 +196,28 @@
         ]
       },
       {
-        id: 'project-2', 
+        id: 'project-2',
         name: 'Mobile App',
         description: 'New customer mobile application',
         tags: ['Development', 'v2.0'],
         assignees: ['user-3', 'user-5'],
         issues: [
-          { 
-            id: 'issue-3', 
-            title: 'Implement new payment gateway', 
-            date: 'Sep 19', 
-            tag: 'Feature Request', 
+          {
+            id: 'issue-3',
+            title: 'Implement new payment gateway',
+            date: 'Sep 19',
+            tag: 'Feature Request',
             assignee: 'https://i.pravatar.cc/100?img=3',
             status: 'review',
             priority: 'high',
             createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
             updatedAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
           },
-          { 
-            id: 'issue-4', 
-            title: 'Fix login authentication bug', 
-            date: 'Sep 22', 
-            tag: 'Bug', 
+          {
+            id: 'issue-4',
+            title: 'Fix login authentication bug',
+            date: 'Sep 22',
+            tag: 'Bug',
             assignee: 'https://i.pravatar.cc/100?img=5',
             status: 'done',
             priority: 'critical',
@@ -283,7 +244,8 @@
       { id: 'critical', name: 'Critical', color: 'bg-red-500' }
     ];
 
-    // Modal de Perfil de Usuario
+    /* ========== Modales ========== */
+
     const UserProfileModal = ({ user, onClose, onSave, isOpen }) => {
       const [name, setName] = useState(user?.name || '');
       const [email, setEmail] = useState(user?.email || '');
@@ -303,19 +265,9 @@
 
       const handleSave = () => {
         if (name && email) {
-          // Si hay un archivo de avatar seleccionado, convertirlo a URL
           let finalAvatar = avatar;
-          if (avatarFile) {
-            finalAvatar = URL.createObjectURL(avatarFile);
-          }
-          
-          onSave({
-            id: user?.id || `user-${Date.now()}`,
-            name,
-            email,
-            role,
-            avatar: finalAvatar
-          });
+          if (avatarFile) finalAvatar = URL.createObjectURL(avatarFile);
+          onSave({ id: user?.id || `user-${Date.now()}`, name, email, role, avatar: finalAvatar });
           onClose();
         }
       };
@@ -326,248 +278,118 @@
         setAvatarFile(null);
       };
 
-      const handleAvatarClick = () => {
-        fileInputRef.current?.click();
-      };
-
+      const handleAvatarClick = () => fileInputRef.current?.click();
       const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
-          // Verificar que sea una imagen
-          if (!file.type.startsWith('image/')) {
-            alert('Por favor, selecciona solo archivos de imagen');
-            return;
-          }
-
-          // Verificar tamaño (máximo 5MB)
-          if (file.size > 5 * 1024 * 1024) {
-            alert('La imagen debe ser menor a 5MB');
-            return;
-          }
-
+          if (!file.type.startsWith('image/')) { alert('Por favor, selecciona solo archivos de imagen'); return; }
+          if (file.size > 5 * 1024 * 1024) { alert('La imagen debe ser menor a 5MB'); return; }
           setAvatarFile(file);
-          
-          // Crear una URL temporal para previsualizar la imagen
-          const objectUrl = URL.createObjectURL(file);
-          setAvatar(objectUrl);
+          setAvatar(URL.createObjectURL(file));
         }
       };
-
-      const removeCustomAvatar = () => {
-        setAvatarFile(null);
-        setAvatar('https://i.pravatar.cc/100');
-      };
-
-      if (!isOpen) return null;
-      
-      return React.createElement("div", { className: "fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50" }, 
-        React.createElement("div", { className: "modal-container bg-white p-6 rounded-lg shadow-lg w-96 max-w-90vw" },
-          React.createElement("h2", { className: "text-xl font-semibold mb-4" }, "Perfil de Usuario"),
-          
-          React.createElement("div", { className: "flex flex-col items-center mb-4" },
-            React.createElement("div", { className: "relative" },
-              React.createElement("img", { 
-                src: avatar, 
-                alt: "Avatar", 
-                className: "w-24 h-24 rounded-full mb-2 object-cover cursor-pointer",
-                onClick: handleAvatarClick
-              }),
-              React.createElement("div", { 
-                className: "absolute bottom-0 right-0 bg-blue-500 text-white p-1 rounded-full cursor-pointer",
-                onClick: handleAvatarClick,
-                title: "Cambiar avatar"
-              },
-                React.createElement("svg", { 
-                  className: "w-4 h-4", 
-                  fill: "none", 
-                  stroke: "currentColor", 
-                  viewBox: "0 0 24 24" 
-                },
-                  React.createElement("path", { 
-                    strokeLinecap: "round", 
-                    strokeLinejoin: "round", 
-                    strokeWidth: "2", 
-                    d: "M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" 
-                  }),
-                  React.createElement("path", { 
-                    strokeLinecap: "round", 
-                    strokeLinejoin: "round", 
-                    strokeWidth: "2", 
-                    d: "M15 13a3 3 0 11-6 0 3 3 0 016 0z" 
-                  })
-                )
-              )
-            ),
-            
-            React.createElement("input", {
-              type: "file",
-              ref: fileInputRef,
-              className: "hidden",
-              accept: "image/*",
-              onChange: handleFileChange
-            }),
-            
-            React.createElement("div", { className: "flex gap-2 mt-2" },
-              React.createElement("button", {
-                className: "text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200",
-                onClick: handleAvatarClick
-              }, "Subir imagen"),
-              
-              React.createElement("button", {
-                className: "text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200",
-                onClick: generateRandomAvatar
-              }, "Avatar aleatorio"),
-              
-              avatarFile && React.createElement("button", {
-                className: "text-xs bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200",
-                onClick: removeCustomAvatar
-              }, "Quitar")
-            ),
-            
-            avatarFile && React.createElement("p", { 
-              className: "text-xs text-gray-500 mt-1 text-center"
-            }, 
-              `Imagen seleccionada: ${avatarFile.name}`
-            )
-          ),
-          
-          React.createElement("div", { className: "mb-4" },
-            React.createElement("label", { className: "block text-sm font-medium text-gray-700 mb-1" }, "Nombre"),
-            React.createElement("input", {
-              type: "text",
-              className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-              value: name,
-              onChange: (e) => setName(e.target.value),
-              placeholder: "Tu nombre completo"
-            })
-          ),
-          
-          React.createElement("div", { className: "mb-4" },
-            React.createElement("label", { className: "block text-sm font-medium text-gray-700 mb-1" }, "Email"),
-            React.createElement("input", {
-              type: "email",
-              className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-              value: email,
-              onChange: (e) => setEmail(e.target.value),
-              placeholder: "tu.email@ejemplo.com"
-            })
-          ),
-          
-          React.createElement("div", { className: "mb-4" },
-            React.createElement("label", { className: "block text-sm font-medium text-gray-700 mb-1" }, "Rol"),
-            React.createElement("select", {
-              className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-              value: role,
-              onChange: (e) => setRole(e.target.value)
-            },
-              availableRoles.map(roleOption => 
-                React.createElement("option", { key: roleOption, value: roleOption }, roleOption)
-              )
-            )
-          ),
-          
-          React.createElement("div", { className: "flex justify-end space-x-2" },
-            React.createElement("button", { 
-              className: "px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50", 
-              onClick: onClose 
-            }, "Cancelar"),
-            React.createElement("button", { 
-              className: "px-4 py-2 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-600", 
-              onClick: handleSave 
-            }, "Guardar cambios")
-          )
-        )
-      );
-    }; // Aquí estaba el error principal - faltaba cerrar correctamente el componente
-
-    // Componente de notificaciones
-    const NotificationPanel = ({ notifications, isOpen, onClose, onMarkAsRead, onClearAll, onNavigateToItem }) => {
-      const panelRef = useRef(null);
-
-      // Cerrar panel al hacer clic fuera de él
-      useEffect(() => {
-        const handleClickOutside = (event) => {
-          if (panelRef.current && !panelRef.current.contains(event.target) && 
-              !event.target.closest('.notification-button')) {
-            onClose();
-          }
-        };
-
-        if (isOpen) {
-          document.addEventListener('mousedown', handleClickOutside);
-        }
-
-        return () => {
-          document.removeEventListener('mousedown', handleClickOutside);
-        };
-      }, [isOpen, onClose]);
-
-      const unreadCount = notifications.filter(n => !n.read).length;
-
+      const removeCustomAvatar = () => { setAvatarFile(null); setAvatar('https://i.pravatar.cc/100'); };
       if (!isOpen) return null;
 
-      return React.createElement("div", { className: "fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end" },
-        React.createElement("div", { 
-          ref: panelRef,
-          className: "notification-panel open w-80 bg-white shadow-xl h-full"
-        },
-          React.createElement("div", { className: "p-4 border-b flex justify-between items-center" },
-            React.createElement("h2", { className: "text-lg font-semibold" }, "Notifications"),
-            React.createElement("div", { className: "flex space-x-2" },
-              unreadCount > 0 && React.createElement("button", {
-                className: "text-sm text-blue-600 hover:text-blue-800",
-                onClick: onMarkAsRead
-              }, "Mark all as read"),
-              React.createElement("button", {
-                className: "text-sm text-gray-600 hover:text-gray-800",
-                onClick: onClose
-              }, "✕")
-            )
-          ),
-          
-          React.createElement("div", { className: "p-2 border-b" },
-            React.createElement("button", {
-              className: "text-sm text-red-600 hover:text-red-800",
-              onClick: onClearAll
-            }, "Clear all notifications")
-          ),
-          
-          React.createElement("div", { className: "overflow-y-auto h-full pb-20" },
-            notifications.length > 0 ? (
-              notifications.map(notification => 
-                React.createElement("div", {
-                  key: notification.id,
-                  className: `notification-item p-4 border-b ${notification.read ? '' : 'unread'}`,
-                  onClick: () => onNavigateToItem(notification)
-                },
-                  React.createElement("div", { className: "flex justify-between items-start mb-2" },
-                    React.createElement("h3", { className: "text-sm font-medium" }, notification.title),
-                    React.createElement("span", { className: "text-xs text-gray-500" }, 
-                      new Date(notification.timestamp).toLocaleTimeString()
-                    )
-                  ),
-                  React.createElement("p", { className: "text-sm text-gray-600 mb-2" }, notification.message),
-                  React.createElement("div", { className: "flex justify-between items-center" },
-                    React.createElement("span", { className: "text-xs text-gray-500" }, 
-                      new Date(notification.timestamp).toLocaleDateString()
-                    ),
-                    !notification.read && React.createElement("span", { 
-                      className: "inline-block w-2 h-2 bg-blue-500 rounded-full"
-                    })
-                  )
-                )
-              )
-            ) : (
-              React.createElement("div", { className: "p-4 text-center text-gray-500" },
-                "No notifications"
-              )
-            )
-          )
-        )
+      return (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="modal-container bg-white p-6 rounded-lg shadow-lg w-96 max-w-90vw">
+            <h2 className="text-xl font-semibold mb-4">Perfil de Usuario</h2>
+            <div className="flex flex-col items-center mb-4">
+              <div className="relative">
+                <img
+                  src={avatar}
+                  alt="Avatar"
+                  className="w-24 h-24 rounded-full mb-2 object-cover cursor-pointer"
+                  onClick={handleAvatarClick}
+                />
+                <div className="absolute bottom-0 right-0 bg-blue-500 text-white p-1 rounded-full cursor-pointer" onClick={handleAvatarClick} title="Cambiar avatar">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                </div>
+              </div>
+
+              <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange}/>
+              <div className="flex gap-2 mt-2">
+                <button className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200" onClick={handleAvatarClick}>Subir imagen</button>
+                <button className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200" onClick={generateRandomAvatar}>Avatar aleatorio</button>
+                {avatarFile && <button className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200" onClick={removeCustomAvatar}>Quitar</button>}
+              </div>
+              {avatarFile && <p className="text-xs text-gray-500 mt-1 text-center">Imagen seleccionada: {avatarFile.name}</p>}
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+              <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={name} onChange={(e)=>setName(e.target.value)} placeholder="Tu nombre completo"/>
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input type="email" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={email} onChange={(e)=>setEmail(e.target.value)} placeholder="tu.email@ejemplo.com"/>
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Rol</label>
+              <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={role} onChange={(e)=>setRole(e.target.value)}>
+                {availableRoles.map(r => <option key={r} value={r}>{r}</option>)}
+              </select>
+            </div>
+
+            <div className="flex justify-end space-x-2">
+              <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancelar</button>
+              <button className="px-4 py-2 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-600" onClick={handleSave}>Guardar cambios</button>
+            </div>
+          </div>
+        </div>
       );
     };
 
-    // Modal para agregar nuevo miembro al equipo
+    const NotificationPanel = ({ notifications, isOpen, onClose, onMarkAsRead, onClearAll, onNavigateToItem }) => {
+      const panelRef = useRef(null);
+      useEffect(() => {
+        const handleClickOutside = (event) => {
+          if (panelRef.current && !panelRef.current.contains(event.target) && !event.target.closest('.notification-button')) onClose();
+        };
+        if (isOpen) document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+      }, [isOpen, onClose]);
+
+      const unreadCount = notifications.filter(n => !n.read).length;
+      if (!isOpen) return null;
+
+      return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end">
+          <div ref={panelRef} className="notification-panel open w-80 bg-white shadow-xl h-full">
+            <div className="p-4 border-b flex justify-between items-center">
+              <h2 className="text-lg font-semibold">Notifications</h2>
+              <div className="flex space-x-2">
+                {unreadCount > 0 && <button className="text-sm text-blue-600 hover:text-blue-800" onClick={onMarkAsRead}>Mark all as read</button>}
+                <button className="text-sm text-gray-600 hover:text-gray-800" onClick={onClose}>✕</button>
+              </div>
+            </div>
+            <div className="p-2 border-b">
+              <button className="text-sm text-red-600 hover:text-red-800" onClick={onClearAll}>Clear all notifications</button>
+            </div>
+            <div className="overflow-y-auto h-full pb-20">
+              {notifications.length > 0 ? notifications.map(notification => (
+                <div key={notification.id} className={`notification-item p-4 border-b ${notification.read ? '' : 'unread'}`} onClick={()=>onNavigateToItem(notification)}>
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-sm font-medium">{notification.title}</h3>
+                    <span className="text-xs text-gray-500">{new Date(notification.timestamp).toLocaleTimeString()}</span>
+                  </div>
+                  <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs text-gray-500">{new Date(notification.timestamp).toLocaleDateString()}</span>
+                    {!notification.read && <span className="inline-block w-2 h-2 bg-blue-500 rounded-full" />}
+                  </div>
+                </div>
+              )) : <div className="p-4 text-center text-gray-500">No notifications</div>}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
     const AddTeamMemberModal = ({ onClose, onSave, isOpen }) => {
       const [activeTab, setActiveTab] = useState('manual');
       const [name, setName] = useState('');
@@ -576,232 +398,111 @@
       const [inviteEmail, setInviteEmail] = useState('');
       const [inviteRole, setInviteRole] = useState(availableRoles[0]);
 
-      const resetForm = () => {
-        setName('');
-        setEmail('');
-        setRole(availableRoles[0]);
-        setInviteEmail('');
-        setInviteRole(availableRoles[0]);
-      };
-
-      useEffect(() => {
-        if (isOpen) {
-          resetForm();
-        }
-      }, [isOpen]);
+      const resetForm = () => { setName(''); setEmail(''); setRole(availableRoles[0]); setInviteEmail(''); setInviteRole(availableRoles[0]); };
+      useEffect(() => { if (isOpen) resetForm(); }, [isOpen]);
 
       const handleManualSubmit = () => {
         if (name.trim() && email.trim()) {
-          onSave({
-            id: `user-${Date.now()}`,
-            name: name.trim(),
-            email: email.trim(),
-            role: role,
-            avatar: `https://i.pravatar.cc/100?img=${Math.floor(Math.random() * 70) + 1}`
-          });
+          onSave({ id: `user-${Date.now()}`, name: name.trim(), email: email.trim(), role, avatar: `https://i.pravatar.cc/100?img=${Math.floor(Math.random()*70)+1}` });
           onClose();
         }
       };
-
-      const handleInviteSubmit = () => {
-        if (inviteEmail.trim()) {
-          alert(`Invitation sent to ${inviteEmail} for the role of ${inviteRole}`);
-          onClose();
-        }
-      };
+      const handleInviteSubmit = () => { if (inviteEmail.trim()) { alert(`Invitation sent to ${inviteEmail} for the role of ${inviteRole}`); onClose(); } };
 
       if (!isOpen) return null;
 
-      return React.createElement("div", { 
-        className: "fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50" 
-      }, 
-        React.createElement("div", { 
-          className: "modal-container bg-white p-6 rounded-lg shadow-lg w-96 max-h-screen overflow-y-auto"
-        },
-          React.createElement("h2", { 
-            className: "text-xl font-semibold mb-4" 
-          }, "Add Team Member"),
-          
-          React.createElement("div", { className: "flex border-b mb-4" },
-            React.createElement("button", {
-              className: `px-4 py-2 tab-button ${activeTab === 'manual' ? 'active' : ''}`,
-              onClick: () => setActiveTab('manual')
-            }, "Add Manually"),
-            React.createElement("button", {
-              className: `px-4 py-2 tab-button ${activeTab === 'invite' ? 'active' : ''}`,
-              onClick: () => setActiveTab('invite')
-            }, "Invite")
-          ),
-          
-          activeTab === 'manual' ? 
-            React.createElement("div", null,
-              React.createElement("div", { className: "mb-4" },
-                React.createElement("label", { className: "block text-sm font-medium text-gray-700 mb-1" }, "Name"),
-                React.createElement("input", {
-                  type: "text",
-                  className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-                  value: name,
-                  onChange: (e) => setName(e.target.value),
-                  placeholder: "Enter full name"
-                })
-              ),
-              
-              React.createElement("div", { className: "mb-4" },
-                React.createElement("label", { className: "block text-sm font-medium text-gray-700 mb-1" }, "Email"),
-                React.createElement("input", {
-                  type: "email",
-                  className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-                  value: email,
-                  onChange: (e) => setEmail(e.target.value),
-                  placeholder: "Enter email address"
-                })
-              ),
-              
-              React.createElement("div", { className: "mb-4" },
-                React.createElement("label", { className: "block text-sm font-medium text-gray-700 mb-1" }, "Role"),
-                React.createElement("select", {
-                  className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-                  value: role,
-                  onChange: (e) => setRole(e.target.value)
-                },
-                  availableRoles.map(role => 
-                    React.createElement("option", { key: role, value: role }, role)
-                  )
-                )
-              ),
-              
-              React.createElement("div", { className: "flex justify-end space-x-2" },
-                React.createElement("button", { 
-                  className: "px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50", 
-                  onClick: onClose 
-                }, "Cancel"),
-                React.createElement("button", { 
-                  className: "px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700", 
-                  onClick: handleManualSubmit 
-                }, "Add Member")
-              )
-            ) : 
-            React.createElement("div", null,
-              React.createElement("div", { className: "mb-4" },
-                React.createElement("label", { className: "block text-sm font-medium text-gray-700 mb-1" }, "Email Address"),
-                React.createElement("input", {
-                  type: "email",
-                  className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-                  value: inviteEmail,
-                  onChange: (e) => setInviteEmail(e.target.value),
-                  placeholder: "Enter email to invite"
-                })
-              ),
-              
-              React.createElement("div", { className: "mb-4" },
-                React.createElement("label", { className: "block text-sm font-medium text-gray-700 mb-1" }, "Role"),
-                React.createElement("select", {
-                  className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-                  value: inviteRole,
-                  onChange: (e) => setInviteRole(e.target.value)
-                },
-                  availableRoles.map(role => 
-                    React.createElement("option", { key: role, value: role }, role)
-                  )
-                )
-              ),
-              
-              React.createElement("p", { className: "text-sm text-gray-500 mb-4" }, 
-                "An invitation email will be sent to this address with a link to join the team."
-              ),
-              
-              React.createElement("div", { className: "flex justify-end space-x-2" },
-                React.createElement("button", { 
-                  className: "px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50", 
-                  onClick: onClose 
-                }, "Cancel"),
-                React.createElement("button", { 
-                  className: "px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700", 
-                  onClick: handleInviteSubmit 
-                }, "Send Invitation")
-              )
-            )
-        )
+      return (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="modal-container bg-white p-6 rounded-lg shadow-lg w-96 max-h-screen overflow-y-auto">
+            <h2 className="text-xl font-semibold mb-4">Add Team Member</h2>
+            <div className="flex border-b mb-4">
+              <button className={`px-4 py-2 tab-button ${activeTab === 'manual' ? 'active' : ''}`} onClick={()=>setActiveTab('manual')}>Add Manually</button>
+              <button className={`px-4 py-2 tab-button ${activeTab === 'invite' ? 'active' : ''}`} onClick={()=>setActiveTab('invite')}>Invite</button>
+            </div>
+            {activeTab === 'manual' ? (
+              <div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                  <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={name} onChange={(e)=>setName(e.target.value)} placeholder="Enter full name"/>
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input type="email" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={email} onChange={(e)=>setEmail(e.target.value)} placeholder="Enter email address"/>
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                  <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={role} onChange={(e)=>setRole(e.target.value)}>
+                    {availableRoles.map(r => <option key={r} value={r}>{r}</option>)}
+                  </select>
+                </div>
+                <div className="flex justify-end space-x-2">
+                  <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancel</button>
+                  <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={handleManualSubmit}>Add Member</button>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                  <input type="email" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={inviteEmail} onChange={(e)=>setInviteEmail(e.target.value)} placeholder="Enter email to invite"/>
+                </div>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                  <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={inviteRole} onChange={(e)=>setInviteRole(e.target.value)}>
+                    {availableRoles.map(r => <option key={r} value={r}>{r}</option>)}
+                  </select>
+                </div>
+                <p className="text-sm text-gray-500 mb-4">An invitation email will be sent to this address with a link to join the team.</p>
+                <div className="flex justify-end space-x-2">
+                  <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancel</button>
+                  <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={handleInviteSubmit}>Send Invitation</button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       );
     };
 
-    // Componente para seleccionar miembros del equipo
     const TeamMemberSelector = ({ members, selectedMembers, onSelectionChange, onAddNewMember }) => {
       const [searchTerm, setSearchTerm] = useState('');
-
-      const filteredMembers = members.filter(member => 
+      const filteredMembers = members.filter(member =>
         member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         member.role.toLowerCase().includes(searchTerm.toLowerCase())
       );
-
       const toggleMemberSelection = (memberId) => {
-        if (selectedMembers.includes(memberId)) {
-          onSelectionChange(selectedMembers.filter(id => id !== memberId));
-        } else {
-          onSelectionChange([...selectedMembers, memberId]);
-        }
+        if (selectedMembers.includes(memberId)) onSelectionChange(selectedMembers.filter(id => id !== memberId));
+        else onSelectionChange([...selectedMembers, memberId]);
       };
 
-      return React.createElement("div", { className: "team-selector border rounded-lg p-4 bg-gray-50" },
-        React.createElement("div", { className: "flex justify-between items-center mb-3" },
-          React.createElement("h3", { className: "text-sm font-medium text-gray-700" }, "Assign Team Members"),
-          React.createElement("button", {
-            className: "text-xs text-blue-600 hover:text-blue-800 font-medium",
-            onClick: onAddNewMember
-          }, "+ Add New Member")
-        ),
-        
-        React.createElement("div", { className: "mb-3" },
-          React.createElement("input", {
-            type: "text",
-            placeholder: "Search team members...",
-            className: "w-full p-2 border rounded-md text-sm",
-            value: searchTerm,
-            onChange: (e) => setSearchTerm(e.target.value)
-          })
-        ),
-        
-        React.createElement("div", { className: "max-h-40 overflow-y-auto" },
-          filteredMembers.length > 0 ? (
-            filteredMembers.map(member => 
-              React.createElement("div", {
-                key: member.id,
-                className: `flex items-center p-2 rounded-md cursor-pointer team-member ${selectedMembers.includes(member.id) ? 'bg-blue-100' : ''}`,
-                onClick: () => toggleMemberSelection(member.id)
-              },
-                React.createElement("img", {
-                  src: member.avatar,
-                  alt: member.name,
-                  className: `avatar mr-3 ${selectedMembers.includes(member.id) ? 'selected-member' : ''}`
-                }),
-                React.createElement("div", { className: "flex-1" },
-                  React.createElement("p", { className: "text-sm font-medium" }, member.name),
-                  React.createElement("p", { className: "text-xs text-gray-500" }, member.role)
-                ),
-                React.createElement("input", {
-                  type: "checkbox",
-                  checked: selectedMembers.includes(member.id),
-                  onChange: () => toggleMemberSelection(member.id),
-                  className: "h-4 w-4 text-blue-600 rounded"
-                })
-              )
-            )
-          ) : (
-            React.createElement("p", { className: "text-sm text-gray-500 text-center py-2" }, "No team members found")
-          )
-        ),
-        
-        React.createElement("div", { className: "mt-3" },
-          React.createElement("p", { className: "text-xs text-gray-500" },
-            selectedMembers.length > 0 
-              ? `Selected ${selectedMembers.length} team member(s)` 
-              : "No team members selected"
-          )
-        )
+      return (
+        <div className="team-selector border rounded-lg p-4 bg-gray-50">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-sm font-medium text-gray-700">Assign Team Members</h3>
+            <button className="text-xs text-blue-600 hover:text-blue-800 font-medium" onClick={onAddNewMember}>+ Add New Member</button>
+          </div>
+          <div className="mb-3">
+            <input type="text" placeholder="Search team members..." className="w-full p-2 border rounded-md text-sm" value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+          </div>
+          <div className="max-h-40 overflow-y-auto">
+            {filteredMembers.length > 0 ? filteredMembers.map(member => (
+              <div key={member.id} className={`flex items-center p-2 rounded-md cursor-pointer team-member ${selectedMembers.includes(member.id) ? 'bg-blue-100' : ''}`} onClick={()=>toggleMemberSelection(member.id)}>
+                <img src={member.avatar} alt={member.name} className={`avatar mr-3 ${selectedMembers.includes(member.id) ? 'selected-member' : ''}`}/>
+                <div className="flex-1">
+                  <p className="text-sm font-medium">{member.name}</p>
+                  <p className="text-xs text-gray-500">{member.role}</p>
+                </div>
+                <input type="checkbox" checked={selectedMembers.includes(member.id)} onChange={()=>toggleMemberSelection(member.id)} className="h-4 w-4 text-blue-600 rounded" />
+              </div>
+            )) : <p className="text-sm text-gray-500 text-center py-2">No team members found</p>}
+          </div>
+          <div className="mt-3">
+            <p className="text-xs text-gray-500">{selectedMembers.length > 0 ? `Selected ${selectedMembers.length} team member(s)` : "No team members selected"}</p>
+          </div>
+        </div>
       );
     };
 
-    // Modal para crear/editar proyectos
     const ProjectModal = ({ project, onClose, onSave, isOpen, teamMembers, onAddNewMember }) => {
       const [name, setName] = useState(project?.name || '');
       const [description, setDescription] = useState(project?.description || '');
@@ -810,168 +511,72 @@
       const [newTag, setNewTag] = useState('');
 
       useEffect(() => {
-        if (project) {
-          setName(project.name);
-          setDescription(project.description);
-          setTags(project.tags || []);
-          setAssignees(project.assignees || []);
-        } else {
-          setName('');
-          setDescription('');
-          setTags([]);
-          setAssignees([]);
-        }
+        if (project) { setName(project.name); setDescription(project.description); setTags(project.tags || []); setAssignees(project.assignees || []); }
+        else { setName(''); setDescription(''); setTags([]); setAssignees([]); }
       }, [project, isOpen]);
 
       const handleSubmit = () => {
         if (name.trim()) {
-          onSave({
-            id: project?.id || `project-${Date.now()}`,
-            name: name.trim(),
-            description: description.trim(),
-            tags: tags,
-            assignees: assignees,
-            issues: project?.issues || []
-          });
+          onSave({ id: project?.id || `project-${Date.now()}`, name: name.trim(), description: description.trim(), tags, assignees, issues: project?.issues || [] });
           onClose();
         }
       };
-
-      const handleAddTag = () => {
-        if (newTag.trim() && !tags.includes(newTag.trim())) {
-          setTags([...tags, newTag.trim()]);
-          setNewTag('');
-        }
-      };
-
-      const handleRemoveTag = (tagToRemove) => {
-        setTags(tags.filter(tag => tag !== tagToRemove));
-      };
+      const handleAddTag = () => { if (newTag.trim() && !tags.includes(newTag.trim())) { setTags([...tags, newTag.trim()]); setNewTag(''); } };
+      const handleRemoveTag = (tagToRemove) => setTags(tags.filter(tag => tag !== tagToRemove));
 
       if (!isOpen) return null;
 
-      return React.createElement("div", { 
-        className: "fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50" 
-      }, 
-        React.createElement("div", { 
-          className: "modal-container bg-white p-4 md:p-8 rounded-lg shadow-lg w-11/12 md:w-96 max-h-screen overflow-y-auto" 
-        },
-          React.createElement("h2", { 
-            className: "text-xl font-semibold mb-4" 
-          }, project ? "Edit Project" : "Create Project"),
-          
-          React.createElement("div", { className: "mb-4" },
-            React.createElement("label", { 
-              htmlFor: "projectName", 
-              className: "block text-sm font-medium text-gray-700 mb-1" 
-            }, "Project Name"),
-            React.createElement("input", {
-              type: "text",
-              id: "projectName",
-              className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-              value: name,
-              onChange: (e) => setName(e.target.value),
-              placeholder: "e.g., Website Redesign"
-            })
-          ),
-          
-          React.createElement("div", { className: "mb-4" },
-            React.createElement("label", { 
-              htmlFor: "projectDescription", 
-              className: "block text-sm font-medium text-gray-700 mb-1" 
-            }, "Description"),
-            React.createElement("textarea", {
-              id: "projectDescription",
-              rows: "3",
-              className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-              value: description,
-              onChange: (e) => setDescription(e.target.value),
-              placeholder: "Project description..."
-            })
-          ),
-          
-          React.createElement("div", { className: "mb-4" },
-            React.createElement(TeamMemberSelector, {
-              members: teamMembers,
-              selectedMembers: assignees,
-              onSelectionChange: setAssignees,
-              onAddNewMember: onAddNewMember
-            })
-          ),
-          
-          React.createElement("div", { className: "mb-4" },
-            React.createElement("label", { 
-              className: "block text-sm font-medium text-gray-700 mb-1" 
-            }, "Tags"),
-            
-            React.createElement("div", { className: "flex flex-wrap gap-2 mb-2" },
-              tags.map(tag => 
-                React.createElement("span", { 
-                  key: tag,
-                  className: "inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full"
-                },
-                  tag,
-                  React.createElement("button", {
-                    type: "button",
-                    className: "ml-1 text-blue-500 hover:text-blue-700",
-                    onClick: () => handleRemoveTag(tag)
-                  }, "×")
-                )
-              )
-            ),
-            
-            React.createElement("div", { className: "flex" },
-              React.createElement("input", {
-                type: "text",
-                className: "flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-                value: newTag,
-                onChange: (e) => setNewTag(e.target.value),
-                placeholder: "Add new tag",
-                onKeyPress: (e) => e.key === 'Enter' && handleAddTag()
-              }),
-              React.createElement("button", {
-                type: "button",
-                className: "ml-2 px-3 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700",
-                onClick: handleAddTag
-              }, "Add")
-            ),
-            
-            React.createElement("div", { className: "mt-2" },
-              React.createElement("p", { className: "text-xs text-gray-500 mb-1" }, "Suggested tags:"),
-              React.createElement("div", { className: "flex flex-wrap gap-1" },
-                availableTags
-                  .filter(tag => !tags.includes(tag))
-                  .map(tag => 
-                    React.createElement("button", {
-                      key: tag,
-                      type: "button",
-                      className: "px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full hover:bg-gray-200",
-                      onClick: () => {
-                        if (!tags.includes(tag)) {
-                          setTags([...tags, tag]);
-                        }
-                      }
-                    }, tag)
-                  )
-              )
-            )
-          ),
-          
-          React.createElement("div", { className: "flex justify-end space-x-2" },
-            React.createElement("button", { 
-              className: "px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50", 
-              onClick: onClose 
-            }, "Cancel"),
-            React.createElement("button", { 
-              className: "px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700", 
-              onClick: handleSubmit 
-            }, project ? "Save Changes" : "Create Project")
-          )
-        )
+      return (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="modal-container bg-white p-4 md:p-6 rounded-lg shadow-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-semibold mb-4">{project ? "Edit Project" : "Create Project"}</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
+                <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={name} onChange={(e)=>setName(e.target.value)} placeholder="e.g., Website Redesign"/>
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea rows="3" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={description} onChange={(e)=>setDescription(e.target.value)} placeholder="Project description..."/>
+              </div>
+              <div className="md:col-span-2">
+                <TeamMemberSelector members={teamMembers} selectedMembers={assignees} onSelectionChange={setAssignees} onAddNewMember={onAddNewMember}/>
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Tags</label>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {tags.map(tag => (
+                    <span key={tag} className="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                      {tag}
+                      <button type="button" className="ml-1 text-blue-500 hover:text-blue-700" onClick={()=>handleRemoveTag(tag)}>×</button>
+                    </span>
+                  ))}
+                </div>
+                <div className="flex">
+                  <input type="text" className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={newTag} onChange={(e)=>setNewTag(e.target.value)} placeholder="Add new tag" onKeyPress={(e)=> e.key==='Enter' && handleAddTag()}/>
+                  <button type="button" className="ml-2 px-3 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={handleAddTag}>Add</button>
+                </div>
+                <div className="mt-2">
+                  <p className="text-xs text-gray-500 mb-1">Suggested tags:</p>
+                  <div className="flex flex-wrap gap-1">
+                    {availableTags.filter(t => !tags.includes(t)).map(tag => (
+                      <button key={tag} type="button" className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full hover:bg-gray-200" onClick={()=>!tags.includes(tag) && setTags([...tags, tag])}>{tag}</button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-2 mt-4">
+              <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancel</button>
+              <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={handleSubmit}>{project ? "Save Changes" : "Create Project"}</button>
+            </div>
+          </div>
+        </div>
       );
     };
 
-    // Modal para crear/editar tareas
     const TaskModal = ({ task, onClose, onSave, isOpen, teamMembers, projectId, currentUser, onNotification }) => {
       const [title, setTitle] = useState(task?.title || '');
       const [description, setDescription] = useState(task?.description || '');
@@ -979,47 +584,45 @@
       const [assignee, setAssignee] = useState(task?.assignee || '');
       const [status, setStatus] = useState(task?.status || 'todo');
       const [priority, setPriority] = useState(task?.priority || 'medium');
+      const [dueDate, setDueDate] = useState(task?.dueDate || "");
       const [previousAssignee, setPreviousAssignee] = useState(task?.assignee || '');
 
       useEffect(() => {
         if (task) {
-          setTitle(task.title);
-          setDescription(task.description || '');
-          setTag(task.tag);
-          setAssignee(task.assignee);
-          setStatus(task.status);
-          setPriority(task.priority);
-          setPreviousAssignee(task.assignee || '');
+          setTitle(task.title); setDescription(task.description || ''); setTag(task.tag);
+          setAssignee(task.assignee); setStatus(task.status); setPriority(task.priority);
+          setDueDate(task.dueDate || ""); setPreviousAssignee(task.assignee || '');
         } else {
-          setTitle('');
-          setDescription('');
-          setTag('Feature Request');
-          setAssignee('');
-          setStatus('todo');
-          setPriority('medium');
-          setPreviousAssignee('');
+          setTitle(''); setDescription(''); setTag('Feature Request'); setAssignee('');
+          setStatus('todo'); setPriority('medium'); setDueDate(""); setPreviousAssignee('');
         }
       }, [task, isOpen]);
 
       const handleSubmit = () => {
         if (title.trim()) {
+          const nowIso = new Date().toISOString();
+          const activityItem = {
+            id: `act-${Date.now()}`,
+            type: task ? 'update' : 'create',
+            text: task ? `Task updated by ${currentUser.name}` : `Task created by ${currentUser.name}`,
+            at: nowIso,
+            userId: currentUser.id
+          };
           const newTask = {
             id: task?.id || `issue-${Date.now()}`,
             title: title.trim(),
             description: description.trim(),
-            tag: tag,
-            assignee: assignee,
-            status: status,
-            priority: priority,
+            tag, assignee, status, priority,
             date: task?.date || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-            projectId: projectId,
-            createdAt: task?.createdAt || new Date().toISOString(),
-            updatedAt: new Date().toISOString()
+            projectId,
+            createdAt: task?.createdAt || nowIso,
+            updatedAt: nowIso,
+            dueDate: dueDate || null,
+            activity: task?.activity ? [...task.activity, activityItem] : [activityItem]
           };
-          
+
           onSave(newTask);
-          
-          // Notificar si se asignó a un nuevo usuario
+
           if (assignee && assignee !== previousAssignee && assignee !== currentUser.avatar) {
             const assignedUser = teamMembers.find(member => member.avatar === assignee);
             if (assignedUser) {
@@ -1028,116 +631,87 @@
                 type: 'assignment',
                 title: 'New Task Assignment',
                 message: `You've been assigned to task: "${title.trim()}"`,
-                timestamp: new Date().toISOString(),
-                read: false,
-                userId: assignedUser.id,
-                taskId: newTask.id,
-                projectId: projectId
+                timestamp: nowIso, read: false,
+                userId: assignedUser.id, taskId: newTask.id, projectId
               });
             }
           }
-          
           onClose();
         }
       };
 
       if (!isOpen) return null;
 
-      return React.createElement("div", { className: "fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50" }, 
-        React.createElement("div", { className: "modal-container bg-white p-4 md:p-8 rounded-lg shadow-lg w-11/12 md:w-96 max-h-screen overflow-y-auto" },
-          React.createElement("h2", { className: "text-xl font-semibold mb-4" }, task ? "Edit Task" : "Create New Task"),
-          
-          React.createElement("div", { className: "mb-4" },
-            React.createElement("label", { className: "block text-sm font-medium text-gray-700 mb-1" }, "Task Title"),
-            React.createElement("input", {
-              type: "text",
-              className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-              value: title,
-              onChange: (e) => setTitle(e.target.value),
-              placeholder: "e.g., Fix login bug"
-            })
-          ),
-          
-          React.createElement("div", { className: "mb-4" },
-            React.createElement("label", { className: "block text-sm font-medium text-gray-700 mb-1" }, "Description"),
-            React.createElement("textarea", {
-              rows: "3",
-              className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-              value: description,
-              onChange: (e) => setDescription(e.target.value),
-              placeholder: "Task description..."
-            })
-          ),
-          
-          React.createElement("div", { className: "mb-4" },
-            React.createElement("label", { className: "block text-sm font-medium text-gray-700 mb-1" }, "Tag"),
-            React.createElement("select", {
-              className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-              value: tag,
-              onChange: (e) => setTag(e.target.value)
-              },
-              availableTags.map(tag => 
-                React.createElement("option", { key: tag, value: tag }, tag)
-              )
-            )
-          ),
-          
-          React.createElement("div", { className: "mb-4" },
-            React.createElement("label", { className: "block text-sm font-medium text-gray-700 mb-1" }, "Assignee"),
-            React.createElement("select", {
-              className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-              value: assignee,
-              onChange: (e) => setAssignee(e.target.value)
-            },
-              React.createElement("option", { value: "" }, "Unassigned"),
-              teamMembers.map(member => 
-                React.createElement("option", { key: member.id, value: member.avatar }, member.name)
-              )
-            )
-          ),
-          
-          React.createElement("div", { className: "grid grid-cols-1 md:grid-cols-2 gap-4 mb-4" },
-            React.createElement("div", null,
-              React.createElement("label", { className: "block text-sm font-medium text-gray-700 mb-1" }, "Status"),
-              React.createElement("select", {
-                className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-                value: status,
-                onChange: (e) => setStatus(e.target.value)
-              },
-                statusOptions.map(status => 
-                  React.createElement("option", { key: status.id, value: status.id }, status.name)
-                )
-              )
-            ),
-            React.createElement("div", null,
-              React.createElement("label", { className: "block text-sm font-medium text-gray-700 mb-1" }, "Priority"),
-              React.createElement("select", {
-                className: "block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2",
-                value: priority,
-                onChange: (e) => setPriority(e.target.value)
-              },
-                priorityOptions.map(priority => 
-                  React.createElement("option", { key: priority.id, value: priority.id }, priority.name)
-                )
-              )
-            )
-          ),
-          
-          React.createElement("div", { className: "flex justify-end space-x-2" },
-            React.createElement("button", { 
-              className: "px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50", 
-              onClick: onClose 
-            }, "Cancel"),
-            React.createElement("button", { 
-              className: "px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700", 
-              onClick: handleSubmit 
-            }, task ? "Save Changes" : "Create Task")
-          )
-        )
+      return (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="modal-container bg-white p-4 md:p-6 rounded-lg shadow-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-semibold mb-4">{task ? "Edit Task" : "Create New Task"}</h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Task Title</label>
+                <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="e.g., Fix login bug"/>
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea rows="3" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={description} onChange={(e)=>setDescription(e.target.value)} placeholder="Task description..."/>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Tag</label>
+                <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={tag} onChange={(e)=>setTag(e.target.value)}>
+                  {availableTags.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Assignee</label>
+                <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={assignee} onChange={(e)=>setAssignee(e.target.value)}>
+                  <option value="">Unassigned</option>
+                  {teamMembers.map(m => <option key={m.id} value={m.avatar}>{m.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={status} onChange={(e)=>setStatus(e.target.value)}>
+                  {statusOptions.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={priority} onChange={(e)=>setPriority(e.target.value)}>
+                  {priorityOptions.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Due date</label>
+                <input type="date" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={dueDate} onChange={(e)=>setDueDate(e.target.value)} />
+              </div>
+
+              {task && (
+                <div className="md:col-span-2">
+                  <h3 className="text-sm font-semibold text-gray-700 mb-2">Activity</h3>
+                  {(task.activity && task.activity.length) ? (
+                    <ul className="space-y-2 max-h-40 overflow-y-auto border rounded p-3 bg-gray-50">
+                      {task.activity.slice().reverse().map(a => (
+                        <li key={a.id} className="text-xs text-gray-700">
+                          <span className="font-medium">{new Date(a.at).toLocaleString()}</span>: {a.text}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : <p className="text-xs text-gray-500">No activity yet</p>}
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end space-x-2 mt-4">
+              <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancel</button>
+              <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={handleSubmit}>{task ? "Save Changes" : "Create Task"}</button>
+            </div>
+          </div>
+        </div>
       );
     };
 
-    // Componente principal de la aplicación
+    /* ========== App principal ========== */
     const App = () => {
       const [projects, setProjects] = useState(initialProjects);
       const [teamMembers, setTeamMembers] = useState(initialTeamMembers);
@@ -1154,267 +728,163 @@
       const [selectedTagFilter, setSelectedTagFilter] = useState(null);
       const [searchTerm, setSearchTerm] = useState('');
       const [notifications, setNotifications] = useState([]);
-      
-      // Obtener usuario actual del localStorage o usar uno por defecto
+
       const [currentUser, setCurrentUser] = useState(() => {
         const savedUser = localStorage.getItem('currentUser');
-        if (savedUser) {
-          return JSON.parse(savedUser);
-        }
-        
-        // Crear usuario basado en los datos del login
+        if (savedUser) return JSON.parse(savedUser);
         const userEmail = localStorage.getItem('userEmail');
         const userName = localStorage.getItem('userName');
-        
         if (userEmail && userName) {
-          const newUser = {
-            id: `user-${Date.now()}`,
-            name: userName,
-            email: userEmail,
-            role: 'User',
-            avatar: `https://i.pravatar.cc/100?u=${userEmail}`
-          };
-          
+          const newUser = { id: `user-${Date.now()}`, name: userName, email: userEmail, role: 'User', avatar: `https://i.pravatar.cc/100?u=${userEmail}` };
           localStorage.setItem('currentUser', JSON.stringify(newUser));
           return newUser;
         }
-        
-        // Usuario por defecto si no hay datos de login
         return initialTeamMembers[0];
       });
-      
-      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-      // Obtener el proyecto seleccionado
+      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
       const currentProject = projects.find(p => p.id === selectedProject) || projects[0];
 
-      // Efecto para notificaciones automáticas cada hora
+      // Notificaciones automáticas (stale / inactive / overdue)
       useEffect(() => {
         const checkForTaskNotifications = () => {
           const now = new Date();
           const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
           const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-          
           let newNotifications = [];
-          
-          // Revisar todas las tareas en todos los proyectos
+
           projects.forEach(project => {
             project.issues.forEach(issue => {
               const updatedAt = new Date(issue.updatedAt);
               const createdAt = new Date(issue.createdAt);
-              
-              // Notificar si la tarea lleva más de 24 horas en el mismo estado
+
               if (updatedAt < twentyFourHoursAgo && issue.status !== 'done' && issue.status !== 'cancelled') {
                 newNotifications.push({
                   id: `notif-${project.id}-${issue.id}-stale`,
-                  type: 'stale_task',
-                  title: 'Task Stale Alert',
-                  message: `Task "${issue.title}" has been in ${statusOptions.find(s => s.id === issue.status)?.name} status for over 24 hours`,
-                  timestamp: new Date().toISOString(),
-                  read: false,
-                  projectId: project.id,
-                  taskId: issue.id
+                  type: 'stale_task', title: 'Task Stale Alert',
+                  message: `Task "${issue.title}" has been in ${statusOptions.find(s=>s.id===issue.status)?.name} status for over 24 hours`,
+                  timestamp: new Date().toISOString(), read: false, projectId: project.id, taskId: issue.id
                 });
               }
-              
-              // Notificar si la tarea fue creada hace más de 2 horas y sigue en "To Do"
               if (createdAt < oneHourAgo && issue.status === 'todo') {
                 newNotifications.push({
                   id: `notif-${project.id}-${issue.id}-inactive`,
-                  type: 'inactive_task',
-                  title: 'Task Inactivity Alert',
+                  type: 'inactive_task', title: 'Task Inactivity Alert',
                   message: `Task "${issue.title}" has been in To Do status for over 1 hour`,
-                  timestamp: new Date().toISOString(),
-                  read: false,
-                  projectId: project.id,
-                  taskId: issue.id
+                  timestamp: new Date().toISOString(), read: false, projectId: project.id, taskId: issue.id
                 });
+              }
+              if (issue.dueDate) {
+                const due = new Date(issue.dueDate);
+                if (due < now && issue.status !== 'done' && issue.status !== 'cancelled') {
+                  newNotifications.push({
+                    id: `notif-${project.id}-${issue.id}-overdue`,
+                    type: 'overdue_task', title: 'Task Overdue',
+                    message: `Task "${issue.title}" is past its due date`,
+                    timestamp: new Date().toISOString(), read: false, projectId: project.id, taskId: issue.id
+                  });
+                }
               }
             });
           });
-          
-          if (newNotifications.length > 0) {
-            setNotifications(prev => [...newNotifications, ...prev]);
-          }
+          if (newNotifications.length > 0) setNotifications(prev => [...newNotifications, ...prev]);
         };
-        
-        // Ejecutar inmediatamente y luego cada hora
         checkForTaskNotifications();
         const interval = setInterval(checkForTaskNotifications, 60 * 60 * 1000);
-        
         return () => clearInterval(interval);
       }, [projects]);
 
-      // Función para navegar a un elemento desde una notificación
       const handleNavigateFromNotification = (notification) => {
-        // Cerrar el panel de notificaciones
         setShowNotifications(false);
-        
-        // Marcar la notificación como leída
-        setNotifications(notifications.map(n => 
-          n.id === notification.id ? { ...n, read: true } : n
-        ));
-        
-        // Si la notificación está relacionada con un proyecto
+        setNotifications(notifications.map(n => n.id === notification.id ? { ...n, read: true } : n));
         if (notification.projectId) {
-          // Seleccionar el proyecto
           setSelectedProject(notification.projectId);
-          
-          // Cerrar sidebar en móviles
           setIsSidebarOpen(false);
-          
-          // Esperar a que el proyecto se cargue y luego buscar la tarea
           setTimeout(() => {
-            // Si la notificación está relacionada con una tarea
             if (notification.taskId) {
-              // Buscar la tarea en el proyecto actual
               const taskElement = document.querySelector(`[data-task-id="${notification.taskId}"]`);
               if (taskElement) {
-                // Desplazarse a la tarea y resaltarla
                 taskElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 taskElement.classList.add('highlight-element');
-                
-                // Quitar el resaltado después de 2 segundos
-                setTimeout(() => {
-                  taskElement.classList.remove('highlight-element');
-                }, 2000);
+                setTimeout(() => taskElement.classList.remove('highlight-element'), 2000);
               }
             }
           }, 100);
         }
       };
 
-      // Obtener información de los asignados para el proyecto actual
-      const getAssigneeInfo = (assigneeIds) => {
-        return assigneeIds.map(id => teamMembers.find(member => member.id === id));
-      };
+      const getAssigneeInfo = (assigneeIds) => assigneeIds.map(id => teamMembers.find(member => member.id === id));
 
-      // Manejar el movimiento de tareas
       const handleMoveTask = (task, newStatus) => {
+        const nowIso = new Date().toISOString();
+        const activityMove = {
+          id: `act-${Date.now()}`, type: 'status_change',
+          text: `Status changed to "${statusOptions.find(s=>s.id===newStatus)?.name}" by ${currentUser.name}`,
+          at: nowIso, userId: currentUser.id
+        };
+
         setProjects(projects.map(project => {
           if (project.id === selectedProject) {
             return {
               ...project,
-              issues: project.issues.map(issue => 
-                issue.id === task.id ? { 
-                  ...issue, 
-                  status: newStatus,
-                  updatedAt: new Date().toISOString()
-                } : issue
+              issues: project.issues.map(issue =>
+                issue.id === task.id ? { ...issue, status: newStatus, updatedAt: nowIso, activity: [...(issue.activity || []), activityMove] } : issue
               )
             };
           }
           return project;
         }));
-        
-        // Notificar cambio de estado
+
         setNotifications(prev => [{
-          id: `notif-${task.id}-status`,
-          type: 'status_change',
-          title: 'Task Status Updated',
+          id: `notif-${task.id}-status`, type: 'status_change', title: 'Task Status Updated',
           message: `Task "${task.title}" moved to ${statusOptions.find(s => s.id === newStatus)?.name}`,
-          timestamp: new Date().toISOString(),
-          read: false,
-          projectId: selectedProject,
-          taskId: task.id
+          timestamp: nowIso, read: false, projectId: selectedProject, taskId: task.id
         }, ...prev]);
       };
 
-      // Manejar la creación/edición de proyectos
       const handleSaveProject = (projectData) => {
-        if (projects.some(p => p.id === projectData.id)) {
-          // Editar proyecto existente
-          setProjects(projects.map(p => 
-            p.id === projectData.id ? projectData : p
-          ));
-        } else {
-          // Crear nuevo proyecto
-          setProjects([...projects, projectData]);
-          setSelectedProject(projectData.id);
-        }
-        setShowProjectModal(false);
-        setEditingProject(null);
+        if (projects.some(p => p.id === projectData.id)) setProjects(projects.map(p => p.id === projectData.id ? projectData : p));
+        else { setProjects([...projects, projectData]); setSelectedProject(projectData.id); }
+        setShowProjectModal(false); setEditingProject(null);
       };
 
-      // Manejar la adición de nuevos miembros al equipo
-      const handleAddTeamMember = (memberData) => {
-        setTeamMembers([...teamMembers, memberData]);
-        setShowAddMemberModal(false);
-      };
-
-      // Manejar la eliminación de miembros del equipo
+      const handleAddTeamMember = (memberData) => { setTeamMembers([...teamMembers, memberData]); setShowAddMemberModal(false); };
       const handleRemoveTeamMember = (memberId) => {
         if (window.confirm("Are you sure you want to remove this team member?")) {
-          // Remover de todos los proyectos
-          const updatedProjects = projects.map(project => ({
-            ...project,
-            assignees: project.assignees.filter(id => id !== memberId)
-          }));
-          
+          const updatedProjects = projects.map(project => ({ ...project, assignees: project.assignees.filter(id => id !== memberId) }));
           setProjects(updatedProjects);
           setTeamMembers(teamMembers.filter(member => member.id !== memberId));
         }
       };
 
-      // Manejar la creación/edición de tareas
       const handleSaveTask = (taskData) => {
         setProjects(projects.map(project => {
           if (project.id === taskData.projectId) {
             if (taskData.id && project.issues.some(issue => issue.id === taskData.id)) {
-              // Editar tarea existente
-              return {
-                ...project,
-                issues: project.issues.map(issue => 
-                  issue.id === taskData.id ? taskData : issue
-                )
-              };
+              return { ...project, issues: project.issues.map(issue => issue.id === taskData.id ? taskData : issue) };
             } else {
-              // Crear nueva tarea
-              return {
-                ...project,
-                issues: [...project.issues, taskData]
-              };
+              return { ...project, issues: [...project.issues, taskData] };
             }
           }
           return project;
         }));
-        setShowTaskModal(false);
-        setEditingTask(null);
+        setShowTaskModal(false); setEditingTask(null);
       };
 
-      // Manejar la eliminación de proyectos
       const handleDeleteProject = (projectId) => {
         if (window.confirm("Are you sure you want to delete this project? All tasks will be lost.")) {
           const newProjects = projects.filter(p => p.id !== projectId);
           setProjects(newProjects);
-          
-          if (selectedProject === projectId) {
-            setSelectedProject(newProjects[0]?.id || null);
-          }
+          if (selectedProject === projectId) setSelectedProject(newProjects[0]?.id || null);
         }
       };
 
-      // Manejar notificaciones
-      const handleAddNotification = (notification) => {
-        setNotifications(prev => [notification, ...prev]);
-      };
+      const handleAddNotification = (n) => setNotifications(prev => [n, ...prev]);
+      const handleMarkAsRead = () => setNotifications(notifications.map(n => ({ ...n, read: true })));
+      const handleClearAll = () => setNotifications([]);
 
-      const handleMarkAsRead = () => {
-        setNotifications(notifications.map(n => ({ ...n, read: true })));
-      };
+      const handleSaveUserProfile = (userData) => { setCurrentUser(userData); localStorage.setItem('currentUser', JSON.stringify(userData)); setShowUserProfile(false); };
 
-      const handleClearAll = () => {
-        setNotifications([]);
-      };
-      
-      // Manejar guardado del perfil de usuario
-      const handleSaveUserProfile = (userData) => {
-        setCurrentUser(userData);
-        localStorage.setItem('currentUser', JSON.stringify(userData));
-        setShowUserProfile(false);
-      };
-
-      // Filtrar issues según los filtros seleccionados
       const filteredIssues = currentProject ? currentProject.issues.filter(issue => {
         const matchesSearch = issue.title.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesTagFilter = selectedTagFilter === null || issue.tag === selectedTagFilter;
@@ -1423,479 +893,311 @@
 
       const unreadNotifications = notifications.filter(n => !n.read).length;
 
-      return React.createElement("div", { className: "App" },
-        React.createElement("div", { className: "h-screen flex" },
-          // Overlay para móviles
-          React.createElement("div", {
-            className: `overlay ${isSidebarOpen ? 'active' : ''}`,
-            onClick: () => setIsSidebarOpen(false)
-          }),
-          
-          // Barra lateral
-          React.createElement("div", { 
-            className: `sidebar fixed md:relative w-64 px-8 py-4 bg-gray-100 border-r overflow-auto md:translate-x-0 ${isSidebarOpen ? '' : 'sidebar-mobile-hidden'}` 
-          },
-            React.createElement("div", { className: "flex justify-between items-center" },
-              React.createElement("img", { className: "h-8 w-8", src: "https://i.pravatar.cc/100", alt: "logo" }),
-              React.createElement("button", {
-                className: "text-sm text-blue-600 hover:text-blue-800 font-medium",
-                onClick: () => setShowAddMemberModal(true)
-              }, "+ Add Member")
-            ),
-            
-            React.createElement("nav", { className: "mt-8" },
-              React.createElement("h3", { className: "text-xs font-semibold text-gray-600 uppercase tracking-wide text-left" }, "Projects"),
-              
-              React.createElement("div", { className: "mt-2 -mx-3" },
-                projects.map(project => 
-                  React.createElement("div", { 
-                    key: project.id,
-                    className: `flex justify-between items-center px-3 py-2 rounded-lg ${selectedProject === project.id ? 'bg-gray-200' : ''}`
-                  },
-                    React.createElement("button", {
-                      className: "flex-1 text-left text-sm font-medium text-gray-900",
-                      onClick: () => {
-                        setSelectedProject(project.id);
-                        setIsSidebarOpen(false);
-                      }
-                    }, project.name),
-                    React.createElement("div", { className: "flex space-x-1" },
-                      React.createElement("button", {
-                        className: "text-gray-500 hover:text-gray-700",
-                        onClick: (e) => {
-                          e.stopPropagation();
-                          setEditingProject(project);
-                          setShowProjectModal(true);
-                        }
-                      }, "✏️"),
-                      React.createElement("button", {
-                        className: "text-gray-500 hover:text-red-500",
-                        onClick: (e) => {
-                          e.stopPropagation();
-                          handleDeleteProject(project.id);
-                        }
-                      }, "🗑️")
-                    )
-                  )
-                )
-              ),
-              
-              React.createElement("button", {
-                className: "mt-4 -ml-1 flex items-center text-sm font-medium text-gray-600 hover:text-gray-900",
-                onClick: () => {
-                  setEditingProject(null);
-                  setShowProjectModal(true);
-                }
-              },
-                React.createElement("svg", { className: "h-5 w-5 text-gray-500", viewBox: "0 0 24 24", fill: "none" },
-                  React.createElement("path", {
-                    stroke: "currentColor",
-                    strokeWidth: "2",
-                    strokeLinecap: "round",
-                    d: "M12 7v10m5-5H7"
-                  })
-                ),
-                React.createElement("span", { className: "ml-1" }, "Create Project")
-              )
-            ),
-            
-            React.createElement("nav", { className: "mt-8" },
-              React.createElement("h3", { className: "text-xs font-semibold text-gray-600 uppercase tracking-wide text-left" }, "Team Members"),
-              React.createElement("div", { className: "mt-2 -mx-3 max-h-40 overflow-y-auto" },
-                teamMembers.map(member => 
-                  React.createElement("div", {
-                    key: member.id,
-                    className: "flex items-center px-3 py-2 rounded-lg justify-between group"
-                  },
-                    React.createElement("div", { className: "flex items-center flex-1" },
-                      React.createElement("img", {
-                        src: member.avatar,
-                        alt: member.name,
-                        className: "avatar mr-3"
-                      }),
-                      React.createElement("div", { className: "flex-1 truncate" },
-                        React.createElement("p", { className: "text-sm font-medium text-gray-900 truncate" }, member.name),
-                        React.createElement("p", { className: "text-xs text-gray-500 truncate" }, member.role)
-                      )
-                    ),
-                    React.createElement("button", {
-                      className: "text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100",
-                      onClick: () => handleRemoveTeamMember(member.id),
-                      title: "Remove member"
-                    }, "🗑️")
-                  )
-                )
-              )
-            ),
-            
-            React.createElement("nav", { className: "mt-8" },
-              React.createElement("h3", { className: "text-xs font-semibold text-gray-600 uppercase tracking-wide text-left" }, "Tags"),
-              React.createElement("div", { className: "mt-2 -mx-3" },
-                availableTags.map(tag => 
-                  React.createElement("button", {
-                    key: tag,
-                    className: `flex justify-between items-center px-3 py-2 rounded-lg w-full text-left ${selectedTagFilter === tag ? 'bg-gray-200' : ''}`,
-                    onClick: () => { 
-                      setSelectedTagFilter(selectedTagFilter === tag ? null : tag);
-                      setSelectedIssueFilter('All');
-                    }
-                  },
-                    React.createElement("span", { className: "text-sm font-medium text-gray-700" }, tag)
-                  )
-                )
-              )
-            )
-          ),
-          
-          // Contenido principal
-          React.createElement("div", { className: "flex-1 min-w-0 bg-white flex flex-col" },
-            React.createElement("div", { className: "flex-shrink-0 border-b-2 border-gray-200" },
-              React.createElement("header", { className: "px-4 md:px-6" },
-                React.createElement("div", { className: "flex justify-between items-center border-b border-gray-200 py-2" },
-                  React.createElement("div", { className: "flex items-center" },
-                    React.createElement("button", {
-                      className: "md:hidden mr-2 text-gray-500",
-                      onClick: () => setIsSidebarOpen(!isSidebarOpen)
-                    },
-                      React.createElement("svg", { className: "h-6 w-6", fill: "none", viewBox: "0 0 24 24", stroke: "currentColor" },
-                        React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "2", d: "M4 6h16M4 12h16M4 18h16" })
-                      )
-                    ),
-                    React.createElement("div", { className: "relative search-input w-40 md:w-64" },
-                      React.createElement("span", { className: "absolute pl-3 inset-y-0 left-0 flex items-center" },
-                        React.createElement("svg", { className: "h-6 w-6 text-gray-600", viewBox: "0 0 24 24", fill: "none" },
-                          React.createElement("path", {
-                            stroke: "currentColor",
-                            strokeWidth: "2",
-                            strokeLinecap: "round",
-                            d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                          })
-                        )
-                      ),
-                      React.createElement("input", {
-                        className: "block w-full rounded-lg border border-gray-400 pl-10 pr-4 py-2 text-gray-900 text-sm placeholder-gray-600",
-                        placeholder: "Search tasks...",
-                        value: searchTerm,
-                        onChange: (e) => setSearchTerm(e.target.value)
-                      })
-                    )
-                  ),
-                  
-                  React.createElement("div", { className: "flex items-center" },
-                    React.createElement("button", { 
-                      className: "relative notification-button mr-4",
-                      onClick: () => setShowNotifications(!showNotifications)
-                    },
-                      React.createElement("svg", { className: "h-5 w-5 text-gray-500", xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 512 512" },
-                        React.createElement("path", { 
-                          stroke: "currentColor", 
-                          d: "M468 392h-20c-10.384 0-18.709-3.609-24.745-10.728-7.363-8.684-11.255-22.386-11.255-39.626V204c0-78.818-59.543-144.777-136-154.699V0h-40v49.301C159.543 59.223 100 125.181 100 204v144c0 14.175-3.734 25.775-10.799 33.546C82.984 388.385 74.27 392 64 392H44v56h161.413A51.888 51.888 0 00204 460c0 28.673 23.327 52 52 52s52-23.327 52-52c0-4.131-.499-8.145-1.413-12H468v-56zm-212 80c-6.617 0-12-5.383-12-12s5.383-12 12-12 12 5.383 12 12-5.383 12-12 12zm-136.792-64C132.813 392.784 140 372.052 140 348V204c0-63.067 51.263-115.072 114.302-115.987h3.396C320.737 88.928 372 140.933 372 204v137.646c0 26.84 7.174 49.488 20.745 65.494.245.289.492.576.741.860H119.208z" 
-                        })
-                      ),
-                      unreadNotifications > 0 && React.createElement("span", { className: "notification-badge" }, unreadNotifications)
-                    ),
-                    
-                    React.createElement("button", { 
-                      className: "ml-2 cursor-pointer",
-                      onClick: () => setShowUserProfile(true)
-                    },
-                      React.createElement("img", { 
-                        className: "h-8 w-8 rounded-full object-cover", 
-                        src: currentUser.avatar, 
-                        alt: "avatar",
-                        title: "Ver perfil"
-                      })
-                    )
-                  )
-                ),
-                
-                React.createElement("div", { className: "flex flex-col md:flex-row md:justify-between md:items-center py-2 header-actions" },
-                  React.createElement("div", { className: "flex items-center mb-2 md:mb-0" },
-                    React.createElement("h2", { className: "project-title text-xl md:text-2xl font-semibold text-gray-900 leading-tight" }, 
-                      currentProject ? currentProject.name : "No Project Selected"
-                    ),
-                    React.createElement("button", {
-                      className: "ml-4 text-sm text-blue-600 hover:text-blue-800",
-                      onClick: () => {
-                        setEditingProject(currentProject);
-                        setShowProjectModal(true);
-                      }
-                    }, "Edit")
-                  ),
-                  
-                  React.createElement("div", { className: "flex items-center space-x-4 view-toggle" },
-                    React.createElement("div", { className: "flex bg-gray-100 rounded-md p-1" },
-                      React.createElement("button", {
-                        className: `px-3 py-1 text-sm rounded ${activeView === 'list' ? 'bg-white shadow' : 'text-gray-600'}`,
-                        onClick: () => setActiveView('list')
-                      }, "List View"),
-                      React.createElement("button", {
-                        className: `px-3 py-1 text-sm rounded ${activeView === 'kanban' ? 'bg-white shadow' : 'text-gray-600'}`,
-                        onClick: () => setActiveView('kanban')
-                      }, "Kanban Board")
-                    ),
-                    
-                    React.createElement("button", {
-                      className: "flex items-center pl-2 pr-4 py-1 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700",
-                      onClick: () => {
-                        setEditingTask(null);
-                        setShowTaskModal(true);
-                      },
-                      disabled: !currentProject
-                    },
-                      React.createElement("svg", { className: "h-5 w-5", viewBox: "0 0 24 24", fill: "none" },
-                        React.createElement("path", {
-                          stroke: "currentColor",
-                          strokeWidth: "2",
-                          strokeLinecap: "round",
-                          d: "M12 7v10m5-5H7"
-                        })
-                      ),
-                      React.createElement("span", { className: "ml-1" }, "New Task")
-                    )
-                  )
-                )
-              )
-            ),
-            
-            // Área de contenido
-            React.createElement("div", { className: "flex-1 overflow-auto" },
-              currentProject ? (
-                React.createElement("div", null,
-                  React.createElement("div", { className: "p-4 border-b" },
-                    React.createElement("p", { className: "text-gray-600" }, currentProject.description),
-                    
-                    React.createElement("div", { className: "flex items-center mt-2" },
-                      React.createElement("h3", { className: "text-sm font-medium text-gray-700 mr-2" }, "Assigned to:"),
-                      React.createElement("div", { className: "flex -space-x-2" },
-                        getAssigneeInfo(currentProject.assignees).map(member => 
-                          member ? React.createElement("img", {
-                            key: member.id,
-                            src: member.avatar,
-                            alt: member.name,
-                            className: "avatar border-2 border-white",
-                            title: `${member.name} (${member.role})`
-                          }) : null
-                        )
-                      )
-                    ),
-                    
-                    React.createElement("div", { className: "flex flex-wrap gap-2 mt-2" },
-                      currentProject.tags.map(tag => 
-                        React.createElement("span", { 
-                          key: tag,
-                          className: "px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full"
-                        }, tag)
-                      )
-                    )
-                  ),
-                  
-                  activeView === 'kanban' ? 
-                    React.createElement("div", { 
-                      className: "p-4"
-                    },
-                      React.createElement("div", { className: "kanban-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4" },
-                        statusOptions.map(status => {
-                          const statusIssues = filteredIssues.filter(issue => issue.status === status.id);
-                          return React.createElement("div", {
-                            key: status.id,
-                            className: `kanban-column rounded-lg p-4`,
-                            onDragOver: (e) => {
-                              e.preventDefault();
-                            },
-                            onDrop: (e) => {
-                              e.preventDefault();
-                              const taskId = e.dataTransfer.getData('text/plain');
-                              const task = filteredIssues.find(t => t.id === taskId);
-                              if (task && task.status !== status.id) {
-                                handleMoveTask(task, status.id);
-                              }
-                            }
-                          },
-                            React.createElement("div", { className: "flex items-center mb-4" },
-                              React.createElement("span", { className: `w-3 h-3 rounded-full ${status.color} mr-2` }),
-                              React.createElement("h3", { className: "font-medium text-gray-700" }, status.name),
-                              React.createElement("span", { className: "ml-2 bg-gray-200 text-gray-700 text-xs font-medium rounded-full px-2 py-1" }, 
-                                statusIssues.length
-                              )
-                            ),
-                            
-                            React.createElement("div", { className: "space-y-3" },
-                              statusIssues.map(issue => 
-                                React.createElement("div", {
-                                  key: issue.id,
-                                  "data-task-id": issue.id,
-                                  className: `task-card bg-white p-4 rounded shadow status-${issue.status}`,
-                                  draggable: true,
-                                  onDragStart: (e) => {
-                                    e.dataTransfer.setData('text/plain', issue.id);
-                                    e.target.classList.add('dragging');
-                                  },
-                                  onDragEnd: (e) => {
-                                    e.target.classList.remove('dragging');
-                                  }
-                                },
-                                  React.createElement("div", { className: "flex justify-between items-start mb-2" },
-                                    React.createElement("h4", { className: "text-sm font-medium text-gray-900" }, issue.title),
-                                    React.createElement("span", { className: `text-xs font-medium px-2 py-1 rounded-full ${priorityOptions.find(p => p.id === issue.priority)?.color || 'bg-gray-500'} text-white` },
-                                      priorityOptions.find(p => p.id === issue.priority)?.name || 'Medium'
-                                    )
-                                  ),
-                                  
-                                  React.createElement("p", { className: "text-xs text-gray-500 mb-3" }, issue.description || "No description available"),
-                                  
-                                  React.createElement("div", { className: "flex justify-between items-center" },
-                                    React.createElement("span", { className: "text-xs text-gray-500" }, issue.date),
-                                    React.createElement("div", { className: "flex items-center" },
-                                      React.createElement("span", { className: "text-xs bg-teal-100 text-teal-900 px-2 py-1 rounded mr-2" }, issue.tag),
-                                      issue.assignee && React.createElement("img", {
-                                        src: issue.assignee,
-                                        alt: "Assignee",
-                                        className: "h-6 w-6 rounded-full"
-                                      })
-                                    )
-                                  ),
-                                  
-                                  React.createElement("button", {
-                                    className: "w-full mt-3 text-xs text-blue-600 hover:text-blue-800",
-                                    onClick: () => {
-                                      setEditingTask(issue);
-                                      setShowTaskModal(true);
-                                    }
-                                  }, "Edit Task")
-                                )
-                              )
-                            )
-                          );
-                        })
-                      )
-                    ) : 
-                    React.createElement("div", { className: "p-4" },
-                      React.createElement("h3", { className: "text-lg font-medium text-gray-900 mb-4" }, "Tasks"),
-                      
-                      React.createElement("div", { className: "grid grid-cols-1 gap-4" },
-                        filteredIssues.length > 0 ? (
-                          filteredIssues.map(issue => 
-                            React.createElement("div", { 
-                              key: issue.id,
-                              "data-task-id": issue.id,
-                              className: "p-4 bg-white rounded shadow"
-                            },
-                              React.createElement("div", { className: "flex justify-between items-start mb-2" },
-                                React.createElement("h4", { className: "text-sm font-medium text-gray-900" }, issue.title),
-                                React.createElement("div", { className: "flex items-center space-x-2" },
-                                  React.createElement("span", { className: `text-xs font-medium px-2 py-1 rounded-full ${priorityOptions.find(p => p.id === issue.priority)?.color || 'bg-gray-500'} text-white` },
-                                    priorityOptions.find(p => p.id === issue.priority)?.name || 'Medium'
-                                  ),
-                                  React.createElement("span", { className: `text-xs font-medium px-2 py-1 rounded-full ${statusOptions.find(s => s.id === issue.status)?.color || 'bg-gray-500'} text-white` },
-                                    statusOptions.find(s => s.id === issue.status)?.name || 'To Do'
-                                  )
-                                )
-                              ),
-                              
-                              React.createElement("p", { className: "text-xs text-gray-500 mb-3" }, issue.description || "No description"),
-                              
-                              React.createElement("div", { className: "flex justify-between items-center" },
-                                React.createElement("div", { className: "flex items-center" },
-                                  React.createElement("span", { className: "text-xs text-gray-500 mr-3" }, issue.date),
-                                  React.createElement("span", { className: "text-xs bg-teal-100 text-teal-900 px-2 py-1 rounded" }, issue.tag)
-                                ),
-                                React.createElement("div", { className: "flex items-center" },
-                                  issue.assignee && React.createElement("img", {
-                                    src: issue.assignee,
-                                    alt: "Assignee",
-                                    className: "h-6 w-6 rounded-full mr-2"
-                                  }),
-                                  React.createElement("button", {
-                                    className: "text-xs text-blue-600 hover:text-blue-800",
-                                    onClick: () => {
-                                      setEditingTask(issue);
-                                      setShowTaskModal(true);
-                                    }
-                                  }, "Edit")
-                                )
-                              )
-                            )
-                          )
-                        ) : (
-                          React.createElement("p", { className: "text-gray-500 text-center py-8" }, "No tasks found")
-                        )
-                      )
-                    )
-                )
-              ) : (
-                React.createElement("div", { className: "flex flex-col items-center justify-center h-full" },
-                  React.createElement("p", { className: "text-gray-500 mb-4" }, "No project selected"),
-                  React.createElement("button", {
-                    className: "px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700",
-                    onClick: () => {
-                      setEditingProject(null);
-                      setShowProjectModal(true);
-                    }
-                  }, "Create your first project")
-                )
-              )
-            )
-          )
-        ),
-        
-        // Panel de notificaciones
-        React.createElement(NotificationPanel, {
-          notifications: notifications,
-          isOpen: showNotifications,
-          onClose: () => setShowNotifications(false),
-          onMarkAsRead: handleMarkAsRead,
-          onClearAll: handleClearAll,
-          onNavigateToItem: handleNavigateFromNotification
-        }),
-        
-        // Modal de perfil de usuario
-        React.createElement(UserProfileModal, {
-          user: currentUser,
-          onClose: () => setShowUserProfile(false),
-          onSave: handleSaveUserProfile,
-          isOpen: showUserProfile
-        }),
-        
-        // Modals
-        showProjectModal && React.createElement(ProjectModal, {
-          project: editingProject,
-          onClose: () => {
-            setShowProjectModal(false);
-            setEditingProject(null);
-          },
-          onSave: handleSaveProject,
-          isOpen: showProjectModal,
-          teamMembers: teamMembers,
-          onAddNewMember: () => {
-            setShowProjectModal(false);
-            setShowAddMemberModal(true);
-          }
-        }),
-        
-        showAddMemberModal && React.createElement(AddTeamMemberModal, {
-          onClose: () => setShowAddMemberModal(false),
-          onSave: handleAddTeamMember,
-          isOpen: showAddMemberModal
-        }),
-        
-        showTaskModal && React.createElement(TaskModal, {
-          task: editingTask,
-          onClose: () => {
-            setShowTaskModal(false);
-            setEditingTask(null);
-          },
-          onSave: handleSaveTask,
-          isOpen: showTaskModal,
-          teamMembers: teamMembers,
-          projectId: selectedProject,
-          currentUser: currentUser,
-          onNotification: handleAddNotification
-        })
+      const prIdToAccent = (id) => ({
+        critical: 'accent-critical',
+        high: 'accent-high',
+        medium: 'accent-medium',
+        low: 'accent-low'
+      }[id] || 'accent-medium');
+
+      const prIdToChip = (id) => `chip chip-priority-${id || 'medium'}`;
+
+      return (
+        <div className="App">
+          <div className="h-screen flex">
+            <div className={`overlay ${isSidebarOpen ? 'active' : ''}`} onClick={()=>setIsSidebarOpen(false)} />
+            <div className={`sidebar fixed md:relative w-64 px-8 py-4 bg-gray-100 border-r overflow-auto md:translate-x-0 ${isSidebarOpen ? '' : 'sidebar-mobile-hidden'}`}>
+              <div className="flex justify-between items-center">
+                <img className="h-8 w-8" src="https://i.pravatar.cc/100" alt="logo"/>
+                <button className="text-sm text-blue-600 hover:text-blue-800 font-medium" onClick={()=>setShowAddMemberModal(true)}>+ Add Member</button>
+              </div>
+
+              <nav className="mt-8">
+                <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wide text-left">Projects</h3>
+                <div className="mt-2 -mx-3">
+                  {projects.map(project => (
+                    <div key={project.id} className={`flex justify-between items-center px-3 py-2 rounded-lg ${selectedProject === project.id ? 'bg-gray-200' : ''}`}>
+                      <button className="flex-1 text-left text-sm font-medium text-gray-900" onClick={()=>{ setSelectedProject(project.id); setIsSidebarOpen(false); }}>{project.name}</button>
+                      <div className="flex space-x-1">
+                        <button className="text-gray-500 hover:text-gray-700" onClick={(e)=>{ e.stopPropagation(); setEditingProject(project); setShowProjectModal(true); }}>✏️</button>
+                        <button className="text-gray-500 hover:text-red-500" onClick={(e)=>{ e.stopPropagation(); handleDeleteProject(project.id); }}>🗑️</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <button className="mt-4 -ml-1 flex items-center text-sm font-medium text-gray-600 hover:text-gray-900" onClick={()=>{ setEditingProject(null); setShowProjectModal(true); }}>
+                  <svg className="h-5 w-5 text-gray-500" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M12 7v10m5-5H7"/></svg>
+                  <span className="ml-1">Create Project</span>
+                </button>
+              </nav>
+
+              <nav className="mt-8">
+                <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wide text-left">Team Members</h3>
+                <div className="mt-2 -mx-3 max-h-40 overflow-y-auto">
+                  {teamMembers.map(member => (
+                    <div key={member.id} className="flex items-center px-3 py-2 rounded-lg justify-between group">
+                      <div className="flex items-center flex-1">
+                        <img src={member.avatar} alt={member.name} className="avatar mr-3"/>
+                        <div className="flex-1 truncate">
+                          <p className="text-sm font-medium text-gray-900 truncate">{member.name}</p>
+                          <p className="text-xs text-gray-500 truncate">{member.role}</p>
+                        </div>
+                      </div>
+                      <button className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100" onClick={()=>handleRemoveTeamMember(member.id)} title="Remove member">🗑️</button>
+                    </div>
+                  ))}
+                </div>
+              </nav>
+
+              <nav className="mt-8">
+                <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wide text-left">Tags</h3>
+                <div className="mt-2 -mx-3">
+                  {availableTags.map(tag => (
+                    <button key={tag} className={`flex justify-between items-center px-3 py-2 rounded-lg w-full text-left ${selectedTagFilter === tag ? 'bg-gray-200' : ''}`} onClick={()=>{ setSelectedTagFilter(selectedTagFilter === tag ? null : tag); setSelectedIssueFilter('All'); }}>
+                      <span className="text-sm font-medium text-gray-700">{tag}</span>
+                    </button>
+                  ))}
+                </div>
+              </nav>
+            </div>
+
+            <div className="flex-1 min-w-0 bg-white flex flex-col">
+              <div className="flex-shrink-0 border-b-2 border-gray-200">
+                <header className="px-4 md:px-6">
+                  <div className="flex justify-between items-center border-b border-gray-200 py-2">
+                    <div className="flex items-center">
+                      <button className="md:hidden mr-2 text-gray-500" onClick={()=>setIsSidebarOpen(!isSidebarOpen)}>
+                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                      </button>
+                      <div className="relative search-input w-40 md:w-64">
+                        <span className="absolute pl-3 inset-y-0 left-0 flex items-center">
+                          <svg className="h-6 w-6 text-gray-600" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </span>
+                        <input className="block w-full rounded-lg border border-gray-400 pl-10 pr-4 py-2 text-gray-900 text-sm placeholder-gray-600" placeholder="Search tasks..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} />
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <button className="relative notification-button mr-4" onClick={()=>setShowNotifications(!showNotifications)}>
+                        <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path stroke="currentColor" d="M468 392h-20c-10.384 0-18.709-3.609-24.745-10.728-7.363-8.684-11.255-22.386-11.255-39.626V204c0-78.818-59.543-144.777-136-154.699V0h-40v49.301C159.543 59.223 100 125.181 100 204v144c0 14.175-3.734 25.775-10.799 33.546C82.984 388.385 74.27 392 64 392H44v56h161.413A51.888 51.888 0 00204 460c0 28.673 23.327 52 52 52s52-23.327 52-52c0-4.131-.499-8.145-1.413-12H468v-56zm-212 80c-6.617 0-12-5.383-12-12s5.383-12 12-12 12 5.383 12 12-5.383 12-12 12zm-136.792-64C132.813 392.784 140 372.052 140 348V204c0-63.067 51.263-115.072 114.302-115.987h3.396C320.737 88.928 372 140.933 372 204v137.646c0 26.84 7.174 49.488 20.745 65.494.245.289.492.576.741.860H119.208z"/></svg>
+                        {notifications.filter(n=>!n.read).length > 0 && <span className="notification-badge">{notifications.filter(n=>!n.read).length}</span>}
+                      </button>
+                      <button className="ml-2 cursor-pointer" onClick={()=>setShowUserProfile(true)}>
+                        <img className="h-8 w-8 rounded-full object-cover" src={currentUser.avatar} alt="avatar" title="Ver perfil"/>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col md:flex-row md:justify-between md:items-center py-2 header-actions">
+                    <div className="flex items-center mb-2 md:mb-0">
+                      <h2 className="project-title text-xl md:text-2xl font-semibold text-gray-900 leading-tight">{currentProject ? currentProject.name : "No Project Selected"}</h2>
+                      {currentProject && <button className="ml-4 text-sm text-blue-600 hover:text-blue-800" onClick={()=>{ setEditingProject(currentProject); setShowProjectModal(true); }}>Edit</button>}
+                    </div>
+                    <div className="flex items-center space-x-4 view-toggle">
+                      <div className="flex bg-gray-100 rounded-md p-1">
+                        <button className={`px-3 py-1 text-sm rounded ${activeView === 'list' ? 'bg-white shadow' : 'text-gray-600'}`} onClick={()=>setActiveView('list')}>List View</button>
+                        <button className={`px-3 py-1 text-sm rounded ${activeView === 'kanban' ? 'bg-white shadow' : 'text-gray-600'}`} onClick={()=>setActiveView('kanban')}>Kanban Board</button>
+                      </div>
+                      <button className="flex items-center pl-2 pr-4 py-1 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700" onClick={()=>{ setEditingTask(null); setShowTaskModal(true); }} disabled={!currentProject}>
+                        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M12 7v10m5-5H7"/></svg>
+                        <span className="ml-1">New Task</span>
+                      </button>
+                    </div>
+                  </div>
+                </header>
+              </div>
+
+              <div className="flex-1 overflow-auto">
+                {currentProject ? (
+                  <div>
+                    <div className="p-4 border-b">
+                      <p className="text-gray-600">{currentProject.description}</p>
+                      <div className="flex items-center mt-2">
+                        <h3 className="text-sm font-medium text-gray-700 mr-2">Assigned to:</h3>
+                        <div className="flex -space-x-2">
+                          {getAssigneeInfo(currentProject.assignees).map(member => member ? <img key={member.id} src={member.avatar} alt={member.name} className="avatar border-2 border-white" title={`${member.name} (${member.role})`} /> : null)}
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {currentProject.tags.map(tag => <span key={tag} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">{tag}</span>)}
+                      </div>
+                    </div>
+
+                    {activeView === 'kanban' ? (
+                      <div className="p-4">
+                        <div className="kanban-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                          {statusOptions.map(status => {
+                            const statusIssues = filteredIssues.filter(issue => issue.status === status.id);
+                            return (
+                              <div key={status.id} className="kanban-column rounded-lg p-4"
+                                   onDragOver={(e)=>e.preventDefault()}
+                                   onDrop={(e)=>{ e.preventDefault(); const taskId = e.dataTransfer.getData('text/plain'); const task = filteredIssues.find(t=>t.id===taskId) || currentProject.issues.find(t=>t.id===taskId); if (task && task.status !== status.id) handleMoveTask(task, status.id); }}>
+                                <div className="flex items-center mb-4">
+                                  <span className={`w-3 h-3 rounded-full ${status.color} mr-2`} />
+                                  <h3 className="font-medium text-gray-700">{status.name}</h3>
+                                  <span className="ml-2 bg-gray-200 text-gray-700 text-xs font-medium rounded-full px-2 py-1">{statusIssues.length}</span>
+                                </div>
+
+                                <div className="space-y-3">
+                                  {statusIssues.map(issue => {
+                                    const isOverdue = issue.dueDate && new Date(issue.dueDate) < new Date() && issue.status !== 'done' && issue.status !== 'cancelled';
+                                    const prAccent = `task-accent ${prIdToAccent(issue.priority)}`;
+                                    const prChip = prIdToChip(issue.priority);
+
+                                    return (
+                                      <div key={issue.id} data-task-id={issue.id} className="task-card-ui p-3"
+                                           draggable
+                                           onDragStart={(e)=>{ e.dataTransfer.setData('text/plain', issue.id); e.currentTarget.classList.add('dragging'); }}
+                                           onDragEnd={(e)=>{ e.currentTarget.classList.remove('dragging'); }}>
+                                        <div className={prAccent} />
+
+                                        <div className="flex items-start justify-between mb-2">
+                                          <h4 className="task-title">{issue.title}</h4>
+                                          <span className={prChip}>
+                                            <span>{(priorityOptions.find(p=>p.id===issue.priority)?.name) || 'Medium'}</span>
+                                          </span>
+                                        </div>
+
+                                        <p className="task-desc mb-3">{issue.description || "No description available"}</p>
+
+                                        <div className="flex flex-wrap items-center gap-2 mb-2">
+                                          <span className="tag-pill">{issue.tag}</span>
+                                          <span className="text-xs text-gray-500 mr-2">{issue.date}</span>
+                                          {issue.dueDate && (
+                                            <span className={`badge ${isOverdue ? 'badge-overdue' : 'badge-due'}`}>
+                                              {isOverdue ? 'Overdue' : 'Due'} · {new Date(issue.dueDate).toLocaleDateString()}
+                                            </span>
+                                          )}
+                                        </div>
+
+                                        <div className="task-footer">
+                                          <div className="flex items-center gap-2">
+                                            {issue.assignee && <img src={issue.assignee} alt="Assignee" className="avatar-sm" />}
+                                          </div>
+                                          <div className="task-actions">
+                                            <button className="task-action-btn" onClick={()=>{ setEditingTask(issue); setShowTaskModal(true); }}>Edit</button>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-4">
+                        <h3 className="text-lg font-medium text-gray-900 mb-4">Tasks</h3>
+                        <div className="grid grid-cols-1 gap-4">
+                          {filteredIssues.length > 0 ? filteredIssues.map(issue => {
+                            const isOverdue = issue.dueDate && new Date(issue.dueDate) < new Date() && issue.status !== 'done' && issue.status !== 'cancelled';
+                            const prAccent = `task-accent ${prIdToAccent(issue.priority)}`;
+                            const prChip = prIdToChip(issue.priority);
+
+                            return (
+                              <div key={issue.id} data-task-id={issue.id} className="task-card-ui p-3">
+                                <div className={prAccent} />
+
+                                <div className="flex items-start justify-between mb-2">
+                                  <h4 className="task-title">{issue.title}</h4>
+                                  <div className="flex items-center gap-2">
+                                    <span className={prChip}>{(priorityOptions.find(p=>p.id===issue.priority)?.name) || 'Medium'}</span>
+                                    <span className="chip">
+                                      {statusOptions.find(s=>s.id===issue.status)?.name || 'To Do'}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <p className="task-desc mb-3">{issue.description || "No description"}</p>
+
+                                <div className="flex flex-wrap items-center gap-2 mb-2">
+                                  {issue.dueDate && (
+                                    <span className={`badge ${isOverdue ? 'badge-overdue' : 'badge-due'}`}>
+                                      {isOverdue ? 'Overdue' : 'Due'} · {new Date(issue.dueDate).toLocaleDateString()}
+                                    </span>
+                                  )}
+                                  <span className="tag-pill">{issue.tag}</span>
+                                  <span className="text-xs text-gray-500">{issue.date}</span>
+                                </div>
+
+                                <div className="task-footer">
+                                  <div className="flex items-center">
+                                    {issue.assignee && <img src={issue.assignee} alt="Assignee" className="avatar-sm mr-2" />}
+                                  </div>
+                                  <div className="task-actions">
+                                    <button className="task-action-btn" onClick={()=>{ setEditingTask(issue); setShowTaskModal(true); }}>Edit</button>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          }) : <p className="text-gray-500 text-center py-8">No tasks found</p>}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center h-full">
+                    <p className="text-gray-500 mb-4">No project selected</p>
+                    <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={()=>{ setEditingProject(null); setShowProjectModal(true); }}>Create your first project</button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <NotificationPanel
+            notifications={notifications}
+            isOpen={showNotifications}
+            onClose={()=>setShowNotifications(false)}
+            onMarkAsRead={handleMarkAsRead}
+            onClearAll={handleClearAll}
+            onNavigateToItem={handleNavigateFromNotification}
+          />
+
+          <UserProfileModal
+            user={currentUser}
+            onClose={()=>setShowUserProfile(false)}
+            onSave={handleSaveUserProfile}
+            isOpen={showUserProfile}
+          />
+
+          {showProjectModal && (
+            <ProjectModal
+              project={editingProject}
+              onClose={()=>{ setShowProjectModal(false); setEditingProject(null); }}
+              onSave={handleSaveProject}
+              isOpen={showProjectModal}
+              teamMembers={teamMembers}
+              onAddNewMember={()=>{ setShowProjectModal(false); setShowAddMemberModal(true); }}
+            />
+          )}
+
+          {showAddMemberModal && (
+            <AddTeamMemberModal
+              onClose={()=>setShowAddMemberModal(false)}
+              onSave={handleAddTeamMember}
+              isOpen={showAddMemberModal}
+            />
+          )}
+
+          {showTaskModal && (
+            <TaskModal
+              task={editingTask}
+              onClose={()=>{ setShowTaskModal(false); setEditingTask(null); }}
+              onSave={handleSaveTask}
+              isOpen={showTaskModal}
+              teamMembers={teamMembers}
+              projectId={selectedProject}
+              currentUser={currentUser}
+              onNotification={handleAddNotification}
+            />
+          )}
+        </div>
       );
     };
 
-    ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
+    ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
 </html>
