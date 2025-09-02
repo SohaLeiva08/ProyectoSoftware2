@@ -1,5 +1,3 @@
-// Este archivo se mantiene igual que el original
-// Solo se añaden los event listeners para los botones de login/signup
 
 let switchCtn = document.querySelector("#switch-cnt");
 let switchC1 = document.querySelector("#switch-c1");
