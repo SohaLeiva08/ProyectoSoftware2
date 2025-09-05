@@ -34,5 +34,22 @@ let mainF = (e) => {
     for (var i = 0; i < switchBtn.length; i++)
         switchBtn[i].addEventListener("click", changeForm)
 }
-
+ document.addEventListener('DOMContentLoaded', function () {
+      const showWelcome = localStorage.getItem('showWelcome');
+      const userName = localStorage.getItem('userName');
+      if (showWelcome === 'true' && userName) {
+        const welcomeModal = document.getElementById('welcome-modal');
+        const welcomeMessage = document.getElementById('welcome-message');
+        welcomeMessage.textContent = `¡Bienvenido ${userName}! Estamos encantados de tenerte aquí.`;
+        welcomeModal.classList.remove('hidden');
+        localStorage.removeItem('showWelcome');
+        document.getElementById('close-welcome').addEventListener('click', function () {
+          welcomeModal.classList.add('hidden');
+        });
+        document.getElementById('accept-welcome').addEventListener('click', function () {
+          welcomeModal.classList.add('hidden');
+        });
+      }
+    });
 window.addEventListener("load", mainF);
+
