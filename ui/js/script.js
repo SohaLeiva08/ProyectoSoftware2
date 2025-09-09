@@ -35,13 +35,6 @@ let mainF = (e) => {
         switchBtn[i].addEventListener("click", changeForm)
 }
 
-// Función para mostrar notificaciones
-function showNotification(element, timeout = 3000) {
-    element.classList.add('show');
-    setTimeout(() => {
-        element.classList.remove('show');
-    }, timeout);
-}
 
 // Función para validar email
 function isValidEmail(email) {
