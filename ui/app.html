@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,7 +13,6 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="styles/app.css" />
-
 </head>
 
 <body>
@@ -28,7 +26,7 @@
 
     const etiquetasDisponibles = ['Feature Request', 'Bug', 'Marketing', 'v2.0', 'Enhancement', 'Design', 'Development'];
     const rolesDisponibles = ['Frontend Developer', 'Backend Developer', 'UI/UX Designer', 'Project Manager', 'QA Engineer', 'DevOps Engineer', 'Product Owner'];
-    
+
     const opcionesEstado = [
       { id: 'porhacer',   name: 'Por hacer',    color: 'bg-gray-500'  },
       { id: 'enprogreso', name: 'En progreso',  color: 'bg-blue-500'  },
@@ -56,7 +54,8 @@
         if (user) {
           setName(user.name);
           setEmail(user.email);
-          setRole(user.role); setAvatar(user.avatar);
+          setRole(user.role);
+          setAvatar(user.avatar);
         }
       }, [user, isOpen]);
 
@@ -64,7 +63,8 @@
         if (name && email) {
           let finalAvatar = avatar;
           if (avatarFile) finalAvatar = URL.createObjectURL(avatarFile);
-          onSave({ id: user?.id || `user-${Date.now()}`, name, email, role, avatar: finalAvatar }); onClose();
+          onSave({ id: user?.id || `user-${Date.now()}`, name, email, role, avatar: finalAvatar });
+          onClose();
         }
       };
 
@@ -85,6 +85,7 @@
         }
       };
       const eliminarAvatarPersonalizado = () => { setAvatarFile(null); setAvatar('https://i.pravatar.cc/100'); };
+
       if (!isOpen) return null;
       return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
@@ -138,60 +139,13 @@
       );
     };
 
-    const NotificationPanel = ({ notificaciones, isOpen, onClose, onMarkAsRead, onClearAll, onNavigateToItem }) => {
-      const panelRef = useRef(null); useEffect(() => {
-        const manejarClickAfuera = (event) => {
-          if (panelRef.current && !panelRef.current.contains(event.target) && !event.target.closest('.notification-button')) onClose();
-        };
-        if (isOpen) document.addEventListener('mousedown', manejarClickAfuera);
-        return () => document.removeEventListener('mousedown', manejarClickAfuera);
-      }, [isOpen, onClose]);
-
-      const unreadCount = notificaciones.filter(n => !n.read).length;
-      if (!isOpen) return null;
-
-      return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end">
-          <div ref={panelRef} className="notification-panel open w-80 bg-white shadow-xl h-full">
-            <div className="p-4 border-b flex justify-between items-center">
-              <h2 className="text-lg font-semibold">Notificaciones</h2>
-              <div className="flex space-x-2">
-                {unreadCount > 0 && <button className="text-sm text-blue-600 hover:text-blue-800" onClick={onMarkAsRead}>Marcar todo como leído</button>}
-                <button className="text-sm text-gray-600 hover:text-gray-800" onClick={onClose}>✕</button>
-              </div>
-            </div>
-            <div className="Notificaciones">
-              <button className="text-sm text-red-600 hover:text-red-800" onClick={onClearAll}>Borrar todas las notificaciones</button>
-            </div>
-            <div className="overflow-y-auto h-full pb-20">
-              {notificaciones.length > 0 ? notificaciones.map(notification => (
-                <div key={notification.id} className={`notification-item p-4 border-b ${notification.read ? '' : 'unread'}`} onClick={() => onNavigateToItem(notification)}>
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-sm font-medium">{notification.title}</h3>
-                    <span className="text-xs text-gray-500">{new Date(notification.timestamp).toLocaleTimeString()}</span>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs text-gray-500">{new Date(notification.timestamp).toLocaleDateString()}</span>
-                    {!notification.read && <span className="inline-block w-2 h-2 bg-blue-500 rounded-full" />}
-                  </div>
-                </div>
-              )) : <div className="p-4 text-center text-gray-500">Sin notificaciones</div>}
-            </div>
-          </div>
-        </div>
-      );
-    };
-
+    // MODAL SIMPLIFICADO: sin pestaña "Invitar"
     const AddTeamMemberModal = ({ onClose, onSave, isOpen }) => {
-      const [pestañaActiva, setPestañaActiva] = useState('manual');
       const [name, setName] = useState('');
       const [email, setEmail] = useState('');
       const [role, setRole] = useState(rolesDisponibles[0]);
-      const [correoInvitacion, setCorreoInvitacion] = useState('');
-      const [rolInvitacion, setRolInvitacion] = useState(rolesDisponibles[0]);
 
-      const resetForm = () => { setName(''); setEmail(''); setRole(rolesDisponibles[0]); setCorreoInvitacion(''); setRolInvitacion(rolesDisponibles[0]); };
+      const resetForm = () => { setName(''); setEmail(''); setRole(rolesDisponibles[0]); };
       useEffect(() => { if (isOpen) resetForm(); }, [isOpen]);
 
       const agregarIntegranteManual = () => {
@@ -200,57 +154,31 @@
           onClose();
         }
       };
-      const enviarInvitacion = () => { if (correoInvitacion.trim()) { alert(`Invitación enviada a ${correoInvitacion} para el rol de ${rolInvitacion}`); onClose(); } };
       if (!isOpen) return null;
 
       return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
           <div className="modal-container bg-white p-6 rounded-lg shadow-lg w-96 max-h-screen overflow-y-auto">
             <h2 className="text-xl font-semibold mb-4">Agregar integrante</h2>
-            <div className="flex border-b mb-4">
-              <button className={`px-4 py-2 tab-button ${pestañaActiva === 'manual' ? 'active' : ''}`} onClick={() => setPestañaActiva('manual')}>Agregar manualmente</button>
-              <button className={`px-4 py-2 tab-button ${pestañaActiva === 'invite' ? 'active' : ''}`} onClick={() => setPestañaActiva('invite')}>Invitar</button>
+
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+              <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ingrese nombre completo" />
             </div>
-            {pestañaActiva === 'manual' ? (
-              <div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-                  <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ingrese nombre completo" />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input type="email" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Ingrese correo electrónico" />
-                </div>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Rol</label>
-                  <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={role} onChange={(e) => setRole(e.target.value)}>
-                    {rolesDisponibles.map(r => <option key={r} value={r}>{r}</option>)}
-                  </select>
-                </div>
-                <div className="flex justify-end space-x-2">
-                  <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancelar</button>
-                  <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={agregarIntegranteManual}>Agregar integrante</button>
-                </div>
-              </div>
-            ) : (
-              <div>
-                <div className="EmailAddres">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
-                  <input type="email" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={correoInvitacion} onChange={(e) => setCorreoInvitacion(e.target.value)} placeholder="Ingrese correo electrónico para invitar" />
-                </div>
-                <div className="Role">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Rol</label>
-                  <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={rolInvitacion} onChange={(e) => setRolInvitacion(e.target.value)}>
-                    {rolesDisponibles.map(r => <option key={r} value={r}>{r}</option>)}
-                  </select>
-                </div>
-                <p className="Enviarinvitacion">Se enviará un correo electrónico de invitación a esta dirección con un enlace para unirse al equipo.</p>
-                <div className="flex justify-end space-x-2">
-                  <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancelar</button>
-                  <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={enviarInvitacion}>Enviar invitación</button>
-                </div>
-              </div>
-            )}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input type="email" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Ingrese correo electrónico" />
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Rol</label>
+              <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={role} onChange={(e) => setRole(e.target.value)}>
+                {rolesDisponibles.map(r => <option key={r} value={r}>{r}</option>)}
+              </select>
+            </div>
+            <div className="flex justify-end space-x-2">
+              <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancelar</button>
+              <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={agregarIntegranteManual}>Agregar integrante</button>
+            </div>
           </div>
         </div>
       );
@@ -258,7 +186,8 @@
 
     const TeamMemberSelector = ({ members, selectedMembers, onSelectionChange, onAddNewMember }) => {
       const [terminoBusqueda, setTerminoBusqueda] = useState('');
-      const filteredMembers = members.filter(member => member.name.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
+      const filteredMembers = members.filter(member =>
+        member.name.toLowerCase().includes(terminoBusqueda.toLowerCase()) ||
         member.role.toLowerCase().includes(terminoBusqueda.toLowerCase())
       );
       const alternarSeleccionIntegrante = (memberId) => {
@@ -317,7 +246,7 @@
       if (!isOpen) return null;
 
       return (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-40">
           <div className="modal-container bg-white p-4 md:p-6 rounded-lg shadow-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-semibold mb-4">{project ? "Editar Proyecto" : "Crear Proyecto"}</h2>
 
@@ -332,7 +261,8 @@
               </div>
               <div className="md:col-span-2">
                 <TeamMemberSelector members={integrantes} selectedMembers={assignees} onSelectionChange={setAssignees} onAddNewMember={onAddNewMember} />
-              </div><div className="md:col-span-2">
+              </div>
+              <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Etiquetas</label>
                 <div className="flex flex-wrap gap-2 mb-2">
                   {tags.map(tag => (
@@ -352,7 +282,11 @@
                     {etiquetasDisponibles.filter(t => !tags.includes(t)).map(tag => (
                       <button key={tag} type="button" className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full hover:bg-gray-200" onClick={() => !tags.includes(tag) && setTags([...tags, tag])}>{tag}</button>
                     ))}
-                  </div> </div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div className="flex justify-end space-x-2 mt-4">
               <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancelar</button>
               <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={guardarProyectoModal}>{project ? "Guardar Cambios" : "Crear Proyecto"}</button>
@@ -362,7 +296,8 @@
       );
     };
 
-    const TaskModal = ({ task, onClose, onSave, isOpen, integrantes, projectId, usuarioActual, onNotification }) => {
+    // MODAL DE TAREA EN 2 COLUMNAS
+    const TaskModal = ({ task, onClose, onSave, isOpen, integrantes, projectId, usuarioActual }) => {
       const [title, setTitle] = useState(task?.title || '');
       const [description, setDescription] = useState(task?.description || '');
       const [tag, setTag] = useState(task?.tag || 'Feature Request');
@@ -402,23 +337,10 @@
             projectId,
             createdAt: task?.createdAt || nowIso,
             updatedAt: nowIso,
-            dueDate: dueDate || null, activity: task?.activity ? [...task.activity, activityItem] : [activityItem]
+            dueDate: dueDate || null,
+            activity: task?.activity ? [...task.activity, activityItem] : [activityItem]
           };
           onSave(newTask);
-
-          if (assignee && assignee !== previousAssignee && assignee !== usuarioActual.avatar) {
-            const assignedUser = integrantes.find(member => member.avatar === assignee);
-            if (assignedUser) {
-              onNotification({
-                id: `notif-${Date.now()}`,
-                type: 'assignment',
-                title: 'Nueva Tarea Asignada',
-                message: `Has sido asignado a la tarea: "${title.trim()}"`,
-                timestamp: nowIso, read: false,
-                userId: assignedUser.id, taskId: newTask.id, projectId
-              });
-            }
-          }
           onClose();
         }
       };
@@ -429,45 +351,53 @@
           <div className="modal-container bg-white p-4 md:p-6 rounded-lg shadow-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-semibold mb-4">{task ? "Editar Tarea" : "Crear Nueva Tarea"}</h2>
 
-            <div className="Titulotarea">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Título de la tarea</label>
                 <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="ejem., Corregir error de inicio de sesión" />
               </div>
-              <div className="Descripcion">
+
+              <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
                 <textarea rows="3" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Descripción de la tarea..." />
               </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Tag</label>
                 <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={tag} onChange={(e) => setTag(e.target.value)}>
                   {etiquetasDisponibles.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
               </div>
+
               <div>
-                <label className="Asignado">Asignado a: </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Asignado a</label>
                 <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={assignee} onChange={(e) => setAssignee(e.target.value)}>
                   <option value="">No asignado</option>
                   {integrantes.map(m => <option key={m.id} value={m.avatar}>{m.name}</option>)}
                 </select>
               </div>
+
               <div>
-                <label className="Estado">Estado</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
                 <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={status} onChange={(e) => setStatus(e.target.value)}>
                   {opcionesEstado.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                 </select>
-              </div><div>
-                <label className="Prioridad">Prioridad</label>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Prioridad</label>
                 <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={priority} onChange={(e) => setPriority(e.target.value)}>
                   {opcionesPrioridad.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                 </select>
-              </div><div>
-                <label className="Fecha">Fecha límite</label>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Fecha límite</label>
                 <input type="date" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
               </div>
 
               {task && (
-                <div className="Actividad">
+                <div className="md:col-span-2">
                   <h3 className="text-sm font-semibold text-gray-700 mb-2">Actividad</h3>
                   {(task.activity && task.activity.length) ? (
                     <ul className="space-y-2 max-h-40 overflow-y-auto border rounded p-3 bg-gray-50">
@@ -485,7 +415,8 @@
             <div className="flex justify-end space-x-2 mt-4">
               <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancelar</button>
               <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={guardarTarea}>{task ? "Guardar Cambios" : "Crear Tarea"}</button>
-            </div></div>
+            </div>
+          </div>
         </div>
       );
     };
@@ -498,20 +429,19 @@
       const [mostrarModalProyecto, setMostrarModalProyecto] = useState(false);
       const [mostrarModalAgregarIntegrante, setMostrarModalAgregarIntegrante] = useState(false);
       const [mostrarModalTarea, setMostrarModalTarea] = useState(false);
-      const [mostrarNotificaciones, setMostrarNotificaciones] = useState(false);
       const [mostrarPerfilUsuario, setMostrarPerfilUsuario] = useState(false);
       const [proyectoEditando, setProyectoEditando] = useState(null);
       const [tareaEditando, setTareaEditando] = useState(null);
       const [etiquetaSeleccionada, setEtiquetaSeleccionada] = useState(null);
       const [terminoBusqueda, setTerminoBusqueda] = useState('');
-      const [notificaciones, setNotificaciones] = useState([]);
 
       const [usuarioActual, setUsuarioActual] = useState(() => {
         const savedUser = localStorage.getItem('usuarioActual');
         if (savedUser) return JSON.parse(savedUser);
 
         const userEmail = localStorage.getItem('userEmail');
-        const userName = localStorage.getItem('userName'); if (userEmail && userName) {
+        const userName = localStorage.getItem('userName');
+        if (userEmail && userName) {
           const newUser = {
             id: `user-${Date.now()}`,
             name: userName,
@@ -534,75 +464,6 @@
 
       const [barraLateralAbierta, setBarraLateralAbierta] = useState(false);
       const proyectoActual = proyectos.find(p => p.id === proyectoSeleccionado) || proyectos[0];
-      useEffect(() => {
-        const verificarNotificacionesTareas = () => {
-          const now = new Date();
-          const unaHoraAtras = new Date(now.getTime() - 60 * 60 * 1000);
-          const veinticuatroHorasAtras = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-          let nuevasNotificaciones = [];
-
-          proyectos.forEach(project => {
-            project.issues.forEach(issue => {
-              const updatedAt = new Date(issue.updatedAt);
-              const createdAt = new Date(issue.createdAt);
-
-              if (updatedAt < veinticuatroHorasAtras && issue.status !== 'hecho' && issue.status !== 'cancelado') {
-                nuevasNotificaciones.push({
-                  id: `notif-${project.id}-${issue.id}-stale`,
-                  type: 'stale_task',
-                  title: 'Alerta de tarea estancada',
-                  message: `La tarea "${issue.title}" lleva más de 24 horas en estado ${opcionesEstado.find(s => s.id === issue.status)?.name}.`,
-                  timestamp: new Date().toISOString(), read: false, projectId: project.id, taskId: issue.id
-                });
-              }
-              if (createdAt < unaHoraAtras && issue.status === 'porhacer') {
-                nuevasNotificaciones.push({
-                  id: `notif-${project.id}-${issue.id}-inactive`,
-                  type: 'inactive_task',
-                  title: 'Tarea inactiva',
-                  message: `La tarea "${issue.title}" lleva más de 1 hora en Por hacer.`,
-                  timestamp: new Date().toISOString(), read: false, projectId: project.id, taskId: issue.id
-                });
-              }
-              if (issue.dueDate) {
-                const due = new Date(issue.dueDate);
-                if (due < now && issue.status !== 'hecho' && issue.status !== 'cancelado') {
-                  nuevasNotificaciones.push({
-                    id: `notif-${project.id}-${issue.id}-overdue`,
-                    type: 'overdue_task',
-                    title: 'Tarea vencida',
-                    message: `La tarea "${issue.title}" está pasada de su fecha límite.`,
-                    timestamp: new Date().toISOString(), read: false, projectId: project.id, taskId: issue.id
-                  });
-                }
-              }
-            });
-          });
-          if (nuevasNotificaciones.length > 0) setNotificaciones(prev => [...nuevasNotificaciones, ...prev]);
-        };
-        verificarNotificacionesTareas();
-        const interval = setInterval(verificarNotificacionesTareas, 60 * 60 * 1000);
-        return () => clearInterval(interval);
-      }, [proyectos]);
-
-      const navegarDesdeNotificacion = (notification) => {
-        setMostrarNotificaciones(false);
-        setNotificaciones(notificaciones.map(n => n.id === notification.id ? { ...n, read: true } : n));
-        if (notification.projectId) {
-          setProyectoSeleccionado(notification.projectId);
-          setBarraLateralAbierta(false);
-          setTimeout(() => {
-            if (notification.taskId) {
-              const taskElement = document.querySelector(`[data-task-id="${notification.taskId}"]`);
-              if (taskElement) {
-                taskElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                taskElement.classList.add('highlight-element');
-                setTimeout(() => taskElement.classList.remove('highlight-element'), 2000);
-              }
-            }
-          }, 100);
-        }
-      };
 
       const obtenerInfoAsignado = (assigneeIds) => assigneeIds.map(id => integrantes.find(member => member.id === id));
 
@@ -625,12 +486,6 @@
           }
           return project;
         }));
-
-        setNotificaciones(prev => [{
-          id: `notif-${task.id}-status`, type: 'status_change', title: 'Estado de Tarea Actualizado',
-          message: `Tarea "${task.title}" movida a ${opcionesEstado.find(s => s.id === newStatus)?.name}`,
-          timestamp: nowIso, read: false, projectId: proyectoSeleccionado, taskId: task.id
-        }, ...prev]);
       };
 
       const guardarProyecto = (projectData) => {
@@ -670,24 +525,11 @@
         }
       };
 
-      const agregarNotificacion = (n) => setNotificaciones(prev => [n, ...prev]);
-      const marcarComoLeido = () => setNotificaciones(notificaciones.map(n => ({ ...n, read: true })));
-      const limpiarTodas = () => setNotificaciones([]);
-      const guardarPerfilUsuario = (userData) => { setUsuarioActual(userData); localStorage.setItem('usuarioActual', JSON.stringify(userData)); setMostrarPerfilUsuario(false); };
-
-      // Filtrar tareas para mostrar en el Kanban Board
-      const obtenerTareasFiltradas = () => {
-        if (!proyectoActual) return [];
-        
-        return proyectoActual.issues.filter(issue => {
-          const coincideBusqueda = issue.title.toLowerCase().includes(terminoBusqueda.toLowerCase());
-          const coincideFiltroEtiqueta = etiquetaSeleccionada === null || issue.tag === etiquetaSeleccionada;
-          return coincideBusqueda && coincideFiltroEtiqueta;
-        });
+      const guardarPerfilUsuario = (userData) => {
+        setUsuarioActual(userData);
+        localStorage.setItem('usuarioActual', JSON.stringify(userData));
+        setMostrarPerfilUsuario(false);
       };
-
-      const tareasFiltradas = obtenerTareasFiltradas();
-      const notificacionesNoLeidas = notificaciones.filter(n => !n.read).length;
 
       const prIdToAccent = (id) => ({
         critico: 'accent-critical',
@@ -697,20 +539,31 @@
       }[id] || 'accent-medium');
       const prIdToChip = (id) => `chip chip-priority-${id || 'medium'}`;
 
+      const obtenerTareasFiltradas = () => {
+        if (!proyectoActual) return [];
+        return proyectoActual.issues.filter(issue => {
+          const coincideBusqueda = issue.title.toLowerCase().includes(terminoBusqueda.toLowerCase());
+          const coincideFiltroEtiqueta = etiquetaSeleccionada === null || issue.tag === etiquetaSeleccionada;
+          return coincideBusqueda && coincideFiltroEtiqueta;
+        });
+      };
+
+      const tareasFiltradas = obtenerTareasFiltradas();
+
       return (
         <div className="App">
           <div className="h-screen flex">
             <div className={`overlay ${barraLateralAbierta ? 'active' : ''}`} onClick={() => setBarraLateralAbierta(false)} />
             <div className={`sidebar fixed md:relative w-64 px-8 py-4 bg-gray-100 border-r overflow-auto md:translate-x-0 ${barraLateralAbierta ? '' : 'sidebar-mobile-hidden'}`}>
               <div className="flex justify-between items-center">
-                <img src="image/LOGO.png" width="90" height="35" class="small-attr"/>
-                <div class="scrumly-text font-oswald text-2xl font-semibold tracking-wide">SCRUMLY</div>
-                </div>
+                <img src="image/LOGO.png" width="90" height="35" className="small-attr"/>
+                <div className="scrumly-text font-oswald text-2xl font-semibold tracking-wide">SCRUMLY</div>
+              </div>
 
               <nav className="mt-8">
                 <div className="flex justify-between items-center">
                   <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wide text-left">Proyectos</h3>
-                  <button className="text-xs text-blue-600 hover:text-blue-800 font-medium" 
+                  <button className="text-xs text-blue-600 hover:text-blue-800 font-medium"
                           onClick={() => { setProyectoEditando(null); setMostrarModalProyecto(true); }}>
                     + Crear Proyecto
                   </button>
@@ -734,7 +587,7 @@
               <nav className="mt-8">
                 <div className="flex justify-between items-center">
                   <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wide text-left">Integrantes del Equipo</h3>
-                  <button className="text-xs text-blue-600 hover:text-blue-800 font-medium" 
+                  <button className="text-xs text-blue-600 hover:text-blue-800 font-medium"
                           onClick={() => setMostrarModalAgregarIntegrante(true)}>
                     + Agregar Integrante
                   </button>
@@ -757,6 +610,7 @@
                   )}
                 </div>
               </nav>
+
               <nav className="mt-8">
                 <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wide text-left">Etiquetas</h3>
                 <div className="mt-2 -mx-3">
@@ -785,10 +639,6 @@
                       </div>
                     </div>
                     <div className="flex items-center">
-                      <button className="relative notification-button mr-4" onClick={() => setMostrarNotificaciones(!mostrarNotificaciones)}>
-                        <svg className="h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path stroke="currentColor" d="M468 392h-20c-10.384 0-18.709-3.609-24.745-10.728-7.363-8.684-11.255-22.386-11.255-39.626V204c0-78.818-59.543-144.777-136-154.699V0h-40v49.301C159.543 59.223 100 125.181 100 204v144c0 14.175-3.734 25.775-10.799 33.546C82.984 388.385 74.27 392 64 392H44v56h161.413A51.888 51.888 0 00204 460c0 28.673 23.327 52 52 52s52-23.327 52-52c0-4.131-.499-8.145-1.413-12H468v-56zm-212 80c-6.617 0-12-5.383-12-12s5.383-12 12-12 12 5.383 12 12-5.383 12-12 12zm-136.792-64C132.813 392.784 140 372.052 140 348V204c0-63.067 51.263-115.072 114.302-115.987h3.396C320.737 88.928 372 140.933 372 204v137.646c0 26.84 7.174 49.488 20.745 65.494.245.289.492.576.741.860H119.208z" /></svg>
-                        {notificaciones.filter(n => !n.read).length > 0 && <span className="notification-badge">{notificaciones.filter(n => !n.read).length}</span>}
-                      </button>
                       <button className="ml-2 cursor-pointer" onClick={() => setMostrarPerfilUsuario(true)}>
                         <img className="h-8 w-8 rounded-full object-cover" src={usuarioActual.avatar} alt="avatar" title="Ver perfil" />
                       </button>
@@ -854,7 +704,11 @@
                                       const prAccent = `task-accent ${prIdToAccent(issue.priority)}`;
                                       const prChip = prIdToChip(issue.priority);
                                       return (
-                                        <div key={issue.id} data-task-id={issue.id} className="task-card-ui p-3"
+                                        <div
+                                          key={issue.id}
+                                          data-task-id={issue.id}
+                                          className="task-card-ui p-3"
+                                          data-priority={issue.priority}
                                           draggable
                                           onDragStart={(e) => { e.dataTransfer.setData('text/plain', issue.id); e.currentTarget.classList.add('dragging'); }}
                                           onDragEnd={(e) => { e.currentTarget.classList.remove('dragging'); }}>
@@ -862,7 +716,9 @@
                                           <div className="flex items-start justify-between mb-2">
                                             <h4 className="task-title">{issue.title}</h4>
                                             <span className={prChip}>
-                                              <span>{(opcionesPrioridad.find(p => p.id === issue.priority)?.name) || 'Media'}</span>
+                                              <span className="priority-text">
+                                                {(opcionesPrioridad.find(p => p.id === issue.priority)?.name) || 'Media'}
+                                              </span>
                                             </span>
                                           </div>
 
@@ -904,7 +760,7 @@
                             const prAccent = `task-accent ${prIdToAccent(issue.priority)}`;
                             const prChip = prIdToChip(issue.priority);
                             return (
-                              <div key={issue.id} data-task-id={issue.id} className="task-card-ui p-3">
+                              <div key={issue.id} data-task-id={issue.id} className="task-card-ui p-3" data-priority={issue.priority}>
                                 <div className={prAccent} />
 
                                 <div className="flex items-start justify-between mb-2">
@@ -913,7 +769,11 @@
                                     <span className="chip">
                                       {opcionesEstado.find(s => s.id === issue.status)?.name || 'Por hacer'}
                                     </span>
-                                    <span className={prChip}>{(opcionesPrioridad.find(p => p.id === issue.priority)?.name) || 'Media'}</span>
+                                    <span className={prChip}>
+                                      <span className="priority-text">
+                                        {(opcionesPrioridad.find(p => p.id === issue.priority)?.name) || 'Media'}
+                                      </span>
+                                    </span>
                                   </div>
                                 </div>
 
@@ -944,7 +804,6 @@
                     )}
                   </div>
                 ) : (
-
                   <div className="flex flex-col items-center justify-center h-full">
                     <p className="text-gray-500 mb-4">No hay proyecto agregado</p>
                     <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={() => { setProyectoEditando(null); setMostrarModalProyecto(true); }}>Crea tu primer proyecto</button>
@@ -953,15 +812,6 @@
               </div>
             </div>
           </div>
-
-          <NotificationPanel
-            notificaciones={notificaciones}
-            isOpen={mostrarNotificaciones}
-            onClose={() => setMostrarNotificaciones(false)}
-            onMarkAsRead={marcarComoLeido}
-            onClearAll={limpiarTodas}
-            onNavigateToItem={navegarDesdeNotificacion}
-          />
 
           <UserProfileModal
             user={usuarioActual}
@@ -977,7 +827,7 @@
               onSave={guardarProyecto}
               isOpen={mostrarModalProyecto}
               integrantes={integrantes}
-              onAddNewMember={() => { setMostrarModalProyecto(false); setMostrarModalAgregarIntegrante(true); }}
+              onAddNewMember={() => { setMostrarModalAgregarIntegrante(true); }}
             />
           )}
 
@@ -998,7 +848,6 @@
               integrantes={integrantes}
               projectId={proyectoSeleccionado}
               usuarioActual={usuarioActual}
-              onNotification={agregarNotificacion}
             />
           )}
         </div>
@@ -1008,5 +857,4 @@
     ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
-
 </html>
