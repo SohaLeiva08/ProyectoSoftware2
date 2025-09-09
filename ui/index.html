@@ -1,59 +1,178 @@
 <!DOCTYPE html>
 <html lang="es" dir="ltr">
-  <head>
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
-    <meta charset="utf-8">
-    <title>Scrumly</title>
-    <link rel="stylesheet" href="styles/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div class="main">
-      <div class="container a-container" id="a-container">
-        <form class="form" id="a-form" method="" action="">
-          <h2 class="form_title title">Create Account</h2>
-          <div class="form__icons">
-            <img class="form__icon" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSI1MHB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1MCA1MCIgd2lkdGg9IjUwcHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGUvPjxkZWZzLz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGlkPSJQYWdlLTEiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIj48ZyBmaWxsPSIjMDAwMDAwIiBpZD0iRmFjZWJvb2siPjxwYXRoIGQ9Ik0yNSw1MCBDMzguODA3MTE5NCw1MCA1MCwzOC44MDcxMTk0IDUwLDI1IEM1MCwxMS4xOTI4ODA2IDM4LjgwNzExOTQsMCAyNSwwIEMxMS4xOTI4ODA2LDAgMCwxMS4xOTI4ODA2IDAsMjUgQzAsMzguODA3MTE5NCAxMS4xOTI4ODA2LDUwIDI1LDUwIFogTTI1LDQ3IEMzNy4xNTAyNjUxLDQ3IDQ3LDM3LjE1MDI2NTEgNDcsMjUgQzQ3LDEyLjg0OTczNDkgMzcuMTUwMjY1MSwzIDI1LDMgQzEyLjg0OTczNDksMyAzLDEyLjg0OTczNDkgMywyNSBDMywzNy4xNTAyNjUxIDEyLjg0OTczNDksNDcgMjUsNDcgWiBNMjYuODE0NTE5NywzNiBMMjYuODE0NTE5NywyNC45OTg3MTIgTDMwLjA2ODc0NDksMjQuOTk4NzEyIEwzMC41LDIxLjIwNzYwNzIgTDI2LjgxNDUxOTcsMjEuMjA3NjA3MiBMMjYuODIwMDQ4NiwxOS4zMTAxMjI3IEMyNi44MjAwNDg2LDE4LjMyMTM0NDIgMjYuOTIwNzIwOSwxNy43OTE1MzQxIDI4LjQ0MjU1MzgsMTcuNzkxNTM0MSBMMzAuNDc2OTYyOSwxNy43OTE1MzQxIEwzMC40NzY5NjI5LDE0IEwyNy4yMjIyNzY5LDE0IEMyMy4zMTI4NzU3LDE0IDIxLjkzNjg2NzgsMTUuODM5MDkzNyAyMS45MzY4Njc4LDE4LjkzMTg3MDkgTDIxLjkzNjg2NzgsMjEuMjA4MDM2NiBMMTkuNSwyMS4yMDgwMzY2IEwxOS41LDI0Ljk5OTE0MTMgTDIxLjkzNjg2NzgsMjQuOTk5MTQxMyBMMjEuOTM2ODY3OCwzNiBMMjYuODE0NTE5NywzNiBaIE0yNi44MTQ1MTk3LDM2IiBpZD0iT3ZhbC0xIi8+PC9nPjwvZz48L3N2Zz4=" alt="">
-            <img class="form__icon" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSI1MHB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1MCA1MCIgd2lkdGg9IjUwcHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGUvPjxkZWZzLz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGlkPSJQYWdlLTEiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIj48ZyBmaWxsPSIjMDAwMDAwIiBpZD0iTGlua2VkSW4iPjxwYXRoIGQ9Ik0yNSw1MCBDMzguODA3MTE5NCw1MCA1MCwzOC44MDcxMTk0IDUwLDI1IEM1MCwxMS4xOTI4ODA2IDM4LjgwNzExOTQsMCAyNSwwIEMxMS4xOTI4ODA2LDAgMCwxMS4xOTI4ODA2IDAsMjUgQzAsMzguODA3MTE5NCAxMS4xOTI4ODA2LDUwIDI1LDUwIFogTTI1LDQ3IEMzNy4xNTAyNjUxLDQ3IDQ3LDM3LjE1MDI2NTEgNDcsMjUgQzQ3LDEyLjg0OTczNDkgMzcuMTUwMjY1MSwzIDI1LDMgQzEyLjg0OTczNDksMyAzLDEyLjg0OTczNDkgMywyNSBDMywzNy4xNTAyNjUxIDEyLjg0OTczNDksNDcgMjUsNDcgWiBNMTQsMjAuMTE4MDQ3OSBMMTQsMzQuNjU4MTgzNCBMMTguNzEwMDg1MSwzNC42NTgxODM0IEwxOC43MTAwODUxLDIwLjExODA0NzkgTDE0LDIwLjExODA0NzkgWiBNMTYuNjY0Njk2MiwxMyBDMTUuMDUzNDA1OCwxMyAxNCwxNC4wODU4NjExIDE0LDE1LjUxMTUxMjIgQzE0LDE2LjkwNzYzMzEgMTUuMDIyMjcxMSwxOC4wMjQ3NjE0IDE2LjYwMzU1NTYsMTguMDI0NzYxNCBMMTYuNjMzNjU1NiwxOC4wMjQ3NjE0IEMxOC4yNzU5ODY3LDE4LjAyNDc2MTQgMTkuMjk4ODIyMiwxNi45MDc2MzMxIDE5LjI5ODgyMjIsMTUuNTExNTEyMiBDMTkuMjY4MjUxOSwxNC4wODU4NjExIDE4LjI3NTk4NjcsMTMgMTYuNjY0Njk2MiwxMyBaIE0zMC41NzY5MjEzLDIwLjExODA0NzkgQzI4LjA3NjE3NiwyMC4xMTgwNDc5IDI2Ljk1NjU1MDEsMjEuNTI5MzE5OSAyNi4zMzE0MTA4LDIyLjUxOTM1MjcgTDI2LjMzMTQxMDgsMjAuNDU5ODY0NCBMMjEuNjIwNzYxNCwyMC40NTk4NjQ0IEMyMS42ODI4NDI3LDIxLjgyNDIzNTYgMjEuNjIwNzYxNCwzNSAyMS42MjA3NjE0LDM1IEwyNi4zMzE0MTA4LDM1IEwyNi4zMzE0MTA4LDI2Ljg3OTU4ODcgQzI2LjMzMTQxMDgsMjYuNDQ1MDMyIDI2LjM2MTk4MTIsMjYuMDExNTM2OCAyNi40ODY1MTk5LDI1LjcwMDQwODQgQzI2LjgyNjkzMiwyNC44MzIyNiAyNy42MDIwMDY5LDIzLjkzMzQyMzMgMjguOTAzMjY3NCwyMy45MzM0MjMzIEMzMC42MDgzMzgxLDIzLjkzMzQyMzMgMzEuMjg5OTE0OSwyNS4yNjY3MjAyIDMxLjI4OTkxNDksMjcuMjIwNjMzMyBMMzEuMjg5OTE0OSwzNC45OTk2MTQgTDM1Ljk5OTgxMTksMzQuOTk5NjE0IEwzNiwyNi42NjI3NDQ2IEMzNiwyMi4xOTY2NDM5IDMzLjY3NjM3NDMsMjAuMTE4MDQ3OSAzMC41NzY5MjEzLDIwLjExODA0NzkgWiBNMzAuNTc2OTIxMywyMC4xMTgwNDc5IiBpZD0iT3ZhbC0xIi8+PC9nPjwvZz48L3N2Zz4=">
-            <img class="form__icon" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSI1MHB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1MCA1MCIgd2lkdGg9IjUwcHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGUvPjxkZWZzLz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGlkPSJQYWdlLTEiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIj48ZyBmaWxsPSIjMDAwMDAwIiBpZD0iVHdpdHRlciI+PHBhdGggZD0iTTI1LDUwIEMzOC44MDcxMTk0LDUwIDUwLDM4LjgwNzExOTQgNTAsMjUgQzUwLDExLjE5Mjg4MDYgMzguODA3MTE5NCwwIDI1LDAgQzExLjE5Mjg4MDYsMCAwLDExLjE5Mjg4MDYgMCwyNSBDMCwzOC44MDcxMTk0IDExLjE5Mjg4MDYsNTAgMjUsNTAgWiBNMjUsNDcgQzM3LjE1MDI2NTEsNDcgNDcsMzcuMTUwMjY1MSA0NywyNSBDNDcsMTIuODQ5NzM0OSAzNy4xNTAyNjUxLDMgMjUsMyBDMTIuODQ5NzM0OSwzIDMsMTIuODQ5NzM0OSAzLDI1IEMzLDM3LjE1MDI2NTEgMTIuODQ5NzM0OSw0NyAyNSw0NyBaIE0yNC42ODIyNTU0LDIwLjU1NDI5NzUgTDI0LjcyOTk0NCwyMS4zNzYxMDExIEwyMy45MzUxMzMzLDIxLjI3NTQ3MjEgQzIxLjA0MjAyMjUsMjAuODg5NzI3NSAxOC41MTQ1MjQ2LDE5LjU4MTU1MDQgMTYuMzY4NTM1OCwxNy4zODQ0ODM3IEwxNS4zMTkzODU3LDE2LjI5NDMzNjEgTDE1LjA0OTE1MDEsMTcuMDk5MzY4MSBDMTQuNDc2ODg2NCwxOC44OTM5MTg4IDE0Ljg0MjQ5OTMsMjAuNzg5MDk4NSAxNi4wMzQ3MTUzLDIyLjA2MzczMjYgQzE2LjY3MDU2MzgsMjIuNzY4MTM1NyAxNi41Mjc0OTc5LDIyLjg2ODc2NDcgMTUuNDMwNjU5MiwyMi40NDk0NzcyIEMxNS4wNDkxNTAxLDIyLjMxNTMwNTEgMTQuNzE1MzI5NiwyMi4yMTQ2NzYxIDE0LjY4MzUzNzEsMjIuMjY0OTkwNyBDMTQuNTcyMjYzNywyMi4zODIzOTEyIDE0Ljk1Mzc3MjgsMjMuOTA4NTk3OCAxNS4yNTU4MDA4LDI0LjUxMjM3MTkgQzE1LjY2OTEwMjQsMjUuMzUwOTQ3IDE2LjUxMTYwMTcsMjYuMTcyNzUwNSAxNy40MzM1ODIsMjYuNjU5MTI0MSBMMTguMjEyNDk2NSwyNy4wNDQ4Njg2IEwxNy4yOTA1MTYxLDI3LjA2MTY0MDEgQzE2LjQwMDMyODIsMjcuMDYxNjQwMSAxNi4zNjg1MzU4LDI3LjA3ODQxMTYgMTYuNDYzOTEzMSwyNy40MzA2MTMxIEMxNi43ODE4Mzc0LDI4LjUyMDc2MDggMTguMDM3NjM4MiwyOS42Nzc5OTQ0IDE5LjQzNjUwNSwzMC4xODExMzk0IEwyMC40MjIwNzAxLDMwLjUzMzM0MSBMMTkuNTYzNjc0NiwzMS4wNzAwMjkgQzE4LjI5MTk3NzYsMzEuODQxNTE4MSAxNi43OTc3MzM1LDMyLjI3NzU3NzIgMTUuMzAzNDg5NSwzMi4zMTExMjAyIEMxNC41ODgxNTk5LDMyLjMyNzg5MTYgMTQsMzIuMzk0OTc3NiAxNCwzMi40NDUyOTIyIEMxNCwzMi42MTMwMDcxIDE1LjkzOTMzOCwzMy41NTIyMTEzIDE3LjA2Nzk2OTIsMzMuOTIxMTg0MyBDMjAuNDUzODYyNiwzNS4wMTEzMzE5IDI0LjQ3NTYwNDYsMzQuNTQxNzI5OCAyNy40OTU4ODUxLDMyLjY4MDA5MzIgQzI5LjY0MTg3MzksMzEuMzU1MTQ0NSAzMS43ODc4NjI4LDI4LjcyMjAxODggMzIuNzg5MzI0MiwyNi4xNzI3NTA1IEMzMy4zMjk3OTU0LDI0LjgxNDI1ODkgMzMuODcwMjY2NywyMi4zMzIwNzY3IDMzLjg3MDI2NjcsMjEuMTQxMyBDMzMuODcwMjY2NywyMC4zNjk4MTEgMzMuOTE3OTU1MywyMC4yNjkxODIgMzQuODA4MTQzMiwxOS4zNDY3NDk0IEMzNS4zMzI3MTgzLDE4LjgxMDA2MTMgMzUuODI1NTAwOSwxOC4yMjMwNTg4IDM1LjkyMDg3ODIsMTguMDU1MzQzNyBDMzYuMDc5ODQwMywxNy43MzY2ODUyIDMzLjkwMjA1OTEsMTguNTI0OTQ1OCAzMy43MTEzMDQ1LDE4LjQ1Nzg1OTggTDM0LjM3ODk0NTUsMTcuNzAzMTQyMiBDMzQuODcxNzI4MSwxNy4xNjY0NTQxIDM1LjQ1OTg4OCwxNi4xOTM3MDcxIDM1LjQ1OTg4OCwxNS45MDg1OTE1IEMzNS40NTk4ODgsMTUuODU4Mjc3IDM1LjIyMTQ0NDgsMTUuOTQyMTM0NiAzNC45NTEyMDkyLDE2LjA5MzA3OCBDMzQuNjY1MDc3MywxNi4yNjA3OTMxIDM0LjAyOTIyODgsMTYuNTEyMzY1NiAzMy41NTIzNDI0LDE2LjY2MzMwOTEgTDMyLjY5Mzk0NjksMTYuOTQ4NDI0NiBMMzEuOTE1MDMyNCwxNi4zOTQ5NjUgQzMxLjQ4NTgzNDYsMTYuMDkzMDc4IDMwLjg4MTc3ODYsMTUuNzU3NjQ4IDMwLjU2Mzg1NDMsMTUuNjU3MDE5IEMyOS43NTMxNDc0LDE1LjQyMjIxOCAyOC41MTMyNDI4LDE1LjQ1NTc2MSAyNy43ODIwMTY5LDE1LjcyNDEwNSBDMjUuNzk0OTkwMywxNi40Nzg4MjI2IDI0LjUzOTE4OTQsMTguNDI0MzE2OCAyNC42ODIyNTU0LDIwLjU1NDI5NzUgQzI0LjY4MjI1NTQsMjAuNTU0Mjk3NSAyNC41MzkxODk0LDE4LjQyNDMxNjggMjQuNjgyMjU1NCwyMC41NTQyOTc1IFogTTI0LjY4MjI1U0NFLDIwLjU1NDI5NzUiIGlkPSJPdmFsLTEiLz48L2c+PC9nPjwvc3ZnPg==">
+<head>
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+  <meta charset="utf-8">
+  <title>SCRUMLY</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+  <div class="main">
+    <div class="container a-container" id="a-container">
+      <form class="form" id="a-form" method="" action="">
+        <div class="form__header">
+          <div class="logo">
+            <img src="image/LOGO.png" class="logo-img"/>
+            <span class="logo-text">SCRUMLY</span>
           </div>
-          <span class="form__span">or use email for registration</span>
-          <input class="form__input" type="text" id="signup-name" placeholder="Name">
-          <input class="form__input" type="text" id="signup-email" placeholder="Email">
-          <input class="form__input" type="password" id="signup-password" placeholder="Password">
-          <button class="form__button button submit" type="button" id="signup-btn">SIGN UP</button>
-        </form>
-      </div>
-      <div class="container b-container" id="b-container">
-        <form class="form" id="b-form" method="" action="">
-          <h2 class="form_title title">Sign in to Website</h2>
-          <div class="form__icons">
-            <img class="form__icon" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSI1MHB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1MCA1MCIgd2lkdGg9IjUwcHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5gLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGUvPjxkZWZzLz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGlkPSJQYWdlLTEiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIj48ZyBmaWxsPSIjMDAwMDAwIiBpZD0iRmFjZWJvb2siPjxwYXRoIGQ9Ik0yNSw1MCBDMzguODA3MTE5NCw1MCA1MCwzOC44MDcxMTk0IDUwLDI1IEM1MCwxMS4xOTI4ODA2IDM4LjgwNzExOTQsMCAyNSwwIEMxMS4xOTI4ODA2LDAgMCwxMS4xOTI4ODA2IDAsMjUgQzAsMzguODA3MTE5NCAxMS4xOTI4ODA2LDUwIDI1LDUwIFogTTI1LDQ3IEMzNy4xNTAyNjUxLDQ3IDQ3LDM3LjE1MDI2NTEgNDcsMjUgQzQ3LDEyLjg0OTczNDkgMzcuMTUwMjY1MSwzIDI1LDMgQzEyLjg0OTczNDksMyAzLDEyLjg0OTczNDkgMywyNSBDMywzNy4xNTAyNjUxIDEyLjg0OTczNDksNDcgMjUsNDcgWiBNMjYuODE0NTE5NywzNiBMMjYuODE0NTE5NywyNC45OTg3MTIgTDMwLjA2ODc0NDksMjQuOTk4NzEyIEwzMC41LDIxLjIwNzYwNzIgTDI2LjgxNDUxOTcsMjEuMjA3NjA3MiBMMjYuODIwMDQ4NiwxOS4zMTAxMjI3IEMyNi44MjAwNDg2LDE4LjMyMTM0NDIgMjYuOTIwNzIwOSwxNy43OTE1MzQxIDI4LjQ0MjU1MzgsMTcuNzkxNTM0MSBMMzAuNDc2OTYyOSwxNy43OTE1MzQxIEwzMC40NzY5NjI5LDE0IEwyNy4yMjIyNzY5LDE0IEMyMy4zMTI4NzU3LDE0IDIxLjkzNjg2NzgsMTUuODM5MDkzNyAyMS45MzY4Njc4LDE4LjkzMTg3MDkgTDIxLjkzNjg2NzgsMjEuMjA4MDM2NiBMMTkuNSwyMS4yMDgwMzY2IEwxOS41LDI0Ljk5OTE0MTMgTDIxLjkzNjg2NzgsMjQuOTk5MTQxMyBMMjEuOTM2ODY3OCwzNiBMMjYuODE0NTE5NywzNiBaIE0yNi44MTQ1MTk3LDM2IiBpZD0iT3ZhbC0xIi8+PC9nPjwvZz48L3N2Zz4=" alt="">
-            <img class="form__icon" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSI1MHB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1MCA1MCIgd2lkdGg9IjUwcHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGUvPjxkZWZzLz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGlkPSJQYWdlLTEiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIj48ZyBmaWxsPSIjMDAwMDAwIiBpZD0iTGlua2VkSW4iPjxwYXRoIGQ9Ik0yNSw1MCBDMzguODA3MTE5NCw1MCA1MCwzOC44MDcxMTk0IDUwLDI1IEM1MCwxMS4xOTI4ODA2IDM4LjgwNzExOTQsMCAyNSwwIEMxMS4xOTI4ODA2LDAgMCwxMS4xOTI4ODU2IDAsMjUgQzAsMzguODA3MTE5NCAxMS4xOTI4ODA2LDUwIDI1LDUwIFogTTI1LDQ3IEMzNy4xNTAyNjUxLDQ3IDQ3LDM3LjE1MDI2NTEgNDcsMjUgQzQ3LDEyLjg0OTczNDkgMzcuMTUwMjY1MSwzIDI1LDMgQzEyLjg0OTczNDksMyAzLDEyLjg0OTczNDkgMywyNSBDMywzNy4xNTAyNjU1IDEyLjg0OTczNDksNDcgMjUsNDcgWiBNMTQsMjAuMTE4MDQ3OSBMMTQsMzQuNjU4MTgzNCBMMTguNzEwMDg1MSwzNC42NTgxODM0IEwxOC43MTAwODUxLDIwLjExODA0NzkgTDE0LDIwLjExODA0NzkgWiBNMTYuNjY0Njk2MiwxMyBDMTUuMDUzNDA1OCwxMyAxNCwxNC4wODU4NjExIDE0LDE1LjUxMTUxMjIgQzE0LDE2LjkwNzYzMzEgMTUuMDIyMjcxMSwxOC4wMjQ3NjE0IDE2LjYwMzU1NTYsMTguMDI0NzYxNCBMMTYuNjMzNjU1NiwxOC4wMjQ3NjE0IEMxOC4yNzU5ODY3LDE4LjAyNDc2MTQgMTkuMjk4ODIyMiwxNi45MDc2MzMxIDE5LjI5ODgyMjIsMTUuNTExNTEyMiBDMTkuMjY4MjUxOSwxNC4wODU4NjExIDE4LjI3NTk4NjcsMTMgMTYuNjY0Njk2MiwxMyBaIE0zMC41NzY5MjEzLDIwLjExODA0NzkgQzI4LjA3NjE3NiwyMC4xMTgwNDc5IDI2Ljk1NjU1MDEsMjEuNTI5MzE5OSAyNi4zMzE0MTA4LDIyLjUxOTM1MjcgTDI2LjMzMTQxMDgsMjAuNDU5ODY0NCBMMjEuNjIwNzYxNCwyMC40NTk4NjQ0IEMyMS42ODI4NDI3LDIxLjgyNDIzNTYgMjEuNjIwNzYxNCwzNSAyMS42MjA3NjE0LDM1IEwyNi4zMzE0MTA4LDM1IEwyNi4zMzE0MTA4LDI2Ljg3OTU4ODcgQzI2LjMzMTQxMDgsMjYuNDQ1MDMyIDI2LjM2MTk4MTIsMjYuMDExNTM2OCAyNi40ODY1MTk5LDI1LjcwMDQwODQgQzI2LjgyNjkzMiwyNC44MzIyNiAyNy42MDIwMDY5LDIzLjkzMzQyMzMgMjguOTAzMjY3NCwyNS45MzM0MjMzIEMzMC42MDgzMzgxLDIzLjkzMzQyMzMgMzEuMjg5OTE0OSwyNS4yNjY3MjAyIDMxLjI4OTkxNDksMjcuMjIwNjMzMyBMMzEuMjg5OTE0OSwzNC45OTk2MTQgTDM1Ljk5OTgxMTksMzQuOTk5NjE0IEwzNiwyNi42NjI3NDQ2IEMzNiwyMi4xOTY2NDM5IDMzLjY3NjM3NDMsMjAuMTE4MDQ3OSAzMC41NzY5MjEzLDIwLjExODA0NzkgWiBNMzAuNTc2OTIxMywyMC4xMTgwNDc5IiBpZD0iT3ZhbC0xIi8+PC9nPjwvZz48L3N2Zz4=">
-            <img class="form__icon" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSI1MHB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1MCA1MCIgd2lkdGg9IjUwcHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGUvPjxkZWZzLz48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGlkPSJQYWdlLTEiIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIj48ZyBmaWxsPSIjMDAwMDAwIiBpZD0iVHdpdHRlciI+PHBhdGggZD0iTTI1LDUwIEMzguODA3MTE5NCw1MCA1MCwzOC44MDcxMTk0IDUwLDI1IEM1MCwxMS4xOTI4ODA2IDM4LjgwNzExOTQsMCAyNSwwIEMxMS4xOTI4ODA2LDAgMCwxMS4xOTI4ODA2IDAsMjUgQzAsMzguODA3MTE5NCAxMS4xOTI4ODA2LDUwIDI1LDUwIFogTTI1LDQ3IEMzNy4xNTAyNjUxLDQ3IDQ3LDM3LjE1MDI2NTEgNDcsMjUgQzQ3LDEyLjg0OTczNDkgMzcuMTUwMjY1MSwzIDI1LDMgQzEyLjg0OTczNDksMyAzLDEyLjg0OTczNDkgMywyNSBDMywzNy4xNTAyNjU1IDEyLjg0OTczNDksNDcgMjUsNDcgWiBNMjQuNjgyMjU1NCwyMC41NTQyOTc1IEwyNC43Mjk5NDQsMjEuMzc2MTAxMSBMMjMuOTM1MTMzMywyMS4yNzU0NzIxIEMyMS4wNDIwMjI1LDIwLjg4OTcyNzUgMTguNTE0NTI0NiwxOS41ODE1NTA0IDE2LjM2ODUzNTgsMTcuMzg0NDgzNyBMMTUuMzE5Mzg1NywxNi4yOTQzMzYxIEwxNS4wNDkxNTAxLDE3LjA5OTM2ODEgQzE0LjQ3Njg4NjQsMTguODkzOTE4OCAxNC44NDI0OTkzLDIwLjc4OTA5ODUgMTYuMDM0NzE1MywyMi4wNjM3MzI2IEMxNi42NzA1NjM4LDIyLjc2ODEzNTcgMTYuNTI3NDk3OSwyMi44Njg3NjQ3IDE1LjQzMDY1OTIsMjIuNDQ5NDc3MiBDMTUuMDQ5MTUwMSwyMi4zMTUzMDUxIDE0LjcxNTMyOTYsMjIuMjE0Njc2MSAxNC42ODM1MzcxLDIyLjI2NDk5MDcgQzE0LjU3MjI2MzcsMjIuMzgyMzkxMiAxNC45NTM3NzI4LDIzLjkwODU5NzggMTUuMjU1ODAwOCwyNC41MTIzNzE5IEMxNS42NjkxMDI0LDI1LjM1MDk0NyAxNi41MTE2MDE3LDI2LjE3Mjc1MDUgMTcuNDMzNTgyLDI2LjY1OTEyNDEgTDE4LjIxMjQ5NjUsMjcuMDQ0ODY4NiBMMTcuMjkwNTE2MSwyNy4wNjE2NDAxIEMxNi40MDAzMjgyLDI3LjA2MTY0MDEgMTYuMzY4NTM1OCwyNy4wNzg0MTE2IDE2LjQ2MzkxMzEsMjcuNDMwNjEzMSBDMTYuNzgxODM3NCwyOC41MjA3NjA4IDE4LjAzNzYzODIsMjkuNjY3OTk0NCAxOS40MzY1MDUsMzAuMTgxMTM5NCBMMjAuNDIyMDcwMSwzMC41MzMzNDEgTDE5LjU2MzY3NDYsMzEuMDcwMDI5IEMxOC4yOTE5Nzc2LDMxLjg0MTUxODEgMTYuNzk3NzMzNSwzMi4yNzc1NzcyIDE1LjMwMzQ4OTUsMzIuMzExMTIwMiBDMTQuNTg4MTU5OSwzMi4zMjc4OTE2IDE0LDMyLjM5NDk3NzYgMTQsMzIuNDQ1MjkyMiBDMTQsMzIuNjEzMDA3MSAxNS45MzkzMzgsMzMuNTUyMjExMyAxNy4wNjc5NjkyLDMzLjkyMTE4NDMgQzIwLjQ1Mzg2MjYsMzUuMDExMzMxOSAyNC40NzU2MDQ2LDM0LjU0MTcyOTggMjcuNDk1ODg1MSwzMi42ODAwOTMyIEMyOS42NDE4NzM5LDMxLjM1NTE0NDUgMzEuNzg3ODYyOCwyOC43MjIwMTg4IDMyLjc4OTMyNDIsMjYuMTcyNzUwNSBDMzMuMzI5Nzk1NCwyNC44MTQyNTg5IDMzLjg3MDI2NjcsMjIuMzMyMDc2NyAzMy44NzAyNjY3LDIxLjE0MTMgQzMzLjg3MDI2NjcsMjAuMzY5ODExIDMzLjkxNzk1NTMsMjAuMjY5MTgyIDM0LjgwODE0MzIsMTkuMzQ2NzQ5NCBDMzUuMzMyNzE4MywxOC44MTAwNjEzIDM1LjgyNTUwMDksMTguMjIzMDU4OCAzNS45MjA4NzgxLDE4LjA1NTM0MzcgQzM2LjA3OTg0MDMsMTcuNzM2Njg1MiAzMy45MDIwNTkxLDE4LjUyNDk0NTggMzMuNzExMzA0NSwxOC40NTc4NTk4IEwzNC4zNzg5NDU1LDE3LjcwMzE0MjIgQzM0Ljg3MTcyODEsMTcuMTY2NDU0MSAzNS40NTk4ODgsMTYuMTkzNzA3MSAzNS40NTk4ODgsMTUuOTA4NTkxNSBDMzUuNDU5ODg4LDE1Ljg1ODI3NyAzNS4yMjE0NDQ4LDE1Ljk0MjEzNDYgMzQuOTUxMjA5MiwxNi4wOTMwNzggQzM0LjY2NTA3NzMsMTYuMjYwNzkzMSAzNC4wMjkyMjg4LDE2LjUxMjM2NTYgMzMuNTUyMzQyNCwxNi42NjMzMDkxIEwzMi42OTM5NDY5LDE2Ljk0ODQyNDYgTDMxLjkxNTAzMjQsMTYuMzk0OTY1IEMzMS40ODU4MzQ2LDE2LjA5MzA3OCAzMC44ODE3Nzg2LDE1Ljc1NzY0OCAzMC41NjM4NTQzLDE1LjY1NzAxOSBDMjkuNzUzMTQ3NCwxNS40MjIyMTggMjguNTEzMjQyOCwxNS40NTU3NjEgMjcuNzgyMDE2OSwxNS43MjQxMDUgQzI1Ljc5NDk5MDMsMTYuNDc4ODIyNiAyNC41MzkxODk0LDE4LjQyNDMxNjggMjQuNjgyMjU1NCwyMC41NTQyOTc1IEMyNC42ODIyNTU0LDIwLjU1NDI5NzUgMjQuNTM5MTg5NCwxOC40MjQzMTY4IDI0LjY4MjI1NTQsMjAuNTU0Mjk3NSBaIE0yNC42ODIyNTU0LDIwLjU1NDI5NzUiIGlkPSJPdmFsLTEiLz48L2c+PC9nPjwvc3ZnPg==">
+          <h2 class="title">Crear una cuenta</h2>
+          <p class="subtitle">Comienza tu viaje con nosotros</p>
+        </div>
+        
+        <div class="input-group">
+          <input class="form__input" type="text" id="signup-name" placeholder="Nombre completo">
+          <i class="fas fa-user input-icon"></i>
+        </div>
+        
+        <div class="input-group">
+          <input class="form__input" type="email" id="signup-email" placeholder="Correo electrónico">
+          <i class="fas fa-envelope input-icon"></i>
+        </div>
+        
+        <div class="input-group">
+          <input class="form__input" type="password" id="signup-password" placeholder="Contraseña">
+          <i class="fas fa-lock input-icon"></i>
+        </div>
+        
+        <button class="button" type="button" id="signup-btn">REGISTRARSE</button>
+      </form>
+    </div>
+    
+    <div class="container b-container" id="b-container">
+      <form class="form" id="b-form" method="" action="">
+        <div class="form__header">
+          <div class="logo">
+            <img src="image/LOGO.png" class="logo-img"/>
+            <span class="logo-text">Scrumly</span>
           </div>
-          <span class="form__span">or use your email account</span>
-          <input class="form__input" type="text" id="login-email" placeholder="Email">
-          <input class="form__input" type="password" id="login-password" placeholder="Password">
-          <a class="form__link">Forgot your password?</a>
-          <button class="form__button button submit" type="button" id="login-btn">SIGN IN</button>
-        </form>
+          <h2 class="title">Iniciar sesión</h2>
+          <p class="subtitle">¡Bienvenido de nuevo!</p>
+        </div>
+        
+        <div class="input-group">
+          <input class="form__input" type="email" id="login-email" placeholder="Correo electrónico">
+          <i class="fas fa-envelope input-icon"></i>
+        </div>
+        
+        <div class="input-group">
+          <input class="form__input" type="password" id="login-password" placeholder="Contraseña">
+          <i class="fas fa-lock input-icon"></i>
+        </div>
+        
+        <a class="form__link">¿Olvidaste tu contraseña?</a>
+        <button class="button" type="button" id="login-btn">ACCEDER</button>
+      </form>
+    </div>
+    
+    <div class="switch" id="switch-cnt">
+      <div class="switch__circle"></div>
+      <div class="switch__circle switch__circle--t"></div>
+      
+      <div class="switch__container" id="switch-c1">
+        <h2 class="switch__title title">¡Bienvenido de nuevo!</h2>
+        <p class="switch__description description">Para mantenerse conectado con nosotros, inicie sesión con su información personal.</p>
+        <button class="switch__button button" id="switch-btn1">INICIAR SESIÓN</button>
       </div>
-      <div class="switch" id="switch-cnt">
-        <div class="switch__circle"></div>
-        <div class="switch__circle switch__circle--t"></div>
-        <div class="switch__container" id="switch-c1">
-          <h2 class="switch__title title">Welcome Back !</h2>
-          <p class="switch__description description">To keep connected with us please login with your personal info</p>
-          <button class="switch__button button switch-btn">SIGN IN</button>
-        </div>
-        <div class="switch__container is-hidden" id="switch-c2">
-          <h2 class="switch__title title">Hello Friend !</h2>
-          <p class="switch__description description">Enter your personal details and start journey with us</p>
-          <button class="switch__button button switch-btn">SIGN UP</button>
-        </div>
+      
+      <div class="switch__container is-hidden" id="switch-c2">
+        <h2 class="switch__title title">¡Hola amigo!</h2>
+        <p class="switch__description description">Introduce tus datos personales y comienza tu viaje con nosotros</p>
+        <button class="switch__button button" id="switch-btn2">REGISTRARSE</button>
       </div>
     </div>
-    <script  src="js/script.js"></script>
-  </body>
+  </div>
+
+  <div class="notification success" id="success-notification">
+    <i class="fas fa-check-circle"></i>
+    <span>¡Operación realizada con éxito!</span>
+  </div>
+
+  <div class="notification error" id="error-notification">
+    <i class="fas fa-exclamation-circle"></i>
+    <span>Por favor, complete todos los campos.</span>
+  </div>
+
+  <script>
+    // Funcionalidad para cambiar entre formularios
+    document.addEventListener('DOMContentLoaded', function() {
+      const switchCtn = document.querySelector("#switch-cnt");
+      const switchC1 = document.querySelector("#switch-c1");
+      const switchC2 = document.querySelector("#switch-c2");
+      const switchBtn1 = document.querySelector("#switch-btn1");
+      const switchBtn2 = document.querySelector("#switch-btn2");
+      const aContainer = document.querySelector("#a-container");
+      const bContainer = document.querySelector("#b-container");
+      
+      // Cambiar a formulario de inicio de sesión
+      switchBtn1.addEventListener('click', function() {
+        switchCtn.classList.add("is-gx");
+        setTimeout(function(){
+          switchCtn.classList.remove("is-gx");
+        }, 1500);
+        
+        switchCtn.classList.toggle("is-txr");
+        switchC1.classList.toggle("is-hidden");
+        switchC2.classList.toggle("is-hidden");
+        
+        aContainer.classList.toggle("is-txl");
+        bContainer.classList.toggle("is-txl");
+        aContainer.classList.toggle("is-z200");
+        bContainer.classList.toggle("is-z200");
+      });
+      
+      // Cambiar a formulario de registro
+      switchBtn2.addEventListener('click', function() {
+        switchCtn.classList.add("is-gx");
+        setTimeout(function(){
+          switchCtn.classList.remove("is-gx");
+        }, 1500);
+        
+        switchCtn.classList.toggle("is-txr");
+        switchC1.classList.toggle("is-hidden");
+        switchC2.classList.toggle("is-hidden");
+        
+        aContainer.classList.toggle("is-txl");
+        bContainer.classList.toggle("is-txl");
+        aContainer.classList.toggle("is-z200");
+        bContainer.classList.toggle("is-z200");
+      });
+      
+      // Validación de formularios
+      document.getElementById('login-btn').addEventListener('click', function() {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        
+        if (!email || !password) {
+          showNotification('error');
+        } else {
+          showNotification('success');
+        }
+      });
+      
+      document.getElementById('signup-btn').addEventListener('click', function() {
+        const name = document.getElementById('signup-name').value;
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        
+        if (!name || !email || !password) {
+          showNotification('error');
+        } else {
+          showNotification('success');
+        }
+      });
+      
+      function showNotification(type) {
+        const notification = document.getElementById(`${type}-notification`);
+        notification.classList.add('show');
+        
+        setTimeout(function() {
+          notification.classList.remove('show');
+        }, 3000);
+      }
+    });
+  </script>
+</body>
 </html>
