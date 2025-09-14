@@ -1,176 +1,175 @@
 <!DOCTYPE html>
 <html lang="es" dir="ltr">
 <head>
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
-  <meta charset="utf-8">
-  <title>SCRUMLY</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/style.css">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>SCRUMLY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/style.css">
 </head>
 
 <body>
-  <div class="main">
-    <div class="container a-container" id="a-container">
-      <form class="form" id="a-form" method="" action="">
-        <div class="form__header">
-          <div class="logo">
-            <img src="image/LOGO.png" class="logo-img"/>
-            <span class="logo-text">SCRUMLY</span>
-          </div>
-          <h2 class="title">Crear una cuenta</h2>
-          <p class="subtitle">Comienza tu viaje con nosotros</p>
-        </div>
-        
-        <div class="input-group">
-          <input class="form__input" type="text" id="signup-name" placeholder="Nombre completo">
-          <i class="fas fa-user input-icon"></i>
-        </div>
-        
-        <div class="input-group">
-          <input class="form__input" type="email" id="signup-email" placeholder="Correo electrónico">
-          <i class="fas fa-envelope input-icon"></i>
-        </div>
-        
-        <div class="input-group">
-          <input class="form__input" type="password" id="signup-password" placeholder="Contraseña">
-          <i class="fas fa-lock input-icon"></i>
-        </div>
-        
-        <button class="button" type="button" id="signup-btn">REGISTRARSE</button>
-      </form>
-    </div>
-    
-    <div class="container b-container" id="b-container">
-      <form class="form" id="b-form" method="" action="">
-        <div class="form__header">
-          <div class="logo">
-            <img src="image/LOGO.png" class="logo-img"/>
-            <span class="logo-text">Scrumly</span>
-          </div>
-          <h2 class="title">Iniciar sesión</h2>
-          <p class="subtitle">¡Bienvenido de nuevo!</p>
-        </div>
-        
-        <div class="input-group">
-          <input class="form__input" type="email" id="login-email" placeholder="Correo electrónico">
-          <i class="fas fa-envelope input-icon"></i>
-        </div>
-        
-        <div class="input-group">
-          <input class="form__input" type="password" id="login-password" placeholder="Contraseña">
-          <i class="fas fa-lock input-icon"></i>
-        </div>
-        <button class="button" type="button" id="login-btn">ACCEDER</button>
-      </form>
-    </div>
-    
-    <div class="switch" id="switch-cnt">
-      <div class="switch__circle"></div>
-      <div class="switch__circle switch__circle--t"></div>
-      
-      <div class="switch__container" id="switch-c1">
-        <h2 class="switch__title title">¡Bienvenido de nuevo!</h2>
-        <p class="switch__description description">Para mantenerse conectado con nosotros, inicie sesión con su información personal.</p>
-        <button class="switch__button button" id="switch-btn1">INICIAR SESIÓN</button>
-      </div>
-      
-      <div class="switch__container is-hidden" id="switch-c2">
-        <h2 class="switch__title title">¡Hola amigo!</h2>
-        <p class="switch__description description">Introduce tus datos personales y comienza tu viaje con nosotros</p>
-        <button class="switch__button button" id="switch-btn2">REGISTRARSE</button>
-      </div>
-    </div>
-  </div>
+    <div class="main">
+        <div class="container a-container" id="a-container">
+            <form class="form" id="a-form" method="" action="">
+                <div class="form__header">
+                    <div class="logo">
+                        <img src="image/LOGO.png" class="logo-img" />
+                        <span class="logo-text">SCRUMLY</span>
+                    </div>
+                    <h2 class="title">Crear una cuenta</h2>
+                    <p class="subtitle">Comienza tu viaje con nosotros</p>
+                </div>
 
-  <div class="notification success" id="success-notification">
-    <i class="fas fa-check-circle"></i>
-    <span>¡Operación realizada con éxito!</span>
-  </div>
+                <div class="input-group">
+                    <input class="form__input" type="text" id="signup-name" placeholder="Nombre completo">
+                    <i class="fas fa-user input-icon"></i>
+                </div>
 
-  <div class="notification error" id="error-notification">
-    <i class="fas fa-exclamation-circle"></i>
-    <span>Por favor, complete todos los campos.</span>
-  </div>
+                <div class="input-group">
+                    <input class="form__input" type="email" id="signup-email" placeholder="Correo electrónico">
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
 
-  <script>
-    // Funcionalidad para cambiar entre formularios
-    document.addEventListener('DOMContentLoaded', function() {
-      const switchCtn = document.querySelector("#switch-cnt");
-      const switchC1 = document.querySelector("#switch-c1");
-      const switchC2 = document.querySelector("#switch-c2");
-      const switchBtn1 = document.querySelector("#switch-btn1");
-      const switchBtn2 = document.querySelector("#switch-btn2");
-      const aContainer = document.querySelector("#a-container");
-      const bContainer = document.querySelector("#b-container");
-      
-      // Cambiar a formulario de inicio de sesión
-      switchBtn1.addEventListener('click', function() {
-        switchCtn.classList.add("is-gx");
-        setTimeout(function(){
-          switchCtn.classList.remove("is-gx");
-        }, 1500);
-        
-        switchCtn.classList.toggle("is-txr");
-        switchC1.classList.toggle("is-hidden");
-        switchC2.classList.toggle("is-hidden");
-        
-        aContainer.classList.toggle("is-txl");
-        bContainer.classList.toggle("is-txl");
-        aContainer.classList.toggle("is-z200");
-        bContainer.classList.toggle("is-z200");
-      });
-      
-      // Cambiar a formulario de registro
-      switchBtn2.addEventListener('click', function() {
-        switchCtn.classList.add("is-gx");
-        setTimeout(function(){
-          switchCtn.classList.remove("is-gx");
-        }, 1500);
-        
-        switchCtn.classList.toggle("is-txr");
-        switchC1.classList.toggle("is-hidden");
-        switchC2.classList.toggle("is-hidden");
-        
-        aContainer.classList.toggle("is-txl");
-        bContainer.classList.toggle("is-txl");
-        aContainer.classList.toggle("is-z200");
-        bContainer.classList.toggle("is-z200");
-      });
-      
-      // Validación de formularios
-      document.getElementById('login-btn').addEventListener('click', function() {
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-        
-        if (!email || !password) {
-          showNotification('error');
-        } else {
-          showNotification('success');
-        }
-      });
-      
-      document.getElementById('signup-btn').addEventListener('click', function() {
-        const name = document.getElementById('signup-name').value;
-        const email = document.getElementById('signup-email').value;
-        const password = document.getElementById('signup-password').value;
-        
-        if (!name || !email || !password) {
-          showNotification('error');
-        } else {
-          showNotification('success');
-        }
-      });
-      
-      function showNotification(type) {
-        const notification = document.getElementById(`${type}-notification`);
-        notification.classList.add('show');
-        
-        setTimeout(function() {
-          notification.classList.remove('show');
-        }, 3000);
-      }
-    });
-  </script>
+                <div class="input-group">
+                    <input class="form__input" type="password" id="signup-password" placeholder="Contraseña">
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+
+                <button class="button" type="button" id="signup-btn">REGISTRARSE</button>
+            </form>
+        </div>
+
+        <div class="container b-container" id="b-container">
+            <form class="form" id="b-form" method="" action="">
+                <div class="form__header">
+                    <div class="logo">
+                        <img src="image/LOGO.png" class="logo-img" />
+                        <span class="logo-text">Scrumly</span>
+                    </div>
+                    <h2 class="title">Iniciar sesión</h2>
+                    <p class="subtitle">¡Bienvenido de nuevo!</p>
+                </div>
+
+                <div class="input-group">
+                    <input class="form__input" type="email" id="login-email" placeholder="Correo electrónico">
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
+
+                <div class="input-group">
+                    <input class="form__input" type="password" id="login-password" placeholder="Contraseña">
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+                <button class="button" type="button" id="login-btn">ACCEDER</button>
+            </form>
+        </div>
+
+        <div class="switch" id="switch-cnt">
+            <div class="switch__circle"></div>
+            <div class="switch__circle switch__circle--t"></div>
+
+            <div class="switch__container" id="switch-c1">
+                <h2 class="switch__title title">¡Bienvenido de nuevo!</h2>
+                <p class="switch__description description">Para mantenerse conectado con nosotros, inicie sesión con su información personal.</p>
+                <button class="switch__button button" id="switch-btn1">INICIAR SESIÓN</button>
+            </div>
+
+            <div class="switch__container is-hidden" id="switch-c2">
+                <h2 class="switch__title title">¡Hola amigo!</h2>
+                <p class="switch__description description">Introduce tus datos personales y comienza tu viaje con nosotros</p>
+                <button class="switch__button button" id="switch-btn2">REGISTRARSE</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification success" id="success-notification">
+        <i class="fas fa-check-circle"></i>
+        <span>¡Operación realizada con éxito!</span>
+    </div>
+
+    <div class="notification error" id="error-notification">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>Por favor, complete todos los campos.</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const switchCtn = document.querySelector("#switch-cnt");
+            const switchC1 = document.querySelector("#switch-c1");
+            const switchC2 = document.querySelector("#switch-c2");
+            const switchBtn1 = document.querySelector("#switch-btn1");
+            const switchBtn2 = document.querySelector("#switch-btn2");
+            const aContainer = document.querySelector("#a-container");
+            const bContainer = document.querySelector("#b-container");
+
+            // Función reutilizable para validar campos
+            function validateForm(fields) {
+                return fields.every(field => field.trim() !== '');
+            }
+
+            // Cambiar a formulario de inicio de sesión
+            switchBtn1.addEventListener('click', function () {
+                switchCtn.classList.add("is-gx");
+                setTimeout(() => switchCtn.classList.remove("is-gx"), 1500);
+
+                switchCtn.classList.toggle("is-txr");
+                switchC1.classList.toggle("is-hidden");
+                switchC2.classList.toggle("is-hidden");
+
+                aContainer.classList.toggle("is-txl");
+                bContainer.classList.toggle("is-txl");
+                aContainer.classList.toggle("is-z200");
+                bContainer.classList.toggle("is-z200");
+            });
+
+            // Cambiar a formulario de registro
+            switchBtn2.addEventListener('click', function () {
+                switchCtn.classList.add("is-gx");
+                setTimeout(() => switchCtn.classList.remove("is-gx"), 1500);
+
+                switchCtn.classList.toggle("is-txr");
+                switchC1.classList.toggle("is-hidden");
+                switchC2.classList.toggle("is-hidden");
+
+                aContainer.classList.toggle("is-txl");
+                bContainer.classList.toggle("is-txl");
+                aContainer.classList.toggle("is-z200");
+                bContainer.classList.toggle("is-z200");
+            });
+
+            // Validación login
+            document.getElementById('login-btn').addEventListener('click', function () {
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+
+                if (validateForm([email, password])) {
+                    showNotification('success');
+                } else {
+                    showNotification('error');
+                }
+            });
+
+            // Validación signup
+            document.getElementById('signup-btn').addEventListener('click', function () {
+                const name = document.getElementById('signup-name').value;
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+
+                if (validateForm([name, email, password])) {
+                    showNotification('success');
+                } else {
+                    showNotification('error');
+                }
+            });
+
+            // Mostrar notificación
+            function showNotification(type) {
+                const notification = document.getElementById(`${type}-notification`);
+                notification.classList.add('show');
+                setTimeout(() => notification.classList.remove('show'), 3000);
+            }
+        });
+    </script>
 </body>
 </html>
