@@ -93,83 +93,72 @@
         <span>Por favor, complete todos los campos.</span>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const switchCtn = document.querySelector("#switch-cnt");
-            const switchC1 = document.querySelector("#switch-c1");
-            const switchC2 = document.querySelector("#switch-c2");
-            const switchBtn1 = document.querySelector("#switch-btn1");
-            const switchBtn2 = document.querySelector("#switch-btn2");
-            const aContainer = document.querySelector("#a-container");
-            const bContainer = document.querySelector("#b-container");
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    
+    const switchCtn = document.querySelector("#switch-cnt");
+    const switchC1 = document.querySelector("#switch-c1");
+    const switchC2 = document.querySelector("#switch-c2");
+    const aContainer = document.querySelector("#a-container");
+    const bContainer = document.querySelector("#b-container");
 
-            // Función reutilizable para validar campos
-            function validateForm(fields) {
-                return fields.every(field => field.trim() !== '');
-            }
+    const switchBtns = {
+        login: document.querySelector("#switch-btn1"),
+        signup: document.querySelector("#switch-btn2")
+    };
 
-            // Cambiar a formulario de inicio de sesión
-            switchBtn1.addEventListener('click', function () {
-                switchCtn.classList.add("is-gx");
-                setTimeout(() => switchCtn.classList.remove("is-gx"), 1500);
+    const actionBtns = {
+        login: document.querySelector('#login-btn'),
+        signup: document.querySelector('#signup-btn')
+    };
 
-                switchCtn.classList.toggle("is-txr");
-                switchC1.classList.toggle("is-hidden");
-                switchC2.classList.toggle("is-hidden");
+    const validateForm = (fields) => fields.every(field => field.trim() !== '');
 
-                aContainer.classList.toggle("is-txl");
-                bContainer.classList.toggle("is-txl");
-                aContainer.classList.toggle("is-z200");
-                bContainer.classList.toggle("is-z200");
-            });
+    const showNotification = (type) => {
+        const notification = document.getElementById(`${type}-notification`);
+        notification.classList.add('show');
+        setTimeout(() => notification.classList.remove('show'), 3000);
+    };
 
-            // Cambiar a formulario de registro
-            switchBtn2.addEventListener('click', function () {
-                switchCtn.classList.add("is-gx");
-                setTimeout(() => switchCtn.classList.remove("is-gx"), 1500);
+    const toggleForm = () => {
+        switchCtn.classList.add("is-gx");
+        setTimeout(() => switchCtn.classList.remove("is-gx"), 1500);
 
-                switchCtn.classList.toggle("is-txr");
-                switchC1.classList.toggle("is-hidden");
-                switchC2.classList.toggle("is-hidden");
+        switchCtn.classList.toggle("is-txr");
+        switchC1.classList.toggle("is-hidden");
+        switchC2.classList.toggle("is-hidden");
 
-                aContainer.classList.toggle("is-txl");
-                bContainer.classList.toggle("is-txl");
-                aContainer.classList.toggle("is-z200");
-                bContainer.classList.toggle("is-z200");
-            });
+        aContainer.classList.toggle("is-txl");
+        bContainer.classList.toggle("is-txl");
+        aContainer.classList.toggle("is-z200");
+        bContainer.classList.toggle("is-z200");
+    };
 
-            // Validación login
-            document.getElementById('login-btn').addEventListener('click', function () {
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
+    const handleFormSubmit = (fields) => {
+        if (validateForm(fields)) {
+            showNotification('success');
+        } else {
+            showNotification('error');
+        }
+    };
 
-                if (validateForm([email, password])) {
-                    showNotification('success');
-                } else {
-                    showNotification('error');
-                }
-            });
 
-            // Validación signup
-            document.getElementById('signup-btn').addEventListener('click', function () {
-                const name = document.getElementById('signup-name').value;
-                const email = document.getElementById('signup-email').value;
-                const password = document.getElementById('signup-password').value;
+    switchBtns.login.addEventListener('click', toggleForm);
+    switchBtns.signup.addEventListener('click', toggleForm);
 
-                if (validateForm([name, email, password])) {
-                    showNotification('success');
-                } else {
-                    showNotification('error');
-                }
-            });
+    actionBtns.login.addEventListener('click', () => {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        handleFormSubmit([email, password]);
+    });
 
-            // Mostrar notificación
-            function showNotification(type) {
-                const notification = document.getElementById(`${type}-notification`);
-                notification.classList.add('show');
-                setTimeout(() => notification.classList.remove('show'), 3000);
-            }
-        });
-    </script>
+    actionBtns.signup.addEventListener('click', () => {
+        const name = document.getElementById('signup-name').value;
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        handleFormSubmit([name, email, password]);
+    });
+});
+</script>
 </body>
 </html>
