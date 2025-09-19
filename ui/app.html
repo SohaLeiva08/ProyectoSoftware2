@@ -152,43 +152,44 @@
 
       if (!isOpen) return null;
       return (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="modal-container bg-white p-6 rounded-lg shadow-lg w-96 max-w-90vw">
-            <h2 className="text-xl font-semibold mb-4">Perfil de Usuario</h2>
-            <div className="flex flex-col items-center mb-4">
-              <div className="relative">
-                <img src={avatar} alt="Avatar" className="w-24 h-24 rounded-full mb-2 object-cover cursor-pointer" onClick={abrirSelectorAvatar} />
-                <div className="absolute bottom-0 right-0 bg-blue-500 text-white p-1 rounded-full cursor-pointer" onClick={abrirSelectorAvatar} title="Cambiar avatar">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                </div>
-              </div>
+   
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+    <div className="modal-container bg-white p-6 rounded-lg shadow-lg w-96 max-w-90vw">
+    <h2 className="text-xl font-semibold mb-4">Perfil de Usuario</h2>
+    <div className="flex flex-col items-center mb-4">
+    <div className="relative">
+    <img src={avatar} alt="Avatar" className="w-24 h-24 rounded-full mb-2 object-cover cursor-pointer" onClick={abrirSelectorAvatar} />
+    <div className="absolute bottom-0 right-0 bg-blue-500 text-white p-1 rounded-full cursor-pointer" onClick={abrirSelectorAvatar} title="Cambiar avatar">
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+    </div>
+    </div>
 
-              <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={manejarCambioArchivo} />
-              <div className="flex gap-2 mt-2">
-                <button className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200" onClick={abrirSelectorAvatar}>Subir imagen</button>
-                <button className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200" onClick={generarAvatarAleatorio}>Avatar aleatorio</button>
-                {avatarFile && <button className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200" onClick={eliminarAvatarPersonalizado}>Quitar</button>}
-              </div>
-              {avatarFile && <p className="text-xs text-gray-500 mt-1 text-center">Imagen seleccionada: {avatarFile.name}</p>}
+    <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={manejarCambioArchivo} />
+    <div className="flex gap-2 mt-2">
+    <button className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200" onClick={abrirSelectorAvatar}>Subir imagen</button>
+    <button className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200" onClick={generarAvatarAleatorio}>Avatar aleatorio</button>
+    {avatarFile && <button className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded hover:bg-red-200" onClick={eliminarAvatarPersonalizado}>Quitar</button>}
+    </div>
+      {avatarFile && <p className="text-xs text-gray-500 mt-1 text-center">Imagen seleccionada: {avatarFile.name}</p>}
             </div>
 
             <div className="Nombreusurio">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-              <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={name} onChange={(e) => setName(e.target.value)} placeholder="Tu nombre completo" />
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+            <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={name} onChange={(e) => setName(e.target.value)} placeholder="Tu nombre completo" />
             </div>
             <div className="Email">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input type="email" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="tu.email@ejemplo.com" />
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input type="email" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="tu.email@ejemplo.com" />
             </div>
             <div className="Rol">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Rol</label>
-              <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={role} onChange={(e) => setRole(e.target.value)}>
-                {rolesDisponibles.map(r => <option key={r} value={r}>{r}</option>)}
-              </select>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Rol</label>
+            <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={role} onChange={(e) => setRole(e.target.value)}>
+             {rolesDisponibles.map(r => <option key={r} value={r}>{r}</option>)}
+            </select>
             </div>
             <div className="flex justify-end space-x-2">
-              <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancelar</button>
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-600" onClick={guardarPerfilUsuario}>Guardar cambios</button>
+            <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancelar</button>
+            <button className="px-4 py-2 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-600" onClick={guardarPerfilUsuario}>Guardar cambios</button>
             </div>
           </div>
         </div>
@@ -221,24 +222,24 @@
       return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
           <div className="modal-container bg-white p-6 rounded-lg shadow-lg w-96 max-h-screen overflow-y-auto">
-            <h2 className="text-xl font-semibold mb-4">Agregar integrante</h2>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-              <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ingrese nombre completo" />
+          <h2 className="text-xl font-semibold mb-4">Agregar integrante</h2>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+            <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ingrese nombre completo" />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input type="email" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Ingrese correo electrónico" />
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input type="email" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Ingrese correo electrónico" />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Rol</label>
-              <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={role} onChange={(e) => setRole(e.target.value)}>
-                {rolesDisponibles.map(r => <option key={r} value={r}>{r}</option>)}
-              </select>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Rol</label>
+            <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={role} onChange={(e) => setRole(e.target.value)}>
+            {rolesDisponibles.map(r => <option key={r} value={r}>{r}</option>)}
+            </select>
             </div>
             <div className="flex justify-end space-x-2">
-              <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancelar</button>
-              <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={agregarIntegranteManual}>Agregar integrante</button>
+            <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancelar</button>
+            <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={agregarIntegranteManual}>Agregar integrante</button>
             </div>
           </div>
         </div>
@@ -263,26 +264,26 @@
       return (
         <div className="seleccionarteam">
           <div className="flex justify-between items-center mb-3">
-            <h3 className="text-sm font-medium text-gray-700">Asignar integrante</h3>
-            <button className="text-xs text-blue-600 hover:text-blue-800 font-medium" onClick={onAddNewMember}>+ Agregar nuevo integrante</button>
+          <h3 className="text-sm font-medium text-gray-700">Asignar integrante</h3>
+          <button className="text-xs text-blue-600 hover:text-blue-800 font-medium" onClick={onAddNewMember}>+ Agregar nuevo integrante</button>
           </div>
           <div className="mb-3">
-            <input type="text" placeholder="Buscar integrante..." className="w-full p-2 border rounded-md text-sm" value={terminoBusqueda} onChange={(e) => setTerminoBusqueda(e.target.value)} />
+          <input type="text" placeholder="Buscar integrante..." className="w-full p-2 border rounded-md text-sm" value={terminoBusqueda} onChange={(e) => setTerminoBusqueda(e.target.value)} />
           </div>
           <div className="max-h-40 overflow-y-auto">
             {filteredMembers.length > 0 ? filteredMembers.map(member => (
               <div key={member.id} className={`flex items-center p-2 rounded-md cursor-pointer team-member ${selectedMembers.includes(member.id) ? 'bg-blue-100' : ''}`} onClick={() => alternarSeleccionIntegrante(member.id)}>
-                <img src={member.avatar} alt={member.name} className={`avatar mr-3 ${selectedMembers.includes(member.id) ? 'selected-member' : ''}`} />
-                <div className="flex-1">
-                  <p className="text-sm font-medium">{member.name}</p>
-                  <p className="text-xs text-gray-500">{member.role}</p>
-                </div>
-                <input type="checkbox" checked={selectedMembers.includes(member.id)} onChange={() => alternarSeleccionIntegrante(member.id)} className="h-4 w-4 text-blue-600 rounded" />
+              <img src={member.avatar} alt={member.name} className={`avatar mr-3 ${selectedMembers.includes(member.id) ? 'selected-member' : ''}`} />
+              <div className="flex-1">
+              <p className="text-sm font-medium">{member.name}</p>
+              <p className="text-xs text-gray-500">{member.role}</p>
+              </div>
+              <input type="checkbox" checked={selectedMembers.includes(member.id)} onChange={() => alternarSeleccionIntegrante(member.id)} className="h-4 w-4 text-blue-600 rounded" />
               </div>
             )) : <p className="Miembrosnoecnontrado">No se encontraron integrantes</p>}
           </div>
           <div className="mt-3">
-            <p className="text-xs text-gray-500">{selectedMembers.length > 0 ? `Se ha seleccionado ${selectedMembers.length} integrante(s) del equipo` : "No se han seleccionado miembros del equipo."}</p>
+          <p className="text-xs text-gray-500">{selectedMembers.length > 0 ? `Se ha seleccionado ${selectedMembers.length} integrante(s) del equipo` : "No se han seleccionado miembros del equipo."}</p>
           </div>
         </div>
       );
@@ -322,48 +323,48 @@
       if (!isOpen) return null;
       return (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-40">
-          <div className="modal-container bg-white p-4 md:p-6 rounded-lg shadow-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-semibold mb-4">{project ? "Editar Proyecto" : "Crear Proyecto"}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="modal-container bg-white p-4 md:p-6 rounded-lg shadow-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+        <h2 className="text-xl font-semibold mb-4">{project ? "Editar Proyecto" : "Crear Proyecto"}</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="md:col-span-2">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Nombre del Proyecto</label>
+        <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={name} onChange={(e) => setName(e.target.value)} placeholder="ej, Rediseño del sitio web" />
+        </div>
+        <div className="md:col-span-2">
+        <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+        <textarea rows="3" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Descripción del Proyecto..." />
+        </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre del Proyecto</label>
-                <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={name} onChange={(e) => setName(e.target.value)} placeholder="ej, Rediseño del sitio web" />
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-                <textarea rows="3" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Descripción del Proyecto..." />
-              </div>
-              <div className="md:col-span-2">
-                <TeamMemberSelector members={integrantes} selectedMembers={assignees} onSelectionChange={setAssignees} onAddNewMember={onAddNewMember} />
+              <TeamMemberSelector members={integrantes} selectedMembers={assignees} onSelectionChange={setAssignees} onAddNewMember={onAddNewMember} />
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Etiquetas</label>
                 <div className="flex flex-wrap gap-2 mb-2">
-                  {tags.map(tag => (
-                    <span key={tag} className="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                      {tag}
-                      <button type="button" className="ml-1 text-blue-500 hover:text-blue-700" onClick={() => quitarEtiqueta(tag)}>×</button>
-                    </span>
-                  ))}
+                {tags.map(tag => (
+                <span key={tag} className="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                {tag}
+                <button type="button" className="ml-1 text-blue-500 hover:text-blue-700" onClick={() => quitarEtiqueta(tag)}>×</button>
+                </span>
+                ))}
                 </div>
                 <div className="flex">
-                  <input type="text" className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={newTag} onChange={(e) => setNewTag(e.target.value)} placeholder="Agregar etiqueta" onKeyPress={(e) => e.key === 'Enter' && agregarEtiqueta()} />
-                  <button type="button" className="ml-2 px-3 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={agregarEtiqueta}>Agregar</button>
+                <input type="text" className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={newTag} onChange={(e) => setNewTag(e.target.value)} placeholder="Agregar etiqueta" onKeyPress={(e) => e.key === 'Enter' && agregarEtiqueta()} />
+                <button type="button" className="ml-2 px-3 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={agregarEtiqueta}>Agregar</button>
                 </div>
                 <div className="Tags">
-                  <p className="text-xs text-gray-500 mb-1">Etiquetas sugeridas:</p>
-                  <div className="flex flex-wrap gap-1">
-                    {etiquetasDisponibles.filter(t => !tags.includes(t)).map(tag => (
-                      <button key={tag} type="button" className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full hover:bg-gray-200" onClick={() => !tags.includes(tag) && setTags([...tags, tag])}>{tag}</button>
-                    ))}
-                  </div>
+                <p className="text-xs text-gray-500 mb-1">Etiquetas sugeridas:</p>
+                <div className="flex flex-wrap gap-1">
+                {etiquetasDisponibles.filter(t => !tags.includes(t)).map(tag => (
+                <button key={tag} type="button" className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full hover:bg-gray-200" onClick={() => !tags.includes(tag) && setTags([...tags, tag])}>{tag}</button>
+                ))}
+                </div>
                 </div>
               </div>
             </div>
 
             <div className="flex justify-end space-x-2 mt-4">
-              <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancelar</button>
-              <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={guardarProyectoModal}>{project ? "Guardar Cambios" : "Crear Proyecto"}</button>
+            <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancelar</button>
+            <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={guardarProyectoModal}>{project ? "Guardar Cambios" : "Crear Proyecto"}</button>
             </div>
           </div>
         </div>
@@ -401,73 +402,73 @@
 
       if (!isOpen) return null;
       return (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="modal-container bg-white p-4 md:p-6 rounded-lg shadow-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-            <h2 className="text-xl font-semibold mb-4">{task ? "Editar Tarea" : "Crear Nueva Tarea"}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Título de la tarea</label>
-                <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="ejem., Corregir error de inicio de sesión" />
-              </div>
+      <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+      <div className="modal-container bg-white p-4 md:p-6 rounded-lg shadow-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+      <h2 className="text-xl font-semibold mb-4">{task ? "Editar Tarea" : "Crear Nueva Tarea"}</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="md:col-span-2">
+      <label className="block text-sm font-medium text-gray-700 mb-1">Título de la tarea</label>
+      <input type="text" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="ejem., Corregir error de inicio de sesión" />
+      </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-                <textarea rows="3" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Descripción de la tarea..." />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+              <textarea rows="3" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Descripción de la tarea..." />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Tag</label>
                 <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={tag} onChange={(e) => setTag(e.target.value)}>
-                  {etiquetasDisponibles.map(t => <option key={t} value={t}>{t}</option>)}
+                {etiquetasDisponibles.map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Asignado a</label>
                 <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={assignee} onChange={(e) => setAssignee(e.target.value)}>
-                  <option value="">No asignado</option>
-                  {integrantes.map(m => <option key={m.id} value={m.avatar}>{m.name}</option>)}
+                <option value="">No asignado</option>
+                {integrantes.map(m => <option key={m.id} value={m.avatar}>{m.name}</option>)}
                 </select>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
                 <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={status} onChange={(e) => setStatus(e.target.value)}>
-                  {opcionesEstado.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+                {opcionesEstado.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                 </select>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Prioridad</label>
                 <select className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={priority} onChange={(e) => setPriority(e.target.value)}>
-                  {opcionesPrioridad.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                {opcionesPrioridad.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Fecha límite</label>
-                <input type="date" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Fecha límite</label>
+              <input type="date" className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
               </div>
 
               {task && (
                 <div className="md:col-span-2">
-                  <h3 className="text-sm font-semibold text-gray-700 mb-2">Actividad</h3>
-                  {(task.activity && task.activity.length) ? (
-                    <ul className="space-y-2 max-h-40 overflow-y-auto border rounded p-3 bg-gray-50">
-                      {task.activity.slice().reverse().map(a => (
-                        <li key={a.id} className="text-xs text-gray-700">
-                          <span className="font-medium">{new Date(a.at).toLocaleString()}</span>: {a.text}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : <p className="text-xs text-gray-500">Aún no hay actividad</p>}
+                <h3 className="text-sm font-semibold text-gray-700 mb-2">Actividad</h3>
+                {(task.activity && task.activity.length) ? (
+                <ul className="space-y-2 max-h-40 overflow-y-auto border rounded p-3 bg-gray-50">
+                {task.activity.slice().reverse().map(a => (
+                <li key={a.id} className="text-xs text-gray-700">
+                <span className="font-medium">{new Date(a.at).toLocaleString()}</span>: {a.text}
+                </li>
+                ))}
+                </ul>
+                ) : <p className="text-xs text-gray-500">Aún no hay actividad</p>}
                 </div>
               )}
             </div>
 
             <div className="flex justify-end space-x-2 mt-4">
-              <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancelar</button>
-              <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={guardarTarea}>{task ? "Guardar Cambios" : "Crear Tarea"}</button>
+            <button className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={onClose}>Cancelar</button>
+            <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={guardarTarea}>{task ? "Guardar Cambios" : "Crear Tarea"}</button>
             </div>
           </div>
         </div>
@@ -612,113 +613,113 @@
 
       return (
         <div className="App">
-          <div className="h-screen flex">
-            <div className={`overlay ${barraLateralAbierta ? 'active' : ''}`} onClick={() => setBarraLateralAbierta(false)} />
-            <div className={`sidebar fixed md:relative w-64 px-8 py-4 bg-gray-100 border-r overflow-auto md:translate-x-0 ${barraLateralAbierta ? '' : 'sidebar-mobile-hidden'}`}>
-              <div className="flex justify-between items-center">
-                <img src="image/LOGO.png" width="90" height="35" className="small-attr"/>
-                <div className="scrumly-text font-oswald text-2xl font-semibold tracking-wide">SCRUMLY</div>
-              </div>
+        <div className="h-screen flex">
+        <div className={`overlay ${barraLateralAbierta ? 'active' : ''}`} onClick={() => setBarraLateralAbierta(false)} />
+        <div className={`sidebar fixed md:relative w-64 px-8 py-4 bg-gray-100 border-r overflow-auto md:translate-x-0 ${barraLateralAbierta ? '' : 'sidebar-mobile-hidden'}`}>
+        <div className="flex justify-between items-center">
+        <img src="image/LOGO.png" width="90" height="35" className="small-attr"/>
+        <div className="scrumly-text font-oswald text-2xl font-semibold tracking-wide">SCRUMLY</div>
+        </div>
 
-              <nav className="mt-8">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wide text-left">Proyectos</h3>
-                  <button className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-                          onClick={() => { setProyectoEditando(null); setMostrarModalProyecto(true); }}>
-                    + Crear Proyecto
-                  </button>
-                </div>
-                <div className="mt-2 -mx-3">
-                  {proyectos.map(project => (
-                    <div key={project.id} className={`flex justify-between items-center px-3 py-2 rounded-lg ${proyectoSeleccionado === project.id ? 'bg-gray-200' : 'hover:bg-gray-100'}`}>
-                      <button className="flex-1 text-left text-sm font-medium text-gray-900" onClick={() => { setProyectoSeleccionado(project.id); setBarraLateralAbierta(false); }}>{project.name}</button>
-                      <div className="flex space-x-1">
-                        <button className="text-gray-500 hover:text-gray-700" onClick={(e) => { e.stopPropagation(); setProyectoEditando(project); setMostrarModalProyecto(true); }}>✏️</button>
-                        <button className="text-gray-500 hover:text-red-500" onClick={(e) => { e.stopPropagation(); eliminarProyecto(project.id); }}>🗑️</button>
-                      </div>
-                    </div>
-                  ))}
-                  {proyectos.length === 0 && (
-                    <div className="px-3 py-2 text-xs text-gray-500 italic">Aún no hay proyectos</div>
-                  )}
+        <nav className="CrearProyecto">
+        <div className="flex justify-between items-center">
+        <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wide text-left">Proyectos</h3>
+        <button className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+        onClick={() => { setProyectoEditando(null); setMostrarModalProyecto(true); }}>
+        + Crear Proyecto
+          </button>
+          </div>
+          <div className="mt-2 -mx-3">
+          {proyectos.map(project => (
+          <div key={project.id} className={`flex justify-between items-center px-3 py-2 rounded-lg ${proyectoSeleccionado === project.id ? 'bg-gray-200' : 'hover:bg-gray-100'}`}>
+          <button className="flex-1 text-left text-sm font-medium text-gray-900" onClick={() => { setProyectoSeleccionado(project.id); setBarraLateralAbierta(false); }}>{project.name}</button>
+          <div className="flex space-x-1">
+          <button className="text-gray-500 hover:text-gray-700" onClick={(e) => { e.stopPropagation(); setProyectoEditando(project); setMostrarModalProyecto(true); }}>✏️</button>
+          <button className="text-gray-500 hover:text-red-500" onClick={(e) => { e.stopPropagation(); eliminarProyecto(project.id); }}>🗑️</button>
+          </div>
+          </div>
+             ))}
+            {proyectos.length === 0 && (
+            <div className="px-3 py-2 text-xs text-gray-500 italic">Aún no hay proyectos</div>
+             )}
                 </div>
               </nav>
 
-              <nav className="mt-8">
-                <div className="flex justify-between items-center">
-                  <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wide text-left">Integrantes del Equipo</h3>
-                  <button className="text-xs text-blue-600 hover:text-blue-800 font-medium"
-                          onClick={() => setMostrarModalAgregarIntegrante(true)}>
-                    + Agregar Integrante
-                  </button>
-                </div>
+              <nav className="agregarIntegrante">
+              <div className="flex justify-between items-center">
+              <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wide text-left">Integrantes del Equipo</h3>
+              <button className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+              onClick={() => setMostrarModalAgregarIntegrante(true)}>
+              + Agregar Integrante
+              </button>
+               </div>
                 <div className="mt-2 -mx-3 max-h-40 overflow-y-auto">
-                  {integrantes.map(member => (
-                    <div key={member.id} className="flex items-center px-3 py-2 rounded-lg justify-between group hover:bg-gray-100">
-                      <div className="flex items-center flex-1">
-                        <img src={member.avatar} alt={member.name} className="avatar mr-3" />
-                        <div className="flex-1 truncate">
-                          <p className="text-sm font-medium text-gray-900 truncate">{member.name}</p>
-                          <p className="text-xs text-gray-500 truncate">{member.role}</p>
-                        </div>
-                      </div>
-                      <button className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100" onClick={() => quitarIntegrante(member.id)} title="Eliminar integrante">🗑️</button>
-                    </div>
+                {integrantes.map(member => (
+                <div key={member.id} className="flex items-center px-3 py-2 rounded-lg justify-between group hover:bg-gray-100">
+                <div className="flex items-center flex-1">
+                <img src={member.avatar} alt={member.name} className="avatar mr-3" />
+                <div className="flex-1 truncate">
+                <p className="text-sm font-medium text-gray-900 truncate">{member.name}</p>
+                <p className="text-xs text-gray-500 truncate">{member.role}</p>
+                  </div>
+                  </div>
+                 <button className="text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100" onClick={() => quitarIntegrante(member.id)} title="Eliminar integrante">🗑️</button>
+                </div>
                   ))}
                   {integrantes.length === 0 && (
-                    <div className="px-3 py-2 text-xs text-gray-500 italic">Aún no hay integrantes</div>
+                  <div className="px-3 py-2 text-xs text-gray-500 italic">Aún no hay integrantes</div>
                   )}
                 </div>
               </nav>
 
-              <nav className="mt-8">
+              <nav className="etiquetasDisponibles">
                 <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wide text-left">Etiquetas</h3>
                 <div className="mt-2 -mx-3">
-                  {etiquetasDisponibles.map(tag => (
-                    <button key={tag} className={`flex justify-between items-center px-3 py-2 rounded-lg w-full text-left ${etiquetaSeleccionada === tag ? 'bg-gray-200' : 'hover:bg-gray-100'}`} onClick={() => { setEtiquetaSeleccionada(etiquetaSeleccionada === tag ? null : tag); }}>
-                      <span className="text-sm font-medium text-gray-700">{tag}</span>
-                    </button>
-                  ))}
+                {etiquetasDisponibles.map(tag => (
+                <button key={tag} className={`flex justify-between items-center px-3 py-2 rounded-lg w-full text-left ${etiquetaSeleccionada === tag ? 'bg-gray-200' : 'hover:bg-gray-100'}`} onClick={() => { setEtiquetaSeleccionada(etiquetaSeleccionada === tag ? null : tag); }}>
+                <span className="text-sm font-medium text-gray-700">{tag}</span>
+                </button>
+                ))}
                 </div>
               </nav>
             </div>
 
             <div className="flex-1 min-w-0 bg-white flex flex-col">
-              <div className="flex-shrink-0 border-b-2 border-gray-200">
-                <header className="px-4 md:px-6">
-                  <div className="flex justify-between items-center border-b border-gray-200 py-2">
-                    <div className="flex items-center">
-                      <button className="md:hidden mr-2 text-gray-500" onClick={() => setBarraLateralAbierta(!barraLateralAbierta)}>
-                        <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
-                      </button>
-                      <div className="relative search-input w-40 md:w-64">
-                        <span className="absolute pl-3 inset-y-0 left-0 flex items-center">
-                          <svg className="h-6 w-6 text-gray-600" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-                        </span>
-                        <input className="block w-full rounded-lg border border-gray-400 pl-10 pr-4 py-2 text-gray-900 text-sm placeholder-gray-600" placeholder="Buscar tareas..." value={terminoBusqueda} onChange={(e) => setTerminoBusqueda(e.target.value)} />
-                      </div>
-                    </div>
-                    <div className="flex items-center">
-                      <button className="ml-2 cursor-pointer" onClick={() => setMostrarPerfilUsuario(true)}>
-                        <img className="h-8 w-8 rounded-full object-cover" src={usuarioActual.avatar} alt="avatar" title="Ver perfil" />
-                      </button>
-                    </div>
+            <div className="flex-shrink-0 border-b-2 border-gray-200">
+            <header className="px-4 md:px-6">
+            <div className="flex justify-between items-center border-b border-gray-200 py-2">
+            <div className="flex items-center">
+            <button className="md:hidden mr-2 text-gray-500" onClick={() => setBarraLateralAbierta(!barraLateralAbierta)}>
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+            </button>
+            <div className="relative search-input w-40 md:w-64">
+            <span className="absolute pl-3 inset-y-0 left-0 flex items-center">
+            <svg className="h-6 w-6 text-gray-600" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            </span>
+            <input className="block w-full rounded-lg border border-gray-400 pl-10 pr-4 py-2 text-gray-900 text-sm placeholder-gray-600" placeholder="Buscar tareas..." value={terminoBusqueda} onChange={(e) => setTerminoBusqueda(e.target.value)} />
+           </div>
+           </div>
+          <div className="flex items-center">
+          <button className="ml-2 cursor-pointer" onClick={() => setMostrarPerfilUsuario(true)}>
+          <img className="h-8 w-8 rounded-full object-cover" src={usuarioActual.avatar} alt="avatar" title="Ver perfil" />
+          </button>
+          </div>
                   </div>
                   <div className="flex flex-col md:flex-row md:justify-between md:items-center py-2 header-actions">
-                    <div className="flex items-center mb-2 md:mb-0">
-                      <h2 className="project-title text-xl md:text-2xl font-semibold text-gray-900 leading-tight">{proyectoActual ? proyectoActual.name : "No hay proyecto agregado"}</h2>
-                      {proyectoActual && <button className="ml-4 text-sm text-blue-600 hover:text-blue-800" onClick={() => { setProyectoEditando(proyectoActual); setMostrarModalProyecto(true); }}>Editar</button>}
-                    </div>
-                    <div className="flex items-center space-x-4 view-toggle">
-                      <div className="flex bg-gray-100 rounded-md p-1">
-                        <button className={`px-3 py-1 text-sm rounded ${vistaActiva === 'list' ? 'bg-white shadow' : 'text-gray-600'}`} onClick={() => setVistaActiva('list')}>Vista de Lista</button>
-                        <button className={`px-3 py-1 text-sm rounded ${vistaActiva === 'kanban' ? 'bg-white shadow' : 'text-gray-600'}`} onClick={() => setVistaActiva('kanban')}>Tablero Kanban</button>
-                      </div>
-                      <button className="flex items-center pl-2 pr-4 py-1 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700" onClick={() => { setTareaEditando(null); setMostrarModalTarea(true); }} disabled={!proyectoActual}>
-                        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M12 7v10m5-5H7" /></svg>
-                        <span className="ml-1">Nueva Tarea</span>
-                      </button>
-                    </div>
+                  <div className="flex items-center mb-2 md:mb-0">
+                  <h2 className="project-title text-xl md:text-2xl font-semibold text-gray-900 leading-tight">{proyectoActual ? proyectoActual.name : "No hay proyecto agregado"}</h2>
+                  {proyectoActual && <button className="ml-4 text-sm text-blue-600 hover:text-blue-800" onClick={() => { setProyectoEditando(proyectoActual); setMostrarModalProyecto(true); }}>Editar</button>}
+                  </div>
+                  <div className="flex items-center space-x-4 view-toggle">
+                  <div className="flex bg-gray-100 rounded-md p-1">
+                  <button className={`px-3 py-1 text-sm rounded ${vistaActiva === 'list' ? 'bg-white shadow' : 'text-gray-600'}`} onClick={() => setVistaActiva('list')}>Vista de Lista</button>
+                  <button className={`px-3 py-1 text-sm rounded ${vistaActiva === 'kanban' ? 'bg-white shadow' : 'text-gray-600'}`} onClick={() => setVistaActiva('kanban')}>Tablero Kanban</button>
+                  </div>
+                  <button className="flex items-center pl-2 pr-4 py-1 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700" onClick={() => { setTareaEditando(null); setMostrarModalTarea(true); }} disabled={!proyectoActual}>
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M12 7v10m5-5H7" /></svg>
+                  <span className="ml-1">Nueva Tarea</span>
+                  </button>
+                  </div>
                   </div>
                 </header>
               </div>
@@ -726,165 +727,162 @@
               <div className="flex-1 overflow-auto">
                 {proyectoActual ? (
                   <div>
-                    <div className="p-4 border-b">
-                      <p className="text-gray-600">{proyectoActual.description}</p>
-                      <div className="flex items-center mt-2">
-                        <h3 className="text-sm font-medium text-gray-700 mr-2">Asignado a:</h3>
-                        <div className="flex -space-x-2">
-                          {obtenerInfoAsignado(proyectoActual.assignees || []).map(member => member ? <img key={member.id} src={member.avatar} alt={member.name} className="avatar border-2 border-white" title={`${member.name} (${member.role})`} /> : null)}
-                        </div>
-                      </div>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        {(proyectoActual.tags || []).map(tag => <span key={tag} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">{tag}</span>)}
-                      </div>
+                  <div className="p-4 border-b">
+                  <p className="text-gray-600">{proyectoActual.description}</p>
+                  <div className="flex items-center mt-2">
+                  <h3 className="text-sm font-medium text-gray-700 mr-2">Asignado a:</h3>
+                  <div className="flex -space-x-2">
+                  {obtenerInfoAsignado(proyectoActual.assignees || []).map(member => member ? <img key={member.id} src={member.avatar} alt={member.name} className="avatar border-2 border-white" title={`${member.name} (${member.role})`} /> : null)}
+                  </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                  {(proyectoActual.tags || []).map(tag => <span key={tag} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">{tag}</span>)}
+                  </div>
                     </div>
 
-                    {vistaActiva === 'kanban' ? (
-                      <div className="p-4">
-                        <div className="kanban-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                          {opcionesEstado.map(status => {
-                            const statusIssues = tareasFiltradas.filter(issue => issue.status === status.id);
-                            return (
-                              <div key={status.id} className="kanban-column rounded-lg p-4"
-                                onDragOver={(e) => e.preventDefault()}
-                                onDrop={(e) => { e.preventDefault(); const taskId = e.dataTransfer.getData('text/plain'); const task = (proyectoActual.issues || []).find(t => t.id === taskId); if (task && task.status !== status.id) moverTarea(task, status.id); }}>
-                                <div className="flex items-center mb-4">
-                                  <span className={`w-3 h-3 rounded-full ${status.color} mr-2`} />
-                                  <h3 className="font-medium text-gray-700">{status.name}</h3>
-                                  <span className="ml-2 bg-gray-200 text-gray-700 text-xs font-medium rounded-full px-2 py-1">{statusIssues.length}</span>
-                                </div>
+                {vistaActiva === 'kanban' ? (
+                <div className="p-4">
+                <div className="kanban-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                {opcionesEstado.map(status => {
+                const statusIssues = tareasFiltradas.filter(issue => issue.status === status.id);
+                return (
+                <div key={status.id} className="kanban-column rounded-lg p-4"
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => { e.preventDefault(); const taskId = e.dataTransfer.getData('text/plain'); const task = (proyectoActual.issues || []).find(t => t.id === taskId); if (task && task.status !== status.id) moverTarea(task, status.id); }}>
+               <div className="flex items-center mb-4">
+                <span className={`w-3 h-3 rounded-full ${status.color} mr-2`} />
+                <h3 className="font-medium text-gray-700">{status.name}</h3>
+                <span className="ml-2 bg-gray-200 text-gray-700 text-xs font-medium rounded-full px-2 py-1">{statusIssues.length}</span>
+                </div>
 
-                                <div className="space-y-3">
-                                  {statusIssues.length === 0 ? (
-                                    <div className="text-sm text-gray-400 italic py-2 text-center">Sin tareas</div>
-                                  ) : (
-                                    statusIssues.map(issue => {
-                                      const isOverdue = issue.dueDate && new Date(issue.dueDate) < new Date() && issue.status !== 'hecho' && issue.status !== 'cancelado';
-                                      const prAccent = `task-accent ${obtenerAccentPrioridad(issue.priority)}`;
-                                      const prChip = obtenerClaseChipPrioridad(issue.priority);
-                                      return (
-                                        <div key={issue.id} data-task-id={issue.id} className="task-card-ui p-3" data-priority={issue.priority} draggable
-                                          onDragStart={(e) => { e.dataTransfer.setData('text/plain', issue.id); e.currentTarget.classList.add('dragging'); }}
-                                          onDragEnd={(e) => { e.currentTarget.classList.remove('dragging'); }}>
-                                          <div className={prAccent} />
-                                          <div className="flex items-start justify-between mb-2">
-                                            <h4 className="task-title">{issue.title}</h4>
-                                            <span className={prChip}>
-                                              <span className="priority-text">
-                                                {(opcionesPrioridad.find(p => p.id === issue.priority)?.name) || 'Media'}
-                                              </span>
-                                            </span>
-                                          </div>
-
-                                          <p className="task-desc mb-3">{issue.description || "No hay descripción disponible"}</p>
-                                          <div className="flex flex-wrap items-center gap-2 mb-2">
-                                            <span className="tag-pill">{issue.tag}</span>
-                                            <span className="text-xs text-gray-500 mr-2">{issue.date}</span>
-                                            {issue.dueDate && (
-                                              <span className={`badge ${isOverdue ? 'badge-overdue' : 'badge-due'}`}>
-                                                {isOverdue ? 'Vencida' : 'Vence'} · {new Date(issue.dueDate).toLocaleDateString()}
-                                              </span>
-                                            )}
-                                          </div>
-
-                                          <div className="task-footer">
-                                            <div className="flex items-center gap-2">
-                                              {issue.assignee && <img src={issue.assignee} alt="Asignado" className="avatar-sm" />}
-                                            </div>
-                                            <div className="task-actions">
-                                              <button className="task-action-btn" onClick={() => { setTareaEditando(issue); setMostrarModalTarea(true); }}>Editar</button>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      );
-                                    })
-                                  )}
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="p-4">
-                        <h3 className="text-lg font-medium text-gray-900 mb-4">Tareas</h3>
-                        <div className="grid grid-cols-1 gap-4">
-                          {tareasFiltradas.length > 0 ? tareasFiltradas.map(issue => {
-                            const isOverdue = issue.dueDate && new Date(issue.dueDate) < new Date() && issue.status !== 'hecho' && issue.status !== 'cancelado';
-                            const prAccent = `task-accent ${obtenerAccentPrioridad(issue.priority)}`;
-                            const prChip = obtenerClaseChipPrioridad(issue.priority);
-                            return (
-                              <div key={issue.id} data-task-id={issue.id} className="task-card-ui p-3" data-priority={issue.priority}>
-                                <div className={prAccent} />
-
-                                <div className="flex items-start justify-between mb-2">
-                                  <h4 className="task-title">{issue.title}</h4>
-                                  <div className="flex items-center gap-2">
-                                    <span className="chip">
-                                      {opcionesEstado.find(s => s.id === issue.status)?.name || 'Por hacer'}
-                                    </span>
-                                    <span className={prChip}>
-                                      <span className="priority-text">
-                                        {(opcionesPrioridad.find(p => p.id === issue.priority)?.name) || 'Media'}
-                                      </span>
-                                    </span>
-                                  </div>
-                                </div>
-
-                                <p className="task-desc mb-3">{issue.description || "Sin descripción"}</p>
-
-                                <div className="flex flex-wrap items-center gap-2 mb-2">
-                                  {issue.dueDate && (
-                                    <span className={`badge ${isOverdue ? 'badge-overdue' : 'badge-due'}`}>
-                                      {isOverdue ? 'Vencida' : 'Vence'} · {new Date(issue.dueDate).toLocaleDateString()}
-                                    </span>
-                                  )}
-                                  <span className="tag-pill">{issue.tag}</span>
-                                  <span className="text-xs text-gray-500">{issue.date}</span>
-                                </div>
-                                <div className="task-footer">
-                                  <div className="flex items-center">
-                                    {issue.assignee && <img src={issue.assignee} alt="Asignado" className="avatar-sm mr-2" />}
-                                  </div>
-                                  <div className="task-actions">
-                                    <button className="task-action-btn" onClick={() => { setTareaEditando(issue); setMostrarModalTarea(true); }}>Editar</button>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          }) : <p className="text-gray-500 text-center py-8">Sin tareas</p>}
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                <div className="SinTareas">
+                {statusIssues.length === 0 ? (
+                <div className="text-sm text-gray-400 italic py-2 text-center">Sin tareas</div>
                 ) : (
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <p className="text-gray-500 mb-4">No hay proyecto agregado</p>
-                    <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={() => { setProyectoEditando(null); setMostrarModalProyecto(true); }}>Crea tu primer proyecto</button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+                statusIssues.map(issue => {
+                const isOverdue = issue.dueDate && new Date(issue.dueDate) < new Date() && issue.status !== 'hecho' && issue.status !== 'cancelado';
+                const prAccent = `task-accent ${obtenerAccentPrioridad(issue.priority)}`;
+                const prChip = obtenerClaseChipPrioridad(issue.priority);
+                return (
+                <div key={issue.id} data-task-id={issue.id} className="task-card-ui p-3" data-priority={issue.priority} draggable
+                onDragStart={(e) => { e.dataTransfer.setData('text/plain', issue.id); e.currentTarget.classList.add('dragging'); }}
+                onDragEnd={(e) => { e.currentTarget.classList.remove('dragging'); }}>
+                <div className={prAccent} />
+                <div className="flex items-start justify-between mb-2">
+                <h4 className="task-title">{issue.title}</h4>
+                <span className={prChip}>
+                <span className="priority-text">
+                {(opcionesPrioridad.find(p => p.id === issue.priority)?.name) || 'Media'}
+                </span>
+                </span>
+                </div>
 
-          <UserProfileModal user={usuarioActual} onClose={() => setMostrarPerfilUsuario(false)} onSave={guardarPerfilUsuario} isOpen={mostrarPerfilUsuario} />
+      <p className="task-desc mb-3">{issue.description || "No hay descripción disponible"}</p>
+      <div className="flex flex-wrap items-center gap-2 mb-2">
+      <span className="Nohaydescripcion">{issue.tag}</span>
+      <span className="text-xs text-gray-500 mr-2">{issue.date}</span>
+      {issue.dueDate && (
+      <span className={`badge ${isOverdue ? 'badge-overdue' : 'badge-due'}`}>
+      {isOverdue ? 'Vencida' : 'Vence'} · {new Date(issue.dueDate).toLocaleDateString()}
+      </span>
+      )}
+    </div>
 
-          {mostrarModalProyecto && (
-            <ProjectModal project={proyectoEditando} onClose={() => { setMostrarModalProyecto(false); setProyectoEditando(null); }} onSave={guardarProyecto} isOpen={mostrarModalProyecto} integrantes={integrantes} onAddNewMember={() => { setMostrarModalAgregarIntegrante(true); }} />
-          )}
+    <div className="Asignado">
+  <div className="flex items-center gap-2">
+  {issue.assignee && <img src={issue.assignee} alt="Asignado" className="avatar-sm" />}
+   </div>
+   <div className="Editartareas">
+  <button className="task-action-btn" onClick={() => { setTareaEditando(issue); setMostrarModalTarea(true); }}>Editar</button>
+  </div>
+  </div></div>
+  );
+  })
+  )}
+</div></div>
+);
+})}
+</div></div>
+) : (
+<div className="Tareas">
+<h3 className="text-lg font-medium text-gray-900 mb-4">Tareas</h3>
+<div className="grid grid-cols-1 gap-4">
+{tareasFiltradas.length > 0 ? tareasFiltradas.map(issue => {
+const isOverdue = issue.dueDate && new Date(issue.dueDate) < new Date() && issue.status !== 'hecho' && issue.status !== 'cancelado';
+const prAccent = `task-accent ${obtenerAccentPrioridad(issue.priority)}`;
+const prChip = obtenerClaseChipPrioridad(issue.priority);
+return (
+<div key={issue.id} data-task-id={issue.id} className="task-card-ui p-3" data-priority={issue.priority}>
+<div className={prAccent} />
 
-          {mostrarModalAgregarIntegrante && (
-            <AddTeamMemberModal onClose={() => setMostrarModalAgregarIntegrante(false)} onSave={agregarIntegrante} isOpen={mostrarModalAgregarIntegrante} />
-          )}
+<div className="flex items-start justify-between mb-2">
+<h4 className="task-title">{issue.title}</h4>
+<div className="flex items-center gap-2">
+<span className="porhacer">
+{opcionesEstado.find(s => s.id === issue.status)?.name || 'Por hacer'}
+</span>
+<span className={prChip}>
+<span className="Media">
+{(opcionesPrioridad.find(p => p.id === issue.priority)?.name) || 'Media'}
+</span>
+</span>
+</div>
+</div>
 
-          {mostrarModalTarea && (
-            <TaskModal task={tareaEditando} onClose={() => { setMostrarModalTarea(false); setTareaEditando(null); }} onSave={guardarTarea} isOpen={mostrarModalTarea} integrantes={integrantes} projectId={proyectoSeleccionado} usuarioActual={usuarioActual} />
-          )}
-        </div>
-      );
-    };
+<p className="task-desc mb-3">{issue.description || "Sin descripción"}</p>
 
-    ReactDOM.render(<App />, document.getElementById('root'));
+<div className="flex flex-wrap items-center gap-2 mb-2">
+{issue.dueDate && (
+<span className={`badge ${isOverdue ? 'badge-overdue' : 'badge-due'}`}>
+  {isOverdue ? 'Vencida' : 'Vence'} · {new Date(issue.dueDate).toLocaleDateString()}
+  </span>
+  )}
+  <span className="Fecha">{issue.tag}</span>
+  <span className="text-xs text-gray-500">{issue.date}</span>
+  </div>
+  <div className="Avatarasignado">
+  <div className="flex items-center">
+  {issue.assignee && <img src={issue.assignee} alt="Asignado" className="avatar-sm mr-2" />}
+  </div>
+  <div className="Editartareas">
+  <button className="task-action-btn" onClick={() => { setTareaEditando(issue); setMostrarModalTarea(true); }}>Editar</button>
+  </div>
+  </div>
+  </div>
+  );
+  }) : <p className="text-gray-500 text-center py-8">Sin tareas</p>}
+  </div>
+  </div>
+  )}
+  </div>
+  ) : (
+ <div className="flex flex-col items-center justify-center h-full">
+ <p className="text-gray-500 mb-4">No hay proyecto agregado</p>
+ <button className="px-4 py-2 bg-gray-800 text-white rounded-md text-sm font-medium hover:bg-gray-700" onClick={() => { setProyectoEditando(null); setMostrarModalProyecto(true); }}>Crea tu primer proyecto</button>
+ </div>
+ )}
+</div>
+</div>
+</div>
+
+<UserProfileModal user={usuarioActual} onClose={() => setMostrarPerfilUsuario(false)} onSave={guardarPerfilUsuario} isOpen={mostrarPerfilUsuario} />
+
+{mostrarModalProyecto && (
+<ProjectModal project={proyectoEditando} onClose={() => { setMostrarModalProyecto(false); setProyectoEditando(null); }} onSave={guardarProyecto} isOpen={mostrarModalProyecto} integrantes={integrantes} onAddNewMember={() => { setMostrarModalAgregarIntegrante(true); }} />
+)}
+
+{mostrarModalAgregarIntegrante && (
+<AddTeamMemberModal onClose={() => setMostrarModalAgregarIntegrante(false)} onSave={agregarIntegrante} isOpen={mostrarModalAgregarIntegrante} />
+)}
+
+{mostrarModalTarea && (
+<TaskModal task={tareaEditando} onClose={() => { setMostrarModalTarea(false); setTareaEditando(null); }} onSave={guardarTarea} isOpen={mostrarModalTarea} integrantes={integrantes} projectId={proyectoSeleccionado} usuarioActual={usuarioActual} />
+)}
+</div>
+);
+};
+
+ReactDOM.render(<App />, document.getElementById('root'));
   </script>
 </body>
 </html>
