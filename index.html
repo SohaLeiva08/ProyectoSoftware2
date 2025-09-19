@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>SCRUMLY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+    <div class="main">
+        <div class="formulario-contenedor registro-contenedor" id="a-container">
+            <form class="formulario-registro" id="a-form" method="" action="">
+                <div class="formulario-cabecera">
+                    <div class="logo">
+                        <img src="image/LOGO.png" class="logo-imagen" />
+                        <span class="logo-texto">SCRUMLY</span>
+                    </div>
+                    <h2 class="tituto">Crear una cuenta</h2>
+                    <p class="subtitulo">Comienza tu viaje con nosotros</p>
+                </div>
+
+                <div class="campo-formulario">
+                    <input class="entrada-formulario" type="text" id="signup-name" placeholder="Nombre completo">
+                    <i class="icono_entrada"></i>
+                </div>
+
+                <div class="campo-formulario">
+                    <input class="entrada-formulario" type="email" id="signup-email" placeholder="Correo electrónico">
+                    <i class="icono_entrada"></i>
+                </div>
+
+                <div class="campo-formulario">
+                    <input class="entrada-formulario" type="password" id="signup-password" placeholder="Contraseña">
+                    <i class="icono_entrada"></i>
+                </div>
+
+                <button class="boton-formulario" type="button" id="signup-btn">REGISTRARSE</button>
+            </form>
+        </div>
+
+        <div class="formulario-contenedor acceso-contenedor" id="b-container">
+            <form class="formulario-acceso" id="b-form" method="" action="">
+                <div class="formulario-cabecera">
+                    <div class="logo">
+                        <img src="image/LOGO.png" class="logo-imagen" />
+                        <span class="logo-texto">Scrumly</span>
+                    </div>
+                    <h2 class="titulo">Iniciar sesión</h2>
+                    <p class="subtitulo">¡Bienvenido de nuevo!</p>
+                </div>
+
+                <div class="campo-formulario">
+                    <input class="entrada-formulario" type="email" id="login-email" placeholder="Correo electrónico">
+                    <i class="fas fa-envelope icono_entrada"></i>
+                </div>
+
+                <div class="campo-formulario">
+                    <input class="entrada-formulario" type="password" id="login-password" placeholder="Contraseña">
+                    <i class="fas fa-lock icono_entrada"></i>
+                </div>
+                <button class="boton-formulario" type="button" id="login-btn">ACCEDER</button>
+            </form>
+        </div>
+
+        <div class="cambio-formulario" id="switch-cnt">
+            <div class="cambio-formulario-circulo"></div>
+            <div class="cambio-formulario-circulo cambio-formulario-circulo--top" ></div>
+
+            <div class="cambio-formulario-contenido" id="switch-c1">
+                <h2 class="cambio-formulario-titulo">¡Bienvenido de nuevo!</h2>
+                <p class="cambio-formulario-descripcion">Para mantenerse conectado con nosotros, inicie sesión con su información personal.</p>
+                <button class="cambio-formulario-boton" id="switch-btn1">INICIAR SESIÓN</button>
+            </div>
+
+            <div class="cambio-formulario-contenido is-hidden" id="switch-c2">
+                <h2 class="cambio-formulario-titulo">¡Hola amigo!</h2>
+                <p class="cambio-formulario-descripcion">Introduce tus datos personales y comienza tu viaje con nosotros</p>
+                <button class="cambio-formulario-boton" id="switch-btn2">REGISTRARSE</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="operacion con exito" id="success-notification">
+        <i class="fas fa-check-circle"></i>
+        <span>¡Operación realizada con éxito!</span>
+    </div>
+
+    <div class="mensaje de error" id="error-notification">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>Por favor, complete todos los campos.</span>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    
+    const switchCtn = document.querySelector("#switch-cnt");
+    const switchC1 = document.querySelector("#cambio-formulario-c1");
+    const switchC2 = document.querySelector("#cambio-formulario-c2");
+    const aContainer = document.querySelector("#registro-contenedor");
+    const bContainer = document.querySelector("#acceso-contenedor");
+
+    const switchBtns = {
+        login: document.querySelector("#cambio-boton1"),
+        signup: document.querySelector("#cambio-boton2")
+    };
+
+    const actionBtns = {
+        login: document.querySelector('#acceso-boton'),
+        signup: document.querySelector('#registro-boton')
+    };
+
+    const validateForm = (fields) => fields.every(field => field.trim() !== '');
+
+    const showNotification = (type) => {
+        const notification = document.getElementById(`${type}-notificacion`);
+        notification.classList.add('show');
+        setTimeout(() => notification.classList.remove('show'), 3000);
+    };
+
+    const toggleForm = () => {
+        switchCtn.classList.add("is-gx");
+        setTimeout(() => switchCtn.classList.remove("is-gx"), 1500);
+
+        switchCtn.classList.toggle("is-txr");
+        switchC1.classList.toggle("is-hidden");
+        switchC2.classList.toggle("is-hidden");
+
+        aContainer.classList.toggle("is-txl");
+        bContainer.classList.toggle("is-txl");
+        aContainer.classList.toggle("is-z200");
+        bContainer.classList.toggle("is-z200");
+    };
+
+    const handleFormSubmit = (fields) => {
+        if (validateForm(fields)) {
+            showNotification('exito');
+        } else {
+            showNotification('error');
+        }
+    };
+
+
+    switchBtns.login.addEventListener('click', toggleForm);
+    switchBtns.signup.addEventListener('click', toggleForm);
+
+    actionBtns.login.addEventListener('click', () => {
+        const email = document.getElementById('acceso-email').value;
+        const password = document.getElementById('acceso-contraseña').value;
+        handleFormSubmit([email, password]);
+    });
+
+    actionBtns.signup.addEventListener('click', () => {
+        const name = document.getElementById('registro_nombre').value;
+        const email = document.getElementById('registro-email').value;
+        const password = document.getElementById('registro-contraseña').value;
+        handleFormSubmit([name, email, password]);
+    });
+});
+</script>
+</body>
+</html>
