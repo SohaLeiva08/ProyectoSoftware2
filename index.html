@@ -136,7 +136,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const handleFormSubmit = (fields) => {
         if (validateForm(fields)) {
-            showNotification('exito');
+            console.log('si entra');
+
+            window.signUp({
+                email: fields[1],
+                password: fields[2]
+            });
         } else {
             showNotification('error');
         }

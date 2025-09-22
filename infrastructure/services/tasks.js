@@ -1,38 +1,67 @@
-import { supabase } from "../../supabase-client";
+const createTask = async (task) => {
+  const token = localStorage.getItem("access_token");
 
-export const createTask = async (task) => {
-  const { data, error } = await supabase
-    .from("tasks")
-    .insert(task)
-    .select()
-    .single();
+  const response = await fetch(`${window.env.API_URL}/rest/v1/tasks`, {
+    method: "POST",
+    headers: {
+      apikey: window.env.API_KEY,
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+    },
+    body: JSON.stringify(task),
+  });
 
-  return { data, error };
+  const data = await response.json();
+
+  return data;
 };
 
-export const getTasks = async () => {
+const getTasks = async () => {
   const response = await supabase.from("tasks").select("*");
 
   return response;
 };
 
-export const getTaskById = async (id) => {
-  const response = await supabase
-    .from("tasks")
-    .select("*")
-    .eq("id", id)
-    .single();
+const getTaskById = async (id) => {
+  const response = await fetch(`${window.env.API_URL}/rest/v1/tasks?id=eq.${id}&select=*`, {
+    method: "GET",
+    headers: {
+      apikey: window.env.API_KEY,
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+      Accept: "application/vnd.pgrst.object+json",
+    },
+  });
 
-  return response;
+  const data = await response.json();
+
+  return data;
 };
 
-export const updateTaskById = async ({ task, taskId }) => {
-  const response = await supabase
-    .from("tasks")
-    .update(task)
-    .eq("id", taskId)
-    .select()
-    .single();
+const updateTaskById = async ({ task, taskId }) => {
+  const token = localStorage.getItem("access_token");
 
-  return response;
+  console.log( task, taskId );
+
+  const response = await fetch(`${window.env.API_URL}/rest/v1/tasks?id=eq.${taskId}`, {
+    method: "PATCH",
+    headers: {
+      apikey: window.env.API_KEY,
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Prefer: "return=representation",
+      Accept: "application/vnd.pgrst.object+json",
+    },
+    body: JSON.stringify(task),
+  });
+
+  const data = await response.json();
+
+  return data;
 };
+
+window.createTask = createTask;
+window.updateTaskById = updateTaskById;
+window.getTaskById = getTaskById;
